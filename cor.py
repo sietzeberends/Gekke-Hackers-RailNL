@@ -1,5 +1,5 @@
 from itertools import product
-
+print("test")
 
 ws = file('StationsHolland.csv','r',1)
 
