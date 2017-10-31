@@ -1,16 +1,19 @@
 from itertools import product
-<<<<<<< HEAD
-print("abc")
-=======
-print("test")
->>>>>>> 0f79037cf82b24c9885b0abf4077e8f63e12d8f9
+import csv
 
-ws = file('StationsHolland.csv','r',1)
+stations = dict()
 
-for cell in rows: 
-    x = list.append(cell)
-for cell in ws.columns[C]: 
-	y = list.append(cell)
+# loop over the Stations and save the coordinates in two lists
+with open('StationsHolland.csv', 'r') as csvfile:
+	rows = csv.reader(csvfile, delimiter=',')
+	for row in rows: 
+		stations[row[0]] = row[1], row[2]
+		
+	
+# ws = file('StationsHolland.csv','r',1)
 
-coordinates = list(product(x(width), y(height)))
-print(coordinates)
+
+for x in stations:
+	print(x)
+	for y in stations[x]:
+		print(stations[x])
