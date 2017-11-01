@@ -15,9 +15,14 @@ with open('StationsHolland.csv', 'r') as csvfile:
 
 for x in stations:
 	print(x)
+<<<<<<< HEAD
 	for y in stationsx]:
 		print(stations[x])
 
 asdasdasdasjhvsdf
 
 floris is een lul
+=======
+	for y in stations[x]:
+		print(stations[x])
+
