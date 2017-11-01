@@ -9,11 +9,12 @@ with open('StationsHolland.csv', 'r') as csvfile:
 	for row in rows: 
 		stations[row[0]] = row[1], row[2]
 		
-	
+		
 # ws = file('StationsHolland.csv','r',1)
 
 
 for x in stations:
 	print(x)
-	for y in stations[x]:
+	for y in stationsx]:
 		print(stations[x])
+
