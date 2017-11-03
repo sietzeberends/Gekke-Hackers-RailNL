@@ -28,3 +28,4 @@ for x in stations:
 
 for connections in traject:
 	total += connections[connections][1]
+>>>>>>> 6d3e995ac5df052ad8ad0cb36dfa026be6945110
