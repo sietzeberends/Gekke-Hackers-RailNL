@@ -26,3 +26,5 @@ floris is een lul
 	for y in stations[x]:
 		print(stations[x])
 
+print("Je boy is hier")
+>>>>>>> 1b638df84a054974fa63aa3d7af58e400595d4c9
