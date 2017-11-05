@@ -5,4 +5,4 @@ class Connection:
 		self.time = time
 
 	def __str__(self):
-		return (self.station1 + ", " + self.station2 + ", " + str(self.time)
+		return (self.station1 + ", " + self.station2 + ", " + str(self.time))
