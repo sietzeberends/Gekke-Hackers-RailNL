@@ -3,8 +3,11 @@ class Station:
 		self.name = name
 		self.latitude = latitude
 		self.longitude = longitude
-		self.critical = critical
+		if critical == "Kritiek":
+			self.critical = True
+		else:
+			self.critical = False
 
-	def __str__():
-		return self.name + ", " + self.latitude + ", " + self.longitude + ", "
-		+ critical
+	def __str__(self):
+		return (self.name + ", " + str(self.latitude) + ", " + str(self.longitude) + ", "
+		+ str(self.critical))

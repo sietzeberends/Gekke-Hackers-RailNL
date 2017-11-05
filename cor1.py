@@ -1,7 +1,5 @@
-from itertools import product
+import product
 import csv
-
-
 
 stations = dict()
 connections = {}
@@ -17,22 +15,15 @@ with open('ConnectiesHolland.csv', 'r') as csvfile:
 		connectionsname = ""
 		connectionsname += row[0] + ' -> ' + row[1]
 		connections[connectionsname] = row[2]
-# ws = file('StationsHolland.csv','r',1)
 
 for connection in connections:
 	print connection, connections[connection]
-
 
 for x in stations:
 	print x, stations[x]
 
 for connections in traject:
 	total += connections[connections][1]
-
-
-
-
-
 
 connection = connections[1]
 total = 0
