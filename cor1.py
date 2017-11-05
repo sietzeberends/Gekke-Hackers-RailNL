@@ -28,7 +28,6 @@ for x in stations:
 
 for connections in traject:
 	total += connections[connections][1]
->>>>>>> 6d3e995ac5df052ad8ad0cb36dfa026be6945110
 
 
 
@@ -38,6 +37,6 @@ for connections in traject:
 connection = connections[1]
 total = 0
 
-while total =< 120
-
+while total <= 120:
   traject.append(connections[1])
+  total += 1
