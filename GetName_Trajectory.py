@@ -1,13 +1,18 @@
+from station import Station
+from connection import Connection
+from trajectory import Trajectory
+
 
 class GetName:
     def __init__(self, traject):
 
-        self.connections = traject.connections
-
         self.Name_traject = []
 
-        for connection in self.connections:
-            self.Name_traject.append(connection[0] + " -> ")
+        for connection in traject.connections:
+            self.Name_traject.append(connection.station1 + " -> ")
+
+        last_connection = traject.connections[-1]
+        self.Name_traject.append(last_connection.station2)
 
     def __str__(self):
-        return (self.Name_traject)
+        return (str(self.Name_traject))
