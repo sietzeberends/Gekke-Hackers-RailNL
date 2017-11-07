@@ -6,6 +6,7 @@ from datetime import datetime
 import csv
 import random
 
+startTime = datetime.now()
 # track all stations and connections in two lists
 stations = []
 connections = []
@@ -28,9 +29,14 @@ with open('csvFiles/StationsHolland.csv', 'r') as csvfile:
 for station in stations:
     print station
 
+
+connectionsForFirstTrajectory =[]
+
+
+
 def addconnection():
     connectionsForFirstTrajectory.append(random.choice(connections))
-    while len(connectionsForFirstTrajectory) < 5:
+    while len(connectionsForFirstTrajectory) < 4:
         x = random.choice(connections)
         if x.station1 == connectionsForFirstTrajectory[-1].station2:
           connectionsForFirstTrajectory.append(x)
@@ -38,20 +44,20 @@ def addconnection():
 addconnection()
 print stations[0].getConnections()
 
-firstTrajectory = Trajectory(connectionsForFirstTrajectory)
+# startTime.sleep(5)
 
-startTime = datetime.now()
-timeElapsed = datetime.now()-startTime
+
+timeElapsed = datetime.now() - startTime
 print('Time elapsed (hh:mm:ss.ms) {}'.format(timeElapsed))
 
 
 # let's test if our connections can be put in an instance of the class 'Trajectory'
-connectionsForFirstTrajectory = []
+
 
 # we use connections to create a trajectory between Amsterdam Amstel and Haarlem
 # TODO: create a function to generate a random traject
 # of course, connections need to be linked to eachother
-connectionsForFirstTrajectory.extend((connections[2], connections[7], connections[6]))
+
 
 # now, let's build the first trajectory. Right now, the name is manually given
 # TODO: create a function to create the name of the trajectory
