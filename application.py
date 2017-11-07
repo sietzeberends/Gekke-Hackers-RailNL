@@ -6,6 +6,8 @@ from datetime import datetime
 import csv
 import random
 
+startTime = datetime.now()
+
 # track all stations and connections in two lists
 stations = []
 connections = []
@@ -28,7 +30,6 @@ with open('csvFiles/StationsHolland.csv', 'r') as csvfile:
 for station in stations:
     print station
 
-startTime = datetime.now()
 
 def addconnection():
     connectionsForFirstTrajectory.append(random.choice(connections))
