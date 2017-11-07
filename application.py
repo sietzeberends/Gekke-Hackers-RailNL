@@ -1,6 +1,7 @@
 from station import Station
 from connection import Connection
 from trajectory import Trajectory
+from datetime import datetime
 
 import random
 import csv
@@ -43,6 +44,10 @@ connectionsForFirstTrajectory = []
 # 		for connection in connections:
 # 			if connection.station2 == y.station1:
 # 				return addconnection(connectionsForFirstTrajectory.extend((connection, y)))
+
+# store time
+startTime = datetime.now()
+
 def addconnection():
     connectionsForFirstTrajectory.append(random.choice(connections))
     while len(connectionsForFirstTrajectory) < 5:
@@ -62,7 +67,10 @@ addconnection()
 # TODO: create a function to create the name of the trajectory
 # based on the first station of the first connection in the trajectory
 # and the last station of the last connection in the trajectory
-firstTrajectory = Trajectory("Amsterdam Amstel -> Haarlem", connectionsForFirstTrajectory)
+firstTrajectory = Trajectory(connectionsForFirstTrajectory)
+
+timeElapsed = datetime.now()-startTime
+print('Time elapsed (hh:mm:ss.ms) {}'.format(timeElapsed))
 
 # check if it worked
 print firstTrajectory

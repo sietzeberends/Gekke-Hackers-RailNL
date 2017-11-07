@@ -2,8 +2,8 @@
 # Trajectory has a name and a list of connections
 
 class Trajectory:
-	def __init__(self, name, connections):
-		self.name = name
+	def __init__(self, connections):
+
 		self.connections = connections
 		self.time = 0
 		for connection in connections:
