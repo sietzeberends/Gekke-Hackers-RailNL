@@ -1,8 +1,10 @@
 from Classes.station import Station
 from Classes.connection import Connection
 from Classes.trajectory import Trajectory
+from datetime import datetime
 
 import csv
+import random
 
 # track all stations and connections in two lists
 stations = []
@@ -26,7 +28,22 @@ with open('csvFiles/StationsHolland.csv', 'r') as csvfile:
 for station in stations:
     print station
 
+def addconnection():
+    connectionsForFirstTrajectory.append(random.choice(connections))
+    while len(connectionsForFirstTrajectory) < 5:
+        x = random.choice(connections)
+        if x.station1 == connectionsForFirstTrajectory[-1].station2:
+          connectionsForFirstTrajectory.append(x)
+
+addconnection()
 print stations[0].getConnections()
+
+firstTrajectory = Trajectory(connectionsForFirstTrajectory)
+
+startTime = datetime.now()
+timeElapsed = datetime.now()-startTime
+print('Time elapsed (hh:mm:ss.ms) {}'.format(timeElapsed))
+
 
 # let's test if our connections can be put in an instance of the class 'Trajectory'
 connectionsForFirstTrajectory = []
