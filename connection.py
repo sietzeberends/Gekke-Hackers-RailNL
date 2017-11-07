@@ -1,5 +1,3 @@
-from station import Station
-
 # connection class
 # connection == time it takes for a train to get from one station to another
 # therefore a connection has two stations and the travel time between them
