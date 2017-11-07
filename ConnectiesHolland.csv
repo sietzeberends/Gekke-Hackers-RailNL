@@ -4,11 +4,11 @@ Amsterdam Amstel,Amsterdam Zuid,10,FALSE
 Amsterdam Amstel,Amsterdam Centraal,8,TRUE
 Amsterdam Centraal,Amsterdam Sloterdijk,6,TRUE
 Amsterdam Sloterdijk,Haarlem,11,TRUE
-Amsterdam Sloterdijk,Zaandam,6,FALSE
+Amsterdam Sloterdijk,Zaandam,6,TRUE
 Amsterdam Zuid,Amsterdam Sloterdijk,16,FALSE
 Amsterdam Zuid,Schiphol Airport,6,FALSE
 Beverwijk,Castricum,13,TRUE
-Castricum,Alkmaar,9,FALSE
+Castricum,Alkmaar,9,TRUE
 Delft,Den Haag Centraal,13,TRUE
 Den Haag Centraal,Gouda,18,TRUE
 Den Haag Centraal,Leiden Centraal,12,TRUE
