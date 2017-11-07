@@ -6,6 +6,7 @@ class Trajectory:
 
 		self.connections = connections
 		self.time = 0
+		
 		for connection in connections:
 			self.time += connection.time
 
