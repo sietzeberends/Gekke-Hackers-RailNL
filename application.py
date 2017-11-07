@@ -7,6 +7,10 @@ import csv
 import random
 
 startTime = datetime.now()
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8bdc792e501d3567a0a357a26dc9aff2379ccbad
 # track all stations and connections in two lists
 stations = []
 connections = []
@@ -29,7 +33,10 @@ with open('csvFiles/StationsHolland.csv', 'r') as csvfile:
 for station in stations:
     print station
 
+<<<<<<< HEAD
 connectionsForFirstTrajectory =[]
+=======
+>>>>>>> 8bdc792e501d3567a0a357a26dc9aff2379ccbad
 
 def addconnection():
     connectionsForFirstTrajectory.append(random.choice(connections))
