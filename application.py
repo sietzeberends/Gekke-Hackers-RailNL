@@ -28,6 +28,8 @@ with open('csvFiles/StationsHolland.csv', 'r') as csvfile:
 for station in stations:
     print station
 
+startTime = datetime.now()
+
 def addconnection():
     connectionsForFirstTrajectory.append(random.choice(connections))
     while len(connectionsForFirstTrajectory) < 5:
@@ -40,7 +42,6 @@ print stations[0].getConnections()
 
 firstTrajectory = Trajectory(connectionsForFirstTrajectory)
 
-startTime = datetime.now()
 timeElapsed = datetime.now()-startTime
 print('Time elapsed (hh:mm:ss.ms) {}'.format(timeElapsed))
 
