@@ -1,6 +1,6 @@
-from station import Station
-from connection import Connection
-from trajectory import Trajectory
+from Classes.station import Station
+from Classes.connection import Connection
+from Classes.trajectory import Trajectory
 
 import csv
 
@@ -9,7 +9,7 @@ stations = []
 connections = []
 
 # load all the connections
-with open('ConnectiesHolland.csv', 'r') as csvfile:
+with open('csvFiles/ConnectiesHolland.csv', 'r') as csvfile:
 	rows = csv.reader(csvfile)
 	for row in rows:
 		connections.append(Connection(row[0], row[1], row[2]))
@@ -18,7 +18,7 @@ for connection in connections:
     print connection
 
 # load all the stations
-with open('StationsHolland.csv', 'r') as csvfile:
+with open('csvFiles/StationsHolland.csv', 'r') as csvfile:
 	rows = csv.reader(csvfile)
 	for row in rows:
 		stations.append(Station(row[0], row[1], row[2], row[3], connections))
