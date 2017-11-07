@@ -5,6 +5,11 @@ class Trajectory:
 	def __init__(self, name, connections):
 		self.name = name
 		self.connections = connections
+		self.time = 0
+		for connection in connections:
+			self.time += connection.time
+
+
 
 	def __str__(self):
 		output = ""
@@ -14,7 +19,7 @@ class Trajectory:
 			 output += " - "
 			 output += connection.station2
 			 output += "; "
-			 time += connection.time
 
-		output += "total time: " + str(time) + " minutes"
+
+		output += "total time: " + str(self.time) + " minutes"
 		return output
