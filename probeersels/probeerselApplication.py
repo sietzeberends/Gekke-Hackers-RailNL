@@ -39,12 +39,6 @@ with open('ConnectiesHolland.csv', 'r') as csvfile:
 for connection in connections:
 	connection.addChildren(connections)
 
-#
-# print connections[1]
-# for child in connections[1].children:
-# 	print connections[child].station1.name
-# 	print connections[child].station2.name
-
 
 count = 0
 stationsk = []
