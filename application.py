@@ -27,21 +27,24 @@ with open('csvFiles/ConnectiesHolland.csv', 'r') as csvfile:
 									  Station(row[1], "", "", row[3]),
 									  row[2],
 									  row[3]))
-# add the children to the connections
+# add the children to the gconnections
 for connection in connections:
 	connection.addChildren(connections)
 
-# stationsk = []
-# for connection in connections:
-#   if connection.critical == True:
-#     stationsk.append(connection.station1, connection.station2)
-# for station in stations:
-#     if (station == stations.index(stationsk[0])) or (station == stations.index(stationsk[1])):
-#       count += 1
-#     else:
-#       print "not proven"
-#     if count == 22:
-#       print "POOF IT IS PROOF"
+count = 0
+stationsk = []
+for connection in connections:
+	if connection.critical == "TRUE":
+	  stationsk.append(connection.station1.name)
+	  stationsk.append(connection.station2.name)
+for Station.name in stations:
+	if str(Station.name) in stationsk:
+		count += 1
+		print (count)
+if count == 22:
+	print ("POOF IT IS PROOF QED")
+else:
+	print ("not a PROOF")
 
 connectionsForTrajectory =[]
 
@@ -69,12 +72,11 @@ def createTrajectory(connection, time):
 time = 0
 createTrajectory(random.choice(connections), time)
 
-# startTime.sleep(5)
-
-timeElapsed = datetime.now()-startTime
-print('Time elapsed (hh:mm:ss.ms) {}'.format(timeElapsed))
 
 firstTrajectory = Trajectory(connectionsForTrajectory)
 
 # check if it worked
-print firstTrajectory
+print (firstTrajectory)
+
+timeElapsed = datetime.now()-startTime
+print('Time elapsed (hh:mm:ss.ms) {}'.format(timeElapsed))
