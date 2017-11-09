@@ -19,7 +19,8 @@ class Trajectory:
 		for connection in self.connections:
 			 output += connection.station1.name
 			 output += " -> "
-
+		last_station = self.connections[-1]
+	 	output += last_station.station2.name
 		output += " total time: " + str(self.time) + " minutes"
 		return output
 
@@ -35,12 +36,11 @@ class Trajectory:
 			else:
 				break
 			# if the station only has one child (i.e. is on the edge of civilization)
-			if len(connection.connections) == 1:
-				index = connection.connections[0]
+			if len(connection.children) == 1:
+				index = connection.children[0]
 			# if the station has more than one child
 			else:
-				index = random.choice(connection.connections)
-				print index
+				index = random.choice(connection.children)
 			# make sure we don't overstep our constraint
 			# recursive
 			return self.createTrajectory(index, time, connections)

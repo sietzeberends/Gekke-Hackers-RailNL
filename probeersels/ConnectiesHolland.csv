@@ -1,0 +1,28 @@
+Alkmaar,Hoorn,24,TRUE
+Alkmaar,Den Helder,36,TRUE
+Amsterdam Amstel,Amsterdam Zuid,10,FALSE
+Amsterdam Amstel,Amsterdam Centraal,8,TRUE
+Amsterdam Centraal,Amsterdam Sloterdijk,6,TRUE
+Amsterdam Sloterdijk,Haarlem,11,TRUE
+Amsterdam Sloterdijk,Zaandam,6,TRUE
+Amsterdam Zuid,Amsterdam Sloterdijk,16,FALSE
+Amsterdam Zuid,Schiphol Airport,6,FALSE
+Beverwijk,Castricum,13,FALSE
+Castricum,Alkmaar,9,TRUE
+Delft,Den Haag Centraal,13,TRUE
+Den Haag Centraal,Gouda,18,TRUE
+Den Haag Centraal,Leiden Centraal,12,TRUE
+Dordrecht,Rotterdam Centraal,17,TRUE
+Gouda,Alphen a/d Rijn,19,TRUE
+Haarlem,Beverwijk,16,TRUE
+Heemstede-Aerdenhout,Haarlem,6,TRUE
+Leiden Centraal,Heemstede-Aerdenhout,13,FALSE
+Leiden Centraal,Alphen a/d Rijn,14,FALSE
+Leiden Centraal,Schiphol Airport,15,FALSE
+Rotterdam Alexander,Gouda,10,TRUE
+Rotterdam Centraal,Schiedam Centrum,5,TRUE
+Rotterdam Centraal,Rotterdam Alexander,8,TRUE
+Schiedam Centrum,Delft,7,FALSE
+Zaandam,Castricum,12,TRUE
+Zaandam,Beverwijk,25,TRUE
+Zaandam,Hoorn,26,TRUE
