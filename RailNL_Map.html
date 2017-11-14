@@ -1,0 +1,121 @@
+<!doctype html>
+
+<html>
+
+<head>
+
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+
+</head>
+
+<body>
+
+<canvas id="graph" width="500" height="800" style="border:1px solid #000000;" > </canvas>
+
+<textarea id="rawdata"> 
+52.64,4.74
+52.12,4.66
+52.35,4.92
+52.38,4.90
+52.39,4.84
+52.34,4.87
+52.48,4.66
+52.55,4.66
+52.01,4.36
+52.08,4.32
+52.96,4.76
+51.81,4.67
+52.02,4.70
+52.39,4.64
+52.36,4.61
+52.64,5.06
+52.17,4.48
+51.95,4.55
+51.92,4.47
+51.92,4.41
+52.31,4.76
+52.44,4.81</textarea>
+
+<script>
+
+var xhttp = new XMLHttpRequest();
+
+xhttp.onreadystatechange = function () 
+{
+	if (this.readyState == 4 && this.status == 200)
+	{
+		var data_stations = xhttp.responseText;
+		create_graph(data_stations)
+	}
+}
+
+xhttp.open("GET","test_kaart.csv");
+xhttp.send();
+
+
+function create_graph(data_stations)
+{
+	var data= data_stations.split("\n")
+
+	data_list = []
+	longitudes = []
+	latitudes = []
+
+	for (i = 0; i < data.length; i++)
+	{	
+		placeholder = data[i].split(";")
+
+		var latitude = Number(placeholder[1].replace(",","."));
+		var longitude = Number(placeholder[2].replace(",","."));
+		
+		latitudes.push(latitude);
+		longitudes.push(longitude);
+		dictionary = {"longitude": longitude, "latitude": latitude, "name":placeholder[0]};
+
+		data_list.push(dictionary);
+	}
+
+
+	var maximum_longitude = Math.max.apply(null,longitudes)
+	var minimum_longitude = Math.min.apply(null,longitudes)
+
+	var maximum_latitude = Math.max.apply(null,latitudes)
+	var minimum_latitude = Math.min.apply(null,latitudes)
+	
+
+	graph_width = 400
+	graph_length = 600
+
+	function getX(x){
+		var position = (x - minimum_longitude) / (maximum_longitude - minimum_longitude);
+		return graph_width * position;
+	}
+
+	function getY(y){
+		var position = (y - minimum_latitude) / (maximum_latitude - minimum_latitude);
+		return graph_length * position;
+	}
+
+
+	for (i = 0; i < data_list.length; i++)
+	{
+		
+		var x_position = getX(data_list[i].longitude)
+		var y_position = getY(data_list[i].latitude)
+		
+		var canvas = document.getElementById('graph'); 
+		var ctx = canvas.getContext('2d');
+
+		ctx.fillRect(x_position, graph_length - y_position, 10,10)
+		ctx.fillText(data_list[i].name, x_position, graph_length - y_position + 20)
+
+	}
+}
+
+
+</script>
+
+</body>
+
