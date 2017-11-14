@@ -12,9 +12,9 @@ class Connection :
 		self.children = []
 		self.index = index
 		if critical == "TRUE":
-			self.critical = "TRUE"
+			self.critical = True
 		else:
-			self.critical = "FALSE"
+			self.critical = False
 
 # add all the possible connections to go to next
 	def addChildren(self, connections):
