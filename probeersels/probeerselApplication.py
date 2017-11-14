@@ -1,6 +1,7 @@
 from probeerselStation import Station
 from probeerselConnection import Connection
 from probeerselTrajectory import Trajectory
+from probeerselLijnVoering import LijnVoering
 from datetime import datetime
 
 import csv
@@ -55,12 +56,23 @@ if count == 22:
 else:
 	print ("not a PROOF")
 
+testLijnVoering = LijnVoering(connections)
+highScore = 0
+aantalLijnvoeringen = 0
+while highScore < 10000:
+	aantalLijnvoeringen += 1
+	testLijnVoering = LijnVoering(connections)
+	testLijnVoering.createRandomLineFeeding(testLijnVoering.trajectories)
+	highScore = testLijnVoering.LineFeedingScore()
 
-testTrajectory = Trajectory([])
-time = 0
-firstConnectionIndex = random.choice(connections).index
 
-testTrajectory.createTrajectory(firstConnectionIndex, time, connections)
-print (testTrajectory)
+print(testLijnVoering)
+print("Score: " + str(highScore))
+print("Aantal Lijnvoeringen voor bereiken maximale score: " + str(aantalLijnvoeringen))
+
+
+# testTrajectory.createTrajectory(firstConnectionIndex, time, connections)
+# print (testTrajectory)
+
 timeElapsed = datetime.now()-startTime
 print('Time elapsed (hh:mm:ss.ms) {}'.format(timeElapsed))

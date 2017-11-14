@@ -3,15 +3,16 @@ import random
 # Trajectory has a name and a list of connections
 
 class Trajectory:
-	def __init__(self, connections):
+	def __init__(self):
 
-		self.connections = connections
+		self.connections = []
 		self.time = 0
 		self.connectionsAmount = 0;
+		self.indexes = []
 
-		for connection in connections:
+		for connection in self.connections:
 			self.time += connection.time
-			connections.amount += 1;
+			self.connectionsAmount += 1;
 
 	# return all the information about a Trajectory
 	def __str__(self):
@@ -30,8 +31,9 @@ class Trajectory:
 		connection = connections[index]
 		# as long as the Trajectory has a lower duration than 120
 		while True:
-			if self.time + connection.time < 120:
+			if self.time + connection.time <= 120:
 				self.connections.append(connection)
+				self.indexes.append(connection.index)
 				time += connection.time
 				self.time = time
 			else:
@@ -42,6 +44,10 @@ class Trajectory:
 			# if the station has more than one child
 			else:
 				index = random.choice(connection.children)
+				# kijk of de connectie al in het traject zit
+				while index in self.indexes:
+					index = random.choice(connection.children)
+					break
 			# make sure we don't overstep our constraint
 			# recursive
 			return self.createTrajectory(index, time, connections)
