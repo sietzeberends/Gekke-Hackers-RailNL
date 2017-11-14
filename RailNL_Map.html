@@ -12,7 +12,7 @@
 
 <body>
 
-<canvas id="graph" width="400" height="600" style="border:1px solid #000000;" > </canvas>
+<canvas id="graph" width="500" height="800" style="border:1px solid #000000;" > </canvas>
 
 <textarea id="rawdata"> 
 52.64,4.74
@@ -40,55 +40,78 @@
 
 <script>
 
-var data = document.getElementById('rawdata').innerHTML.split("\n");
+var xhttp = new XMLHttpRequest();
 
-data_list = []
-longitudes = []
-latitudes = []
-
-for (i = 1; i < data.length; i++)
+xhttp.onreadystatechange = function () 
 {
-	var latitude = data[i].substring(0,5);
-	var longitude = data[i].substring(6,10);
-	latitudes.push(Number(latitude));
-	longitudes.push(Number(longitude));
-	dictionary = {"longitude": longitude, "latitude": latitude};
-
-	data_list.push(dictionary);
+	if (this.readyState == 4 && this.status == 200)
+	{
+		var data_stations = xhttp.responseText;
+		create_graph(data_stations)
+	}
 }
 
-
-var maximum_longitude = Math.max.apply(null,longitudes)
-var minimum_longitude = Math.min.apply(null,longitudes)
-
-var maximum_latitude = Math.max.apply(null,latitudes)
-var minimum_latitude = Math.min.apply(null,latitudes)
-
-graph_width = 400
-graph_length = 600
-
-function getX(x){
-	var position = (x - minimum_longitude) / (maximum_longitude - minimum_longitude);
-	return graph_width * position;
-}
-
-function getY(y){
-	var position = (y - minimum_latitude) / (maximum_latitude - minimum_latitude);
-	return graph_length * position;
-}
+xhttp.open("GET","test_kaart.csv");
+xhttp.send();
 
 
-for (i = 0; i < data_list.length; i++)
+function create_graph(data_stations)
 {
-	
-	var x_position = getX(data_list[i].longitude)
-	var y_position = getY(data_list[i].latitude)
-	
-	var canvas = document.getElementById('graph'); 
-	var ctx = canvas.getContext('2d');
+	var data= data_stations.split("\n")
 
-	ctx.fillRect(x_position, graph_length - y_position, 10,10)
+	data_list = []
+	longitudes = []
+	latitudes = []
 
+	for (i = 0; i < data.length; i++)
+	{	
+		placeholder = data[i].split(";")
+
+		var latitude = Number(placeholder[1].replace(",","."));
+		var longitude = Number(placeholder[2].replace(",","."));
+		
+		latitudes.push(latitude);
+		longitudes.push(longitude);
+		dictionary = {"longitude": longitude, "latitude": latitude, "name":placeholder[0]};
+
+		data_list.push(dictionary);
+	}
+
+
+	var maximum_longitude = Math.max.apply(null,longitudes)
+	var minimum_longitude = Math.min.apply(null,longitudes)
+
+	var maximum_latitude = Math.max.apply(null,latitudes)
+	var minimum_latitude = Math.min.apply(null,latitudes)
+	
+
+	graph_width = 400
+	graph_length = 600
+
+	function getX(x){
+		var position = (x - minimum_longitude) / (maximum_longitude - minimum_longitude);
+		return graph_width * position;
+	}
+
+	function getY(y){
+		var position = (y - minimum_latitude) / (maximum_latitude - minimum_latitude);
+		return graph_length * position;
+	}
+
+
+	for (i = 0; i < data_list.length; i++)
+	{
+		
+		var x_position = getX(data_list[i].longitude)
+		var y_position = getY(data_list[i].latitude)
+		
+		var canvas = document.getElementById('graph'); 
+		var ctx = canvas.getContext('2d');
+
+		ctx.fillRect(x_position, graph_length - y_position, 10,10)
+		ctx.fillText(data_list[i].name, x_position, graph_length - y_position + 20)
+
+	}
 }
 
 
