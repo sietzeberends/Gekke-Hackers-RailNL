@@ -17,10 +17,11 @@ class Trajectory:
 	def __str__(self):
 		output = ""
 		for connection in self.connections:
-			 output += connection.station1.name
-			 output += " -> "
+			output += connection.station1.name
+			output += " -> "
+
 		last_station = self.connections[-1]
-	 	output += last_station.station2.name
+		output += last_station.station2.name
 		output += " total time: " + str(self.time) + " minutes"
 		return output
 
