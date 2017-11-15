@@ -32,54 +32,66 @@ class LijnVoering:
     # Breadth-first
     def createAllPossibleLijnVoeringen(self, connections, indexVerticaal, indexHorizontaal, tree):
 
+        # als we voor het eerst de functie doorlopen
         if indexVerticaal == 0 and indexHorizontaal == 0:
-            tree = {}
-            v = 0
-            h = 0
+            v = indexVerticaal
+            h = indexHorizontaal
 
+            tree = {}
+
+            # maak dan de tree aan met alle connecties
             for connection in connections:
-                tree["indexVerticaal"] = v
-                tree["indexHorizontaal"] = h
-                tree["connection"] = connection
+                tree[v, h] = connection.index
                 h += 1
 
+            # for key, value in tree.items():
+            #     print(key, value)
 
-            for key, value in tree.items():
-                if tree["indexVerticaal"] == 0 and tree["indexHorizontaal"] == 54:
-                    print (tree["connection"])
-
-
-
-
+        # als het niet de eerste keer is, neem dan de oude tree over
         else:
             tree = tree
 
-        # allChilds = connections[indexHorizontaal].children
-        #
-        # for child in allChilds:
-        #     if connections[child].station2.name == connections[indexHorizontaal].station1.name:
-        #         print("niet toevoegen")
-        #     else:
-        #         indexHorizontaal += 1
-        #         tree[indexVerticaal, indexHorizontaal] = child
-        #
-        # # als het laatste child van de connectie geweest is, begin dan aan de children van de volgende connectie
-        # if indexHorizontaal == len(allChilds):
-        #     indexHorizontaal += 1
-        #     return self.createAllPossibleLijnVoeringen(connections, indexVerticaal, indexHorizontaal, tree)
-        #
-        # # als de children van de laatste connectie geweest zijn, begin dan aan de children van het eerste child van de eerste connectie
-        # if indexVerticaal == len(connections):
-        #     indexVerticaal += 1
-        #     indexHorizontaal = 0
-        #     # childConnecties = []
-        #     # for connection in connections:
-        #     #     for childIndex in allChilds:
-        #     #         if childIndex == connection.indexes:
-        #     #             childConnecties.append(connection)
-        #     return self.createAllPossibleLijnVoeringen(childConnecties, index, tree)
-        #
-        # return tree
+        indexVerticaal += 1
+        allChilds = connections[indexHorizontaal].children
+        childsRemaining = len(allChilds)
+        for child in allChilds:
+            if connections[child].station2.name == connections[indexHorizontaal].station1.name:
+                # als de volgende connectie  maar 1 child heeft (Dordrecht/Den Helder)
+                if len(connections[child].children) == 1:
+                    tree[indexVerticaal, indexHorizontaal] = child
+                    indexHorizontaal += 1
+                    print(indexHorizontaal)
+                    childsRemaining -= 1
+                # als de herkomst hetzelfde is als de bestemming
+                else:
+                    childsRemaining -= 1
+
+            # alles klopt
+            else:
+                tree[indexVerticaal, indexHorizontaal] = child
+                childsRemaining -= 1
+                indexHorizontaal += 1
+                print(indexHorizontaal)
+
+        print (child)
+        # als het laatste child van de connectie geweest is, begin dan aan de children van de volgende connectie
+        if childsRemaining == 0:
+            if len(connections[child].children) == 1:
+                indexHorizontaal += 1
+            return self.createAllPossibleLijnVoeringen(connections, indexVerticaal, indexHorizontaal, tree)
+
+        # als de children van de laatste connectie geweest zijn, begin dan aan de children van het eerste child van de eerste connectie
+        if indexVerticaal == len(connections):
+            indexVerticaal += 1
+            indexHorizontaal = 0
+            # childConnecties = []
+            # for connection in connections:
+            #     for childIndex in allChilds:
+            #         if childIndex == connection.indexes:
+            #             childConnecties.append(connection)
+            return self.createAllPossibleLijnVoeringen(childConnecties, index, tree)
+
+        return "asd"
 
     def LineFeedingScore(self):
         constant = 10000
