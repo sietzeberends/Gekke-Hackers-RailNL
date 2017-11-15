@@ -70,6 +70,9 @@ print(testLijnVoering)
 print("Score: " + str(highScore))
 print("Aantal Lijnvoeringen voor bereiken maximale score: " + str(aantalLijnvoeringen))
 
+breadthLijnvoering = LijnVoering(connections)
+print(breadthLijnvoering.createAllPossibleLijnVoeringen(connections, 0, 0, ""))
+
 
 # testTrajectory.createTrajectory(firstConnectionIndex, time, connections)
 # print (testTrajectory)
