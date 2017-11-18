@@ -1,6 +1,7 @@
 from probeerselTrajectory import Trajectory
 from probeerselConnection import Connection
 
+from queue import *
 import random
 
 class LijnVoering:
@@ -19,81 +20,119 @@ class LijnVoering:
         return output
 
     # Willekeurige LineFeeding aanmaken, dit kunnen we al.
-    def createRandomLineFeeding(self, trajectories):
-        while len(trajectories) < 7:
+    def createRandomLijnVoering(self, trajectories, amount):
+        # rand = random.randrange(8)
+        # print(rand)
+        while len(trajectories) < amount:
             trajectory = Trajectory()
             firstConnectionIndex = random.choice(self.connections).index
             trajectory.createTrajectory(firstConnectionIndex, 0 , self.connections)
             self.trajectories.append(trajectory)
             self.time += trajectory.time
 
+    def hillClimber(self, trajectories, connections, amount):
+        self.createRandomLijnVoering(self.trajectories, amount)
+        alternativeLijnvoering = LijnVoering(connections)
+        alternativeLijnvoering.trajectories = self.trajectories
+        score = self.scoreOpdrachtB()
+        stopCounter = 0
 
-    # TODO Alle mogelijke LineFeedings aanmaken
-    # Breadth-first
-    def createAllPossibleLijnVoeringen(self, connections, indexVerticaal, indexHorizontaal, tree):
+        # start with replacing the first trajectory
+        whichTrajectory = 0
 
-        # als we voor het eerst de functie doorlopen
-        if indexVerticaal == 0 and indexHorizontaal == 0:
-            v = indexVerticaal
-            h = indexHorizontaal
+        while stopCounter < 16000:
+            # print(score)
+            # generate a new trajectory
+            trajectory = Trajectory()
+            firstConnectionIndex = random.choice(self.connections).index
+            trajectory.createTrajectory(firstConnectionIndex, 0 , self.connections)
 
-            tree = {}
+            # replace the trajectory and calculate the new score
+            alternativeLijnvoering.trajectories[whichTrajectory] = trajectory
+            scoreAlternative = alternativeLijnvoering.scoreOpdrachtB()
 
-            # maak dan de tree aan met alle connecties
-            for connection in connections:
-                tree[v, h] = connection.index
-                h += 1
+            # if the score is better, get the next trajectory
+            if scoreAlternative > score:
+                self.trajectories = alternativeLijnvoering.trajectories
+                score = scoreAlternative
 
-            # for key, value in tree.items():
-            #     print(key, value)
+                # move on to the next trajectory
+                # go to the first trajectory after the last one
 
-        # als het niet de eerste keer is, neem dan de oude tree over
-        else:
-            tree = tree
+                # if there is only one trajectory, replace the same one
+                if len(self.trajectories) == 1:
+                    whichTrajectory = whichTrajectory
 
-        indexVerticaal += 1
-        allChilds = connections[indexHorizontaal].children
-        childsRemaining = len(allChilds)
-        for child in allChilds:
-            if connections[child].station2.name == connections[indexHorizontaal].station1.name:
-                # als de volgende connectie  maar 1 child heeft (Dordrecht/Den Helder)
-                if len(connections[child].children) == 1:
-                    tree[indexVerticaal, indexHorizontaal] = child
-                    indexHorizontaal += 1
-                    print(indexHorizontaal)
-                    childsRemaining -= 1
-                # als de herkomst hetzelfde is als de bestemming
+                # if we've reached the last trajectory, start with the first one
+                elif len(self.trajectories) - 1 == whichTrajectory:
+                    whichTrajectory = 0
+
+                # if we haven't reached the last trajectory, get the next one
                 else:
-                    childsRemaining -= 1
+                    whichTrajectory += 1
 
-            # alles klopt
             else:
-                tree[indexVerticaal, indexHorizontaal] = child
-                childsRemaining -= 1
-                indexHorizontaal += 1
-                print(indexHorizontaal)
+                stopCounter += 1
 
-        print (child)
-        # als het laatste child van de connectie geweest is, begin dan aan de children van de volgende connectie
-        if childsRemaining == 0:
-            if len(connections[child].children) == 1:
-                indexHorizontaal += 1
-            return self.createAllPossibleLijnVoeringen(connections, indexVerticaal, indexHorizontaal, tree)
+        # print(stopCounter)
+        # print(len(self.trajectories))
+        # for traject in self.trajectories:
+        #     print("\n")
+        #     for connection in traject.connections:
+        #         print(connection)
 
-        # als de children van de laatste connectie geweest zijn, begin dan aan de children van het eerste child van de eerste connectie
-        if indexVerticaal == len(connections):
-            indexVerticaal += 1
-            indexHorizontaal = 0
-            # childConnecties = []
-            # for connection in connections:
-            #     for childIndex in allChilds:
-            #         if childIndex == connection.indexes:
-            #             childConnecties.append(connection)
-            return self.createAllPossibleLijnVoeringen(childConnecties, index, tree)
+        return score
 
-        return "asd"
 
-    def LineFeedingScore(self):
+    # queue method (breadth first)
+    def queue(self, connections):
+
+        # create the queue
+        q = Queue()
+        a = {}
+        index = 0
+        finalList = []
+
+        # put all the root connections in the queue and in the archive as well
+        for connection in connections:
+            index = str(connection.index)
+            connectionList = []
+            connectionCheckList = []
+            connectionList.append(connection)
+            connectionCheckList.append(connection.station1.name)
+            q.put(connectionList)
+            time = connection.time
+
+        # while there are still items left on the queue
+        while q.qsize() > 0:
+
+            # get alkmaar -> hoorn
+            connectionFromq = q.get()
+            for x in connectionFromq:
+                print (x)
+
+            # pak alle children van het laatste item van de lijst (dus alkmaar -> hoorn)
+            for child in connectionFromq[-1].children:
+                # breid de lijst uit met alle children alkmaar -> hoorn
+                # voorkom de bounce
+                if connections[child].station2.name not in connectionCheckList:
+                    if time + connections[child].time <= 120:
+                        time += connections[child].time
+                        connectionList.append(connections[child])
+                        connectionCheckList.append(connections[child].station1.name)
+                        q.put(connectionList)
+                    else:
+                        # als de tijd 120 is, begin met een nieuwe en reset de tijd en sla de connectionlist op
+                        finalList.append(connectionList)
+                        connectionList.clear()
+                        time = 0
+
+        for traject in finalList:
+            print("Traject: " + traject[0].station1.name + " -> " + traject[0].station2.name)
+            for connection in traject:
+                print ("Connectie: " + connection.station1.name + " -> " + connection.station2.name)
+
+    def ScoreOpdrachtA(self):
         constant = 10000
         kritiekTotaal = 20
         indexesAlGecheckt = []
@@ -112,3 +151,36 @@ class LijnVoering:
         score = constant * percentageKritiek
         return score
         # 10000 * aantal kritieke connection in LineFeeding / (aantal kritieke connections totaal)
+
+    def scoreOpdrachtB(self):
+        percentageKritiek = 0
+        constanteP = 10000
+        kritiekTotaal = 20
+        trajecten = 0
+        constanteTrajecten = 50
+        minuten = 0
+        constanteMinuten = 1
+        indexesAlGecheckt = []
+
+        # ga alle trajecten in de lijnvoering langs
+        for trajectory in self.trajectories:
+            minuten += trajectory.time
+            trajecten += 1
+            # en alle connecties per traject
+            for connection in trajectory.connections:
+                # kijk of de connectie kritiek is
+                if connection.critical:
+                    # als de connectie al eerder is meegerekend
+                    if connection.index not in indexesAlGecheckt:
+                        # als de connectie op een oneven positie staat, voeg de connectie toe (en z'n broertje ook)
+                        if connection.index % 2 != 0:
+                            indexesAlGecheckt.append(connection.index)
+                            indexesAlGecheckt.append(self.connections[connection.index - 1].index)
+                        # als de connectie op een oneven positie staat, voeg de connectie toe (en z'n broertje ook)
+                        else:
+                            indexesAlGecheckt.append(connection.index)
+                            indexesAlGecheckt.append(self.connections[connection.index + 1].index)
+
+        percentageKritiek = (len(indexesAlGecheckt) / 2) / kritiekTotaal
+        score = percentageKritiek * constanteP - trajecten * constanteTrajecten - minuten / constanteMinuten
+        return score
