@@ -56,24 +56,50 @@ if count == 22:
 else:
 	print ("not a PROOF")
 
-testLijnVoering = LijnVoering(connections)
+# testLijnVoering = LijnVoering(connections)
+# highScoreA = 0
+# aantalLijnvoeringen = 0
+# while highScoreA < 10000:
+# 	aantalLijnvoeringen += 1
+# 	testLijnVoering = LijnVoering(connections)
+# 	testLijnVoering.createRandomLijnVoering(testLijnVoering.trajectories)
+# 	highScoreA = testLijnVoering.ScoreOpdrachtA()
+# 	print(highScoreA)
+
 highScore = 0
-aantalLijnvoeringen = 0
-while highScore < 10000:
-	aantalLijnvoeringen += 1
-	testLijnVoering = LijnVoering(connections)
-	testLijnVoering.createRandomLineFeeding(testLijnVoering.trajectories)
-	highScore = testLijnVoering.LineFeedingScore()
+aantalTrajectenBeste = 0
+
+# voer de hillCLimber 100 keer uit
+for j in range(1,100):
+	print("run: " + str(j))
+	testHillClimber = LijnVoering(connections)
+	for i in range(1,8):
+		hillClimberScore = testHillClimber.hillClimber(testHillClimber.trajectories, connections, i)
+		print(str(i) + " trajecten")
+		# testHillClimber.createRandomLijnVoering(testHillClimber.trajectories)
+		if(highScore < hillClimberScore):
+			print(highScore)
+			print(hillClimberScore)
+			highScore = hillClimberScore
+			aantalTrajectenBeste = i
+
+print("Traject " + str(aantalTrajectenBeste) + ": " + str(highScore))
+
+# for trajectory in testHillClimber.trajectories:
+# 	for connection in trajectory.connections:
+# 		print(connection)
 
 
-print(testLijnVoering)
-print("Score: " + str(highScore))
-print("Aantal Lijnvoeringen voor bereiken maximale score: " + str(aantalLijnvoeringen))
 
-breadthLijnvoering = LijnVoering(connections)
-print(breadthLijnvoering.createAllPossibleLijnVoeringen(connections, 0, 0, ""))
+# print(testLijnVoering)
+# print("Score: " + str(highScoreA))
+# print("Aantal Lijnvoeringen voor bereiken maximale score: " + str(aantalLijnvoeringen))
+
+#breadthLijnvoering = LijnVoering(connections)
+#print(breadthLijnvoering.createAllPossibleLijnVoeringen(connections, 0, 0, ""))
 
 
+# testLijnVoering.queue(connections)
 # testTrajectory.createTrajectory(firstConnectionIndex, time, connections)
 # print (testTrajectory)
 
