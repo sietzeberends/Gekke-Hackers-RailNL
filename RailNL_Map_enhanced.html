@@ -24,7 +24,7 @@ xhttp.onreadystatechange = function ()
 // global variable for location of cities
 city_locations = {};
 
-xhttp.open("GET","test_kaart.csv");
+xhttp.open("GET","csvFiles/test_kaart.csv");
 xhttp.send();
 
 var next = new XMLHttpRequest();
@@ -33,12 +33,12 @@ next.onreadystatechange = function()
 {
 	if (this.readyState == 4 && this.status == 200)
 	{
-		var data_trajectory = next.responseText;
-		create_trajectories(data_trajectory);
+		var data_connection = next.responseText;
+		create_connections(data_connection);
 	}
 }
 
-next.open("GET","test_traject.csv");
+next.open("GET","csvFiles/test_connection.csv");
 next.send();
 
 
@@ -107,7 +107,7 @@ function create_graph(data_stations)
 	}
 }
 
-function create_trajectories(data_trajectory)
+function create_connections(data_trajectory)
 {
 	var data = data_trajectory.split("\n");
 	
@@ -115,12 +115,11 @@ function create_trajectories(data_trajectory)
 
 	for (i = 0; i < data.length; i++)
 	{
-		placeholder = data[i].split(";")
+		placeholder = data[i].split(",")
 		
 		connection = {"city_1":placeholder[0],
 					  "city_2":placeholder[1],
-					  "time":placeholder[2],
-					  "critical":placeholder[3]};
+					  "time":placeholder[2]};
 
 		connections.push(connection);
 
@@ -131,11 +130,17 @@ function create_trajectories(data_trajectory)
 		var first_city = connections[i].city_1;
 		var second_city = connections[i].city_2;
 
+		console.log(first_city)
+		console.log(second_city)
+
 		var canvas = document.getElementById('graph'); 
 		var ctx = canvas.getContext('2d');
 
-		x_firstcity = city_locations[first_city][0]
-		y_firstcity = city_locations[first_city][1]
+		console.log(city_locations)
+
+		x_firstcity = city_locations[String(first_city)][0]
+		y_firstcity = city_locations[String(first_city)][1]
+
 		x_secondcity = city_locations[second_city][0]
 		y_secondcity = city_locations[second_city][1]
 
