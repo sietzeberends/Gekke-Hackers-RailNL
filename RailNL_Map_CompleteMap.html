@@ -12,7 +12,7 @@
 
 var xhttp = new XMLHttpRequest();
 
-xhttp.onreadystatechange = function () 
+xhttp.onreadystatechange = function ()
 {
 	if (this.readyState == 4 && this.status == 200)
 	{
@@ -38,7 +38,7 @@ next.onreadystatechange = function()
 	}
 }
 
-next.open("GET","csvFiles/test_connection.csv");
+next.open("GET","ConnectiesHolland.csv");
 next.send();
 
 
@@ -52,13 +52,13 @@ function create_graph(data_stations)
 	names = [];
 
 	for (i = 0; i < data.length; i++)
-	{	
+	{
 		placeholder = data[i].split(";");
 
 		var latitude = Number(placeholder[1].replace(",","."));
 		var longitude = Number(placeholder[2].replace(",","."));
 		var name = placeholder[0];
-		
+
 		latitudes.push(latitude);
 		longitudes.push(longitude);
 		names.push(name);
@@ -73,7 +73,7 @@ function create_graph(data_stations)
 
 	var maximum_latitude = Math.max.apply(null,latitudes);
 	var minimum_latitude = Math.min.apply(null,latitudes);
-	
+
 
 	graph_width = 1000
 	graph_length = 1200
@@ -91,11 +91,11 @@ function create_graph(data_stations)
 
 	for (i = 0; i < data_list.length; i++)
 	{
-		
+
 		var x_position = getX(data_list[i].longitude);
 		var y_position = getY(data_list[i].latitude);
-		
-		var canvas = document.getElementById('graph'); 
+
+		var canvas = document.getElementById('graph');
 		var ctx = canvas.getContext('2d');
 
 		ctx.fillRect(x_position, graph_length - y_position, 10,10);
@@ -110,17 +110,17 @@ function create_graph(data_stations)
 function create_connections(data_trajectory)
 {
 	var data = data_trajectory.split("\n");
-	console.log(data)
-	
+
 	connections = [];
 
 	for (i = 0; i < data.length; i++)
 	{
 		placeholder = data[i].split(",")
-		
+
 		connection = {"city_1":placeholder[0],
-					  "city_2":placeholder[1],
-					  "time":placeholder[2]};
+					  			"city_2":placeholder[1],
+					  			"time":placeholder[2],
+								  "critical":placeholder[3]};
 
 		connections.push(connection);
 
@@ -129,9 +129,9 @@ function create_connections(data_trajectory)
 	for (i = 0; i < connections.length; i++)
 	{
 		var first_city = connections[i].city_1;
-		var second_city = connections[i].city_2.replace(/\s+/g,'');
+		var second_city = connections[i].city_2.trim();
 
-		var canvas = document.getElementById('graph'); 
+		var canvas = document.getElementById('graph');
 		var ctx = canvas.getContext('2d');
 
 		x_firstcity = city_locations[String(first_city)][0]
@@ -156,11 +156,10 @@ function create_connections(data_trajectory)
 
 		ctx.fillText(connections[i].time, 0.5 * (x_firstcity + x_secondcity), 0.5 * (y_firstcity + y_secondcity))
 	}
-	
+
 
 }
 
 </script>
 
 </body>
-

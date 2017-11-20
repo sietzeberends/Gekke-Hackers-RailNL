@@ -88,6 +88,16 @@ for j in range(1,100):
 			for trajectory in testHillClimber.trajectories:
 				besteLijnvoering.trajectories.append(trajectory)
 			print(str(besteLijnvoering))
+			with open ("csvFiles/connections_visualisation.csv", "w") as outfile:
+				writer = csv.writer(outfile, dialect='excel')
+				for trajectory in besteLijnvoering.trajectories:
+					writer.writerow("-")
+					for connection in trajectory.connections:
+						placeholder = connection.station1.name + ", " +\
+		 			  				  connection.station2.name + ", " +\
+				      				  str(connection.time)
+						placeholder = placeholder.split(",")
+						writer.writerow(placeholder)
 
 for trajectory.time in testHillClimber.trajectories:
 	timeBesteLijnvoering += time
