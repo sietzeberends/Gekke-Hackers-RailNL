@@ -1,0 +1,45 @@
+-
+Rotterdam Alexander, Rotterdam Centraal, 8
+Rotterdam Centraal, Rotterdam Alexander, 8
+Rotterdam Alexander, Gouda, 10
+Gouda, Alphen a/d Rijn, 19
+Alphen a/d Rijn, Leiden Centraal, 14
+Leiden Centraal, Schiphol Airport, 15
+Schiphol Airport, Leiden Centraal, 15
+Leiden Centraal, Alphen a/d Rijn, 14
+-
+Amsterdam Amstel, Amsterdam Centraal, 8
+Amsterdam Centraal, Amsterdam Sloterdijk, 6
+Amsterdam Sloterdijk, Haarlem, 11
+Haarlem, Amsterdam Sloterdijk, 11
+Amsterdam Sloterdijk, Zaandam, 6
+Zaandam, Castricum, 12
+Castricum, Alkmaar, 9
+Alkmaar, Den Helder, 36
+-
+Schiedam Centrum, Rotterdam Centraal, 5
+Rotterdam Centraal, Dordrecht, 17
+Dordrecht, Rotterdam Centraal, 17
+Rotterdam Centraal, Schiedam Centrum, 5
+Schiedam Centrum, Delft, 7
+Delft, Schiedam Centrum, 7
+Schiedam Centrum, Rotterdam Centraal, 5
+Rotterdam Centraal, Rotterdam Alexander, 8
+Rotterdam Alexander, Gouda, 10
+Gouda, Alphen a/d Rijn, 19
+Alphen a/d Rijn, Gouda, 19
+-
+Amsterdam Centraal, Amsterdam Amstel, 8
+Amsterdam Amstel, Amsterdam Zuid, 10
+Amsterdam Zuid, Schiphol Airport, 6
+Schiphol Airport, Leiden Centraal, 15
+Leiden Centraal, Heemstede-Aerdenhout, 13
+Heemstede-Aerdenhout, Haarlem, 6
+Haarlem, Beverwijk, 16
+Beverwijk, Castricum, 13
+Castricum, Alkmaar, 9
+-
+Castricum, Beverwijk, 13
+Beverwijk, Zaandam, 25
+Zaandam, Hoorn, 26
+Hoorn, Alkmaar, 24
