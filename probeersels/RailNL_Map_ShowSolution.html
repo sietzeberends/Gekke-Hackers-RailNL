@@ -1,0 +1,179 @@
+<!doctype html>
+
+<html>
+
+<head></head>
+
+<body>
+
+<canvas id="graph" width="1200" height="1400" style="border:1px solid #000000;" > </canvas>
+
+<script>
+
+var xhttp = new XMLHttpRequest();
+
+xhttp.onreadystatechange = function () 
+{
+	if (this.readyState == 4 && this.status == 200)
+	{
+		var data_stations = xhttp.responseText;
+		create_graph(data_stations);
+	}
+}
+
+// global variable for location of cities
+city_locations = {};
+
+xhttp.open("GET","csvFiles/test_kaart.csv");
+xhttp.send();
+
+var next = new XMLHttpRequest();
+
+next.onreadystatechange = function()
+{
+	if (this.readyState == 4 && this.status == 200)
+	{
+		var data_connection = next.responseText;
+		create_connections(data_connection);
+	}
+}
+
+next.open("GET","connections_visualisation.csv");
+next.send();
+
+
+function create_graph(data_stations)
+{
+	var data= data_stations.split("\n");
+
+	data_list = [];
+	longitudes = [];
+	latitudes = [];
+	names = [];
+
+	for (i = 0; i < data.length; i++)
+	{	
+		placeholder = data[i].split(";");
+
+		var latitude = Number(placeholder[1].replace(",","."));
+		var longitude = Number(placeholder[2].replace(",","."));
+		var name = placeholder[0];
+		
+		latitudes.push(latitude);
+		longitudes.push(longitude);
+		names.push(name);
+		dictionary = {"longitude":longitude,"latitude":latitude,"name":name};
+
+		data_list.push(dictionary);
+	}
+
+
+	var maximum_longitude = Math.max.apply(null,longitudes);
+	var minimum_longitude = Math.min.apply(null,longitudes);
+
+	var maximum_latitude = Math.max.apply(null,latitudes);
+	var minimum_latitude = Math.min.apply(null,latitudes);
+	
+
+	graph_width = 1000
+	graph_length = 1200
+
+	function getX(x){
+		var position = (x - minimum_longitude) / (maximum_longitude - minimum_longitude);
+		return graph_width * position;
+	}
+
+	function getY(y){
+		var position = (y - minimum_latitude) / (maximum_latitude - minimum_latitude);
+		return graph_length * position;
+	}
+
+
+	for (i = 0; i < data_list.length; i++)
+	{
+		
+		var x_position = getX(data_list[i].longitude);
+		var y_position = getY(data_list[i].latitude);
+		
+		var canvas = document.getElementById('graph'); 
+		var ctx = canvas.getContext('2d');
+
+		ctx.fillRect(x_position, graph_length - y_position, 10,10);
+		ctx.fillText(data_list[i].name, x_position, graph_length - y_position + 20);
+
+		var position = [x_position, graph_length - y_position];
+
+		city_locations[data_list[i].name] = position;
+	}
+}
+
+function create_connections(data_trajectory)
+{
+	var data = data_trajectory.split("\n");
+	
+	connections = [];
+
+	for (i = 0; i < data.length; i++)
+	{
+		placeholder = data[i].split(",");
+
+		if (placeholder[0].trim() == "-")
+		{
+			var connection = {"city_1":placeholder[0].trim()}
+		}
+		else
+		{
+			var connection = {"city_1":placeholder[0],
+					      "city_2":placeholder[1],
+					      "time":placeholder[2]};
+		}	
+
+		connections.push(connection);
+	}
+
+	console.log(connections)
+
+	colours = ["#000000","#ff0000","#00ff00","#0000ff","#ffff00","#ff6600","#660066"];
+	colourcounter = 0;
+
+	for (i = 0; i < connections.length; i++)
+	{
+		var canvas = document.getElementById('graph'); 
+		var ctx = canvas.getContext('2d');
+
+		connection = connections[i];
+
+		if (connection.city_1 != "-")
+		{
+
+			var first_city = connection.city_1;
+			var second_city = connection.city_2.trim();
+
+			x_firstcity = city_locations[String(first_city)][0]
+			y_firstcity = city_locations[String(first_city)][1]
+
+			x_secondcity = city_locations[String(second_city)][0]
+			y_secondcity = city_locations[String(second_city)][1]
+
+			ctx.beginPath();
+			ctx.moveTo(x_firstcity, y_firstcity);
+			ctx.lineTo(x_secondcity, y_secondcity);
+			ctx.stroke();
+
+			ctx.fillText(connection.time, 0.5 * (x_firstcity + x_secondcity), 0.5 * (y_firstcity + y_secondcity))
+		}
+		else
+		{
+			ctx.strokeStyle=colours[colourcounter];
+			colourcounter = colourcounter + 1;
+		}
+
+	}
+	
+
+}
+
+</script>
+
+</body>
+
