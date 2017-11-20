@@ -17,7 +17,7 @@ connections = []
 with open('csvFiles/StationsHolland.csv', 'r') as csvfile:
 	rows = csv.reader(csvfile)
 	for row in rows:
-		stations.append(Station(row[0], row[1], row[2], row[3]))
+		stations.append(Station(row[0], row[1], row[2]))
 
 # load all the connections
 with open('csvFiles/ConnectiesHolland.csv', 'r') as csvfile:
