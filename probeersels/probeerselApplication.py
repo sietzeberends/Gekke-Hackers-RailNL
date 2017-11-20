@@ -68,6 +68,7 @@ else:
 
 highScore = 0
 aantalTrajectenBeste = 0
+besteLijnvoering = LijnVoering(connections)
 
 # voer de hillCLimber 100 keer uit
 for j in range(1,100):
@@ -82,8 +83,16 @@ for j in range(1,100):
 			print(hillClimberScore)
 			highScore = hillClimberScore
 			aantalTrajectenBeste = i
+			besteLijnvoering.trajectories.clear()
+			for trajectory in testHillClimber.trajectories:
+				besteLijnvoering.trajectories.append(trajectory)
+			print(str(besteLijnvoering))
+
+
 
 print("Traject " + str(aantalTrajectenBeste) + ": " + str(highScore))
+print(str(besteLijnvoering))
+print(besteLijnvoering.scoreOpdrachtB)
 
 # for trajectory in testHillClimber.trajectories:
 # 	for connection in trajectory.connections:
