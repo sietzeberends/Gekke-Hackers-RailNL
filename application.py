@@ -92,7 +92,7 @@ for j in range(1,100):
 			for trajectory in testHillClimber.trajectories:
 				besteLijnvoering.trajectories.append(trajectory)
 			print(str(besteLijnvoering))
-			with open ("connections_visualisation.csv", "w") as outfile:
+			with open ("csvFiles/connections_visualisation.csv", "w") as outfile:
 				writer = csv.writer(outfile, dialect='excel')
 				for trajectory in besteLijnvoering.trajectories:
 					writer.writerow("-")
