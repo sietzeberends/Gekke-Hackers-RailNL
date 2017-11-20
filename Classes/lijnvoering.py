@@ -16,7 +16,7 @@ class LijnVoering:
         for trajectory in self.trajectories:
             output += str(trajectory)
             output += "\n\n"
-        output += "Totale tijd van lijnvoering: " + str(self.time)
+        # output += "Totale tijd van lijnvoering: " + str(self.time)
         return output
 
     # Willekeurige LineFeeding aanmaken, dit kunnen we al.
