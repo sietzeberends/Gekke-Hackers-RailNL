@@ -5,27 +5,23 @@ from Classes.station import Station
 # therefore a connection has two stations and the travel time between them
 # connection also contains all possible connections to take next
 class Connection :
-	def __init__(self, station1, station2, time, critical):
+	def __init__(self, station1, station2, time, critical, index):
 		self.station1 = station1
 		self.station2 = station2
 		self.time = int(time)
-		self.connections = []
+		self.children = []
+		self.index = index
 		if critical == "TRUE":
-			self.critical = "TRUE"
+			self.critical = True
 		else:
-			self.critical = "FALSE"
+			self.critical = False
 
 # add all the possible connections to go to next
 	def addChildren(self, connections):
 		for connection in connections:
-			if connection.station1.name == self.station2.name:
-				self.connections.append(connection)
-			# we want the name of the connection we're currently in to go first
-			# so if necessary, we switch names
-			elif connection.station2.name == self.station2.name:
-				self.connections.append(Connection(connection.station2,
-		 										   connection.station1,
-		 										   connection.time, connection.critical))
+			if str(connection.station1.name) == str(self.station2.name):
+				self.children.append(connection.index)
+
 # return all details of a connection
 	def __str__(self):
 		return (self.station1.name + ", " + self.station2.name + ", " + str(self.time))

@@ -1,6 +1,7 @@
 from Classes.station import Station
 from Classes.connection import Connection
 from Classes.trajectory import Trajectory
+from Classes.lijnvoering import LijnVoering
 from datetime import datetime
 
 import csv
@@ -17,19 +18,28 @@ connections = []
 with open('csvFiles/StationsHolland.csv', 'r') as csvfile:
 	rows = csv.reader(csvfile)
 	for row in rows:
-		stations.append(Station(row[0], row[1], row[2]))
+		stations.append(Station(row[0], row[1], row[2], row[3]))
 
 # load all the connections
+index = 0;
 with open('csvFiles/ConnectiesHolland.csv', 'r') as csvfile:
 	rows = csv.reader(csvfile)
 	for row in rows:
 		connections.append(Connection(Station(row[0], "", "", row[3]),
 									  Station(row[1], "", "", row[3]),
 									  row[2],
-									  row[3]))
-# add the children to the gconnections
+									  row[3], index))
+		index += 1
+		connections.append(Connection(Station(row[1], "", "", row[3]),
+									  Station(row[0], "", "", row[3]),
+									  row[2],
+									  row[3], index))
+		index += 1
+
+# add the children to the connections
 for connection in connections:
 	connection.addChildren(connections)
+
 
 count = 0
 stationsk = []
@@ -46,37 +56,67 @@ if count == 22:
 else:
 	print ("not a PROOF")
 
-connectionsForTrajectory =[]
+# testLijnVoering = LijnVoering(connections)
+# highScoreA = 0
+# aantalLijnvoeringen = 0
+# while highScoreA < 10000:
+# 	aantalLijnvoeringen += 1
+# 	testLijnVoering = LijnVoering(connections)
+# 	testLijnVoering.createRandomLijnVoering(testLijnVoering.trajectories)
+# 	highScoreA = testLijnVoering.ScoreOpdrachtA()
+# 	print(highScoreA)
 
-# create a random Trajectory
-def createTrajectory(connection, time):
-	connectionsForTrajectory.append(connection)
-	time += connection.time
-	# as long as the Trajectory has a lower duration than 120
-	while True:
-		# if the station only has one child (i.e. is on the edge of civilization)
-		if len(connection.connections) == 1:
-			newConnection = connection.connections[0]
-			newConnection.addChildren(connections)
-		# if the station has more than one child
-		else:
-			newConnection = random.choice(connection.connections[0:-1])
-			newConnection.addChildren(connections)
-		# make sure we don't overstep our constraint
-		if newConnection.time + time < 120:
-			# recursive
-			return createTrajectory(newConnection, time)
-		else:
-			break
+highScore = 0
+aantalTrajectenBeste = 0
+besteLijnvoering = LijnVoering(connections)
+timeBesteLijnvoering = 0
 
-time = 0
-createTrajectory(random.choice(connections), time)
+# voer de hillCLimber 100 keer uit
+for j in range(1,100):
+	print("run: " + str(j))
+	testHillClimber = LijnVoering(connections)
+	for i in range(1,8):
+		hillClimberScore = testHillClimber.hillClimber(testHillClimber.trajectories, connections, i)
+		print(str(i) + " trajecten")
+		# testHillClimber.createRandomLijnVoering(testHillClimber.trajectories)
+		if(highScore < hillClimberScore):
+			print(highScore)
+			print(hillClimberScore)
+			highScore = hillClimberScore
+			aantalTrajectenBeste = i
+			besteLijnvoering.trajectories.clear()
+			for trajectory in testHillClimber.trajectories:
+				besteLijnvoering.trajectories.append(trajectory)
+			print(str(besteLijnvoering))
+
+for trajectory.time in testHillClimber.trajectories:
+	timeBesteLijnvoering += time
 
 
-firstTrajectory = Trajectory(connectionsForTrajectory)
+print("Traject " + str(aantalTrajectenBeste) + ": " + str(highScore))
+print(str(besteLijnvoering))
+print ("test")
+print(besteLijnvoering.scoreOpdrachtB)
 
-# check if it worked
-print (firstTrajectory)
+print (timeBesteLijnvoering)
+
+# for trajectory in testHillClimber.trajectories:
+# 	for connection in trajectory.connections:
+# 		print(connection)
+
+
+
+# print(testLijnVoering)
+# print("Score: " + str(highScoreA))
+# print("Aantal Lijnvoeringen voor bereiken maximale score: " + str(aantalLijnvoeringen))
+
+#breadthLijnvoering = LijnVoering(connections)
+#print(breadthLijnvoering.createAllPossibleLijnVoeringen(connections, 0, 0, ""))
+
+
+# testLijnVoering.queue(connections)
+# testTrajectory.createTrajectory(firstConnectionIndex, time, connections)
+# print (testTrajectory)
 
 timeElapsed = datetime.now()-startTime
 print('Time elapsed (hh:mm:ss.ms) {}'.format(timeElapsed))
