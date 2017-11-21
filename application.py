@@ -72,7 +72,8 @@ besteLijnvoering = LijnVoering(connections)
 timeBesteLijnvoering = 0
 
 # voer de hillCLimber 100 keer uit
-for j in range(1,100):
+
+for j in range(1,10):
 	print("run: " + str(j))
 	testHillClimber = LijnVoering(connections)
 	for i in range(1,8):
@@ -83,8 +84,6 @@ for j in range(1,100):
 			print(highScore)
 			for trajectory in testHillClimber.trajectories:
 				 timeBesteLijnvoering += trajectory.time
-			print ("Totale tijd van lijnvoering: " + str(timeBesteLijnvoering))
-			timeBesteLijnvoering = 0
 			print(hillClimberScore)
 			highScore = hillClimberScore
 			aantalTrajectenBeste = i
@@ -92,6 +91,7 @@ for j in range(1,100):
 			for trajectory in testHillClimber.trajectories:
 				besteLijnvoering.trajectories.append(trajectory)
 			print(str(besteLijnvoering))
+			print ("Totale tijd van lijnvoering: " + str(timeBesteLijnvoering))
 			with open ("csvFiles/connections_visualisation.csv", "w") as outfile:
 				writer = csv.writer(outfile, dialect='excel')
 				for trajectory in besteLijnvoering.trajectories:
@@ -109,11 +109,13 @@ for j in range(1,100):
 									str(timeBesteLijnvoering)
 				placeholder1 = placeholder1.split(",")
 				writer.writerow(placeholder1)
+			timeBesteLijnvoering = 0
 
 
 
 print("Traject " + str(aantalTrajectenBeste) + ": " + str(highScore))
 print(str(besteLijnvoering))
+print ("Totale tijd van lijnvoering: " + str(timeBesteLijnvoering))
 print ("test")
 print(besteLijnvoering.scoreOpdrachtB)
 
