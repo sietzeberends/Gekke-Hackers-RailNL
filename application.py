@@ -73,10 +73,10 @@ timeBesteLijnvoering = 0
 
 # voer de hillCLimber 100 keer uit
 
-for j in range(1,10):
+for j in range(1,2):
 	print("run: " + str(j))
 	testHillClimber = LijnVoering(connections)
-	for i in range(1,8):
+	for i in range(2,8):
 		hillClimberScore = testHillClimber.hillClimber(testHillClimber.trajectories, connections, i)
 		print(str(i) + " trajecten")
 		# testHillClimber.createRandomLijnVoering(testHillClimber.trajectories)
@@ -102,7 +102,7 @@ for j in range(1,10):
 				      				  str(connection.time)
 						placeholder = placeholder.split(",")
 						writer.writerow(placeholder)
-			with open ("dataPlot.csv", "a") as outfile:
+			with open ("dataPlot.csv", "a", newline="") as outfile:
 				writer = csv.writer(outfile, dialect="excel")
 				placeholder1 = 		str(aantalTrajectenBeste) + ", " +\
 									str(hillClimberScore) + ", " +\

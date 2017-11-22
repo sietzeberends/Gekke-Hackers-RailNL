@@ -2,6 +2,7 @@ from Classes.trajectory import Trajectory
 from Classes.connection import Connection
 
 from queue import *
+import math
 import random
 
 class LijnVoering:
@@ -19,10 +20,10 @@ class LijnVoering:
         # output += "Totale tijd van lijnvoering: " + str(self.time)
         return output
 
-    # Willekeurige LineFeeding aanmaken, dit kunnen we al.
+    # create a random Lijnvoering
     def createRandomLijnVoering(self, trajectories, amount):
-        # rand = random.randrange(8)
-        # print(rand)
+
+        # add random trajectories while we haven't created them
         while len(trajectories) < amount:
             trajectory = Trajectory()
             firstConnectionIndex = random.choice(self.connections).index
@@ -31,20 +32,35 @@ class LijnVoering:
             self.time += trajectory.time
 
     def hillClimber(self, trajectories, connections, amount):
+
+        n = 0
+        # create a random Lijnvoering with a certain amount of trajectories
         self.createRandomLijnVoering(self.trajectories, amount)
+
+        # also create a copy of this Lijnvoering in which trajectories
+        # can be changed so that we can compare their scores
+
         alternativeLijnvoering = LijnVoering(connections)
         alternativeLijnvoering.trajectories = self.trajectories
+
+        # set the base score of the Lijnvoering
         score = self.scoreOpdrachtB()
+
+        # track the amount of times we've created a random trajectory
         stopCounter = 0
+
+        # track the time, we can print this out later
         for trajectory in trajectories:
             self.time += trajectory.time
 
         # start with replacing the first trajectory
         whichTrajectory = 0
 
-        while stopCounter < 16000:
-            # print(score)
-            # generate a new trajectory
+        # check for improved score 16.000 times
+        while n < 1600000:
+            n += 1
+
+            # generate a new random trajectory
             trajectory = Trajectory()
             firstConnectionIndex = random.choice(self.connections).index
             trajectory.createTrajectory(firstConnectionIndex, 0 , self.connections)
@@ -53,13 +69,10 @@ class LijnVoering:
             alternativeLijnvoering.trajectories[whichTrajectory] = trajectory
             scoreAlternative = alternativeLijnvoering.scoreOpdrachtB()
 
-            # if the score is better, get the next trajectory
+            # if the score is better, save this Lijnvoering
             if scoreAlternative > score:
                 self.trajectories = alternativeLijnvoering.trajectories
                 score = scoreAlternative
-
-                # move on to the next trajectory
-                # go to the first trajectory after the last one
 
                 # if there is only one trajectory, replace the same one
                 if len(self.trajectories) == 1:
@@ -73,18 +86,40 @@ class LijnVoering:
                 else:
                     whichTrajectory += 1
 
+            # if the score is lower, simulated annealing
             else:
+                scores = []
+                chanceAlternative = self.acceptationChance(n, score, scoreAlternative) * 100
+                round(chanceAlternative,0)
+                chanceScore = 100 - chanceAlternative
+                scoresAlternative = [scoreAlternative] * int(chanceAlternative)
+                scores = [score] * int(chanceScore)
+                scores.extend(scoresAlternative)
+                score = random.choice(scores)
                 stopCounter += 1
+                if n % 10000 == 0:
+                    print("highscore was: " + str(score))
+                    print("alternative score was: " + str(scoreAlternative))
+                    print(n)
+                    print("acceptatiekans alternatief: " + str(chanceAlternative))
+                    # print("verkorting :" str(scoreAlternative - score))
+                    # print("temperatuur :" str(10000 * (n/1600000)))
 
-        # print(stopCounter)
-        # print(len(self.trajectories))
-        # for traject in self.trajectories:
-        #     print("\n")
-        #     for connection in traject.connections:
-        #         print(connection)
-
+                    print(score)
         return score
 
+    # calculate acception chance for simulated annealing
+    def acceptationChance(self, iteration, highscore, alternative):
+        # aantal iteraties totaal
+        N = 1600000
+        verkorting = alternative - highscore
+        temperatuur = N - 0.5 * iteration
+        # print(temperatuur)
+        try:
+            chance = math.exp(verkorting/temperatuur)
+        except temperatuur == 0:
+            verkorting = 0
+        return chance
 
     # queue method (breadth first)
     def queue(self, connections):
