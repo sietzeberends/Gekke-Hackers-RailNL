@@ -30,7 +30,8 @@ class Trajectory:
 	# create a random Trajectory
 	def createTrajectory(self, index, time, connections):
 		connection = connections[index]
-		# as long as the Trajectory has a lower duration than 120
+
+		# as long as the Trajectory has a lower duration than 120 minutes
 		while True:
 			if self.time + connection.time <= 120:
 				self.connections.append(connection)
@@ -39,17 +40,24 @@ class Trajectory:
 				self.time = time
 			else:
 				break
-			# if the station only has one child (i.e. is on the edge of civilization)
+
+			# if the station only has one child
+			# i.e. is on the edge of civilization
+			# then go back where you came from
 			if len(connection.children) == 1:
 				index = connection.children[0]
+
 			# if the station has more than one child
+			# pick where to go next (random)
 			else:
 				index = random.choice(connection.children)
-				# kijk of de connectie al in het traject zit
+
+				# check if the connections is already in the trajectory
+				# if so, break
 				while index in self.indexes:
 					index = random.choice(connection.children)
 					break
-			# make sure we don't overstep our constraint
+
 			# recursive
 			return self.createTrajectory(index, time, connections)
 
