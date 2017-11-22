@@ -45,4 +45,16 @@ for i in range(0,56):
     save_scores_traject1.append(score)
 
 # highest score for a single trajectory
-print(max(save_scores_traject1))
+#print(max(save_scores_traject1))
+
+test_1 = Trajectory()
+test_1.createGreedyTrajectory(0, 0, connections)
+print(test_1.indexes)
+
+test_2 = Trajectory()
+test_2.createGreedyTrajectory(1, 0, connections)
+print(test_2.indexes)
+
+test_3 = Trajectory()
+test_3.indexes = test_1.indexes + test_2.indexes
+print(test_3.indexes)
