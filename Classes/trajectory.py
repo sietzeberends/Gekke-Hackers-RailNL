@@ -28,14 +28,15 @@ class Trajectory:
 		return output
 
 	# create a random Trajectory
-	def createTrajectory(self, index, time, connections):
-		connection = connections[index]
+	def createTrajectory(self, index, time, connections, maxMinutes):
 
+		connection = connections[index]
 		# as long as the Trajectory has a lower duration than 120 minutes
 		while True:
-			if self.time + connection.time <= 120:
+			if self.time + connection.time <= maxMinutes:
 				self.connections.append(connection)
-				self.indexes.append(connection.index)
+				if index % 2 == 0:
+					self.indexes.append(connection.index)
 				time += connection.time
 				self.time = time
 			else:
@@ -51,19 +52,30 @@ class Trajectory:
 			# pick where to go next (random)
 			else:
 				index = random.choice(connection.children)
+				if len(self.indexes) != 0:
+					stopcounter = 0
+					while connections[index].station2.name == connection.station1.name:
+						# print("trein vertrekt van :" + connection.station1.name)
+						# print("trein komt aan in :" + connection.station2.name)
+						# print("trein van: " + connections[index].station1.name)
+						# print("mag niet aankomen op : " + connection.station1.name)
+						# print("de nieuwe connecties waar we uit kunnen kiezen zijn: ")
+						# for index in connection.children:
+							# print(str(connections[index]))
+						index = random.choice(connection.children)
+						# print("gekozen connectie: " + str(connections[index]))
+						stopcounter += 1
+						if stopcounter > 10000:
+							print("we geven het op")
+							break
 
-				# check if the connections is already in the trajectory
-				# if so, break
-				while index in self.indexes:
-					index = random.choice(connection.children)
-					break
 
 			# recursive
-			return self.createTrajectory(index, time, connections)
+			return self.createTrajectory(index, time, connections, maxMinutes)
 
 	def createGreedyTrajectory(self, index, time, connections):
 		connection = connections[index]
-	
+
 		while True:
 			if self.time + connection.time <= 120:
 				self.connections.append(connection)
@@ -88,7 +100,7 @@ class Trajectory:
 					else:
 						critical = 0
 
-					score = (10000 * (critical/22)) - placeholder.time
+					score = (10000 * (critical/20)) - placeholder.time
 					scores.append(score)
 
 					if placeholder.station2.name != connection.station1.name:

@@ -1,18 +1,103 @@
 -
-Rotterdam Alexander, Rotterdam Centraal, 8
-Rotterdam Centraal, Rotterdam Alexander, 8
-Rotterdam Alexander, Rotterdam Centraal, 8
-Rotterdam Centraal, Dordrecht, 17
-Dordrecht, Rotterdam Centraal, 17
-Rotterdam Centraal, Schiedam Centrum, 5
+Rotterdam Blaak, Schiedam Centrum, 11
+Schiedam Centrum, Delft, 7
+Delft, Den Haag HS, 8
+Den Haag HS, Leiden Centraal, 12
+Leiden Centraal, Schiphol Airport, 15
+Schiphol Airport, Utrecht Centraal, 33
+Utrecht Centraal, Ede-Wageningen, 24
+Ede-Wageningen, Arnhem Centraal, 10
+Arnhem Centraal, Nijmegen, 12
+Nijmegen, Oss, 16
+Oss, s-Hertogenbosch, 11
+-
+Zutphen, Dieren, 8
+Dieren, Arnhem Centraal, 12
+Arnhem Centraal, Ede-Wageningen, 10
+Ede-Wageningen, Utrecht Centraal, 24
+Utrecht Centraal, Amsterdam Centraal, 27
+Amsterdam Centraal, Amsterdam Amstel, 8
+Amsterdam Amstel, Hilversum, 28
+Hilversum, Almere Centrum, 26
+Almere Centrum, Amsterdam Centraal, 20
+-
+Helmond, Eindhoven, 9
+Eindhoven, Tilburg, 21
+Tilburg, Breda, 13
+Breda, Etten-Leur, 7
+Etten-Leur, Roosendaal, 11
+Roosendaal, Dordrecht, 22
+Dordrecht, Rotterdam Blaak, 14
+Rotterdam Blaak, Schiedam Centrum, 11
 Schiedam Centrum, Delft, 7
 Delft, Den Haag Centraal, 13
-Den Haag Centraal, Delft, 13
-Delft, Den Haag Centraal, 13
+Den Haag Centraal, Leiden Centraal, 12
+Leiden Centraal, Den Haag Laan v NOI, 9
+Den Haag Laan v NOI, Delft, 12
+Delft, Den Haag HS, 8
 -
-Beverwijk, Zaandam, 25
+Schiphol Airport, Leiden Centraal, 15
+Leiden Centraal, Schiphol Airport, 15
+Schiphol Airport, Amsterdam Zuid, 6
+Amsterdam Zuid, Amsterdam Sloterdijk, 16
+Amsterdam Sloterdijk, Haarlem, 11
+Haarlem, Heemstede-Aerdenhout, 6
+Heemstede-Aerdenhout, Leiden Centraal, 13
+Leiden Centraal, Alphen a/d Rijn, 14
+Alphen a/d Rijn, Utrecht Centraal, 28
+Utrecht Centraal, Gouda, 18
+Gouda, Den Haag Centraal, 18
+Den Haag Centraal, Leiden Centraal, 12
+-
+Leeuwarden, Groningen, 35
+Groningen, Assen, 17
+Assen, Zwolle, 40
+Zwolle, Deventer, 24
+Deventer, Almelo, 24
+Almelo, Hengelo, 10
+Hengelo, Enschede, 7
+Enschede, Hengelo, 7
+Hengelo, Almelo, 10
+-
+Zaandam, Amsterdam Sloterdijk, 6
+Amsterdam Sloterdijk, Amsterdam Centraal, 6
+Amsterdam Centraal, Utrecht Centraal, 27
+Utrecht Centraal, Hilversum, 15
+Hilversum, Almere Centrum, 26
+Almere Centrum, Amsterdam Centraal, 20
+Amsterdam Centraal, Amsterdam Amstel, 8
+Amsterdam Amstel, Utrecht Centraal, 19
+Utrecht Centraal, Amersfoort, 14
+Amersfoort, Zwolle, 35
+-
+Breda, Dordrecht, 18
+Dordrecht, Rotterdam Centraal, 17
+Rotterdam Centraal, Rotterdam Alexander, 8
+Rotterdam Alexander, Gouda, 10
+Gouda, Utrecht Centraal, 18
+Utrecht Centraal, s-Hertogenbosch, 27
+s-Hertogenbosch, Eindhoven, 18
+Eindhoven, Weert, 17
+Weert, Roermond, 14
+Roermond, Sittard, 15
+Sittard, Maastricht, 15
+-
+Steenwijk, Heerenveen, 14
+Heerenveen, Leeuwarden, 16
+Leeuwarden, Heerenveen, 16
+Heerenveen, Steenwijk, 14
+Steenwijk, Zwolle, 24
+Zwolle, Almelo, 42
+Almelo, Deventer, 24
+Deventer, Apeldoorn, 10
+Apeldoorn, Zutphen, 20
+-
+Hoorn, Alkmaar, 24
+Alkmaar, Den Helder, 36
+Den Helder, Alkmaar, 36
+Alkmaar, Castricum, 9
+Castricum, Zaandam, 12
 Zaandam, Beverwijk, 25
-Beverwijk, Haarlem, 16
-Haarlem, Amsterdam Sloterdijk, 11
-Amsterdam Sloterdijk, Zaandam, 6
-Zaandam, Hoorn, 26
+Beverwijk, Castricum, 13
+Castricum, Zaandam, 12
+Zaandam, Amsterdam Sloterdijk, 6

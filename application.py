@@ -6,92 +6,88 @@ from datetime import datetime
 
 import csv
 import random
+import sys
 
+
+
+def loadStations(csvFilepath):
+	"""Load stations from a CSV file and returns them as a list"""
+
+	stationsList = []
+	with open(csvFilepath, 'r') as csvfile:
+		rows = csv.reader(csvfile)
+		for row in rows:
+			stationsList.append(Station(row[0], row[1], row[2], row[3]))
+
+	return stationsList
+
+def loadConnections(csvFilepath):
+	"""Loads connections from a CSV file and returns them as a list"""
+
+	connectionsList = []
+	index = 0;
+	with open(csvFilepath, 'r') as csvfile:
+		rows = csv.reader(csvfile)
+		for row in rows:
+			connectionsList.append(Connection(Station(row[0], "", "", row[3]),
+										  Station(row[1], "", "", row[3]),
+										  row[2],
+										  row[3], index))
+			index += 1
+			connectionsList.append(Connection(Station(row[1], "", "", row[3]),
+										  Station(row[0], "", "", row[3]),
+										  row[2],
+										  row[3], index))
+			index += 1
+
+	# add the children to the connections and count how many connections are critical
+	for connection in connectionsList:
+		connection.addChildren(connectionsList)
+
+	return connectionsList
+
+def minutesPerTrajectory(connections):
+	"""Calculates the allowed amount of minutes per trajectory and returns that number"""
+	minutes = 0
+	if len(connections) <= 28:
+		minutes = 120
+	else:
+		minutes = 180
+
+	return minutes
+
+
+# track how long the application runs
 startTime = datetime.now()
 
 # track all stations and connections in two lists
-stations = []
-connections = []
-
-
-# load all the stations
-with open('csvFiles/StationsHolland.csv', 'r') as csvfile:
-	rows = csv.reader(csvfile)
-	for row in rows:
-		stations.append(Station(row[0], row[1], row[2], row[3]))
-
-# load all the connections
-index = 0;
-with open('csvFiles/ConnectiesHolland.csv', 'r') as csvfile:
-	rows = csv.reader(csvfile)
-	for row in rows:
-		connections.append(Connection(Station(row[0], "", "", row[3]),
-									  Station(row[1], "", "", row[3]),
-									  row[2],
-									  row[3], index))
-		index += 1
-		connections.append(Connection(Station(row[1], "", "", row[3]),
-									  Station(row[0], "", "", row[3]),
-									  row[2],
-									  row[3], index))
-		index += 1
-
-# add the children to the connections
-for connection in connections:
-	connection.addChildren(connections)
-
-
-count = 0
-stationsk = []
-for connection in connections:
-	if connection.critical == "TRUE":
-	  stationsk.append(connection.station1.name)
-	  stationsk.append(connection.station2.name)
-for Station.name in stations:
-	if str(Station.name) in stationsk:
-		count += 1
-		print (count)
-if count == 22:
-	print ("POOF IT IS PROOF QED")
-else:
-	print ("not a PROOF")
-
-# testLijnVoering = LijnVoering(connections)
-# highScoreA = 0
-# aantalLijnvoeringen = 0
-# while highScoreA < 10000:
-# 	aantalLijnvoeringen += 1
-# 	testLijnVoering = LijnVoering(connections)
-# 	testLijnVoering.createRandomLijnVoering(testLijnVoering.trajectories)
-# 	highScoreA = testLijnVoering.ScoreOpdrachtA()
-# 	print(highScoreA)
+stations = loadStations('csvFiles/StationsNationaal.csv')
+connections = loadConnections('csvFiles/ConnectiesNationaal.csv')
 
 highScore = 0
-aantalTrajectenBeste = 0
 besteLijnvoering = LijnVoering(connections)
-timeBesteLijnvoering = 0
+testHillClimber = LijnVoering(connections)
 
-# voer de hillCLimber 100 keer uit
-
-for j in range(1,2):
-	print("run: " + str(j))
+for i in range(1,100):
+	print("run: " + str(i))
 	testHillClimber = LijnVoering(connections)
-	for i in range(2,8):
+	for i in range(1,21):
 		hillClimberScore = testHillClimber.hillClimber(testHillClimber.trajectories, connections, i)
 		print(str(i) + " trajecten")
+		print("highScore tot nu toe: " + str(highScore))
 		# testHillClimber.createRandomLijnVoering(testHillClimber.trajectories)
 		if(highScore < hillClimberScore):
-			print(highScore)
-			for trajectory in testHillClimber.trajectories:
-				 timeBesteLijnvoering += trajectory.time
-			print(hillClimberScore)
-			highScore = hillClimberScore
-			aantalTrajectenBeste = i
 			besteLijnvoering.trajectories.clear()
+			besteLijnvoering.time = 0
 			for trajectory in testHillClimber.trajectories:
 				besteLijnvoering.trajectories.append(trajectory)
+				besteLijnvoering.time = testHillClimber.time
+			highScore = hillClimberScore
+			print(testHillClimber)
+			print ("Nieuwe highscore: " + str(highScore))
 			print(str(besteLijnvoering))
-			print ("Totale tijd van lijnvoering: " + str(timeBesteLijnvoering))
+			print ("Totale tijd van lijnvoering: " + str(besteLijnvoering.time))
+
 			with open ("csvFiles/connections_visualisation.csv", "w") as outfile:
 				writer = csv.writer(outfile, dialect='excel')
 				for trajectory in besteLijnvoering.trajectories:
@@ -104,40 +100,16 @@ for j in range(1,2):
 						writer.writerow(placeholder)
 			with open ("dataPlot.csv", "a", newline="") as outfile:
 				writer = csv.writer(outfile, dialect="excel")
-				placeholder1 = 		str(aantalTrajectenBeste) + ", " +\
+				placeholder1 = 		str(len(besteLijnvoering.trajectories)) + ", " +\
 									str(hillClimberScore) + ", " +\
-									str(timeBesteLijnvoering)
+									str(besteLijnvoering.time)
 				placeholder1 = placeholder1.split(",")
 				writer.writerow(placeholder1)
-			timeBesteLijnvoering = 0
 
-
-
-print("Traject " + str(aantalTrajectenBeste) + ": " + str(highScore))
+print("Beste lijnvoering " + str(len(besteLijnvoering.trajectories)) + ": " + str(highScore))
 print(str(besteLijnvoering))
-print ("Totale tijd van lijnvoering: " + str(timeBesteLijnvoering))
-print ("test")
-print(besteLijnvoering.scoreOpdrachtB)
+print ("Totale tijd van lijnvoering: " + str(besteLijnvoering.time))
 
-
-
-# for trajectory in testHillClimber.trajectories:
-# 	for connection in trajectory.connections:
-# 		print(connection)
-
-
-
-# print(testLijnVoering)
-# print("Score: " + str(highScoreA))
-# print("Aantal Lijnvoeringen voor bereiken maximale score: " + str(aantalLijnvoeringen))
-
-#breadthLijnvoering = LijnVoering(connections)
-#print(breadthLijnvoering.createAllPossibleLijnVoeringen(connections, 0, 0, ""))
-
-
-# testLijnVoering.queue(connections)
-# testTrajectory.createTrajectory(firstConnectionIndex, time, connections)
-# print (testTrajectory)
-
+# print the runtime
 timeElapsed = datetime.now()-startTime
 print('Time elapsed (hh:mm:ss.ms) {}'.format(timeElapsed))

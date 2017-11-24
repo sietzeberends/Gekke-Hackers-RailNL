@@ -23,31 +23,46 @@ class LijnVoering:
     # create a random Lijnvoering
     def createRandomLijnVoering(self, trajectories, amount):
 
+        maxMinutes = 0
+        if len(self.connections) <= 28:
+            maxMinutes = 120
+        else:
+            maxMinutes = 180
+
         # add random trajectories while we haven't created them
         while len(trajectories) < amount:
             trajectory = Trajectory()
             firstConnectionIndex = random.choice(self.connections).index
-            trajectory.createTrajectory(firstConnectionIndex, 0 , self.connections)
+            trajectory.createTrajectory(firstConnectionIndex, 0 , self.connections, maxMinutes)
             self.trajectories.append(trajectory)
             self.time += trajectory.time
 
     def hillClimber(self, trajectories, connections, amount):
 
+        maxMinutes = 0
+        if len(self.connections) <= 28:
+            maxMinutes = 120
+        else:
+            maxMinutes = 180
+
         n = 0
+        maxn = 16000
+        temperature = 1
+        initialTemperature = 1
+        self.time = 0
+
         # create a random Lijnvoering with a certain amount of trajectories
         self.createRandomLijnVoering(self.trajectories, amount)
 
         # also create a copy of this Lijnvoering in which trajectories
         # can be changed so that we can compare their scores
-
         alternativeLijnvoering = LijnVoering(connections)
-        alternativeLijnvoering.trajectories = self.trajectories
+
+        for trajectory in self.trajectories:
+            alternativeLijnvoering.trajectories.append(trajectory)
 
         # set the base score of the Lijnvoering
-        score = self.scoreOpdrachtB()
-
-        # track the amount of times we've created a random trajectory
-        stopCounter = 0
+        current = self.scoreOpdrachtB()
 
         # track the time, we can print this out later
         for trajectory in trajectories:
@@ -57,22 +72,25 @@ class LijnVoering:
         whichTrajectory = 0
 
         # check for improved score 16.000 times
-        while n < 1600000:
+        while n < maxn:
             n += 1
 
             # generate a new random trajectory
             trajectory = Trajectory()
             firstConnectionIndex = random.choice(self.connections).index
-            trajectory.createTrajectory(firstConnectionIndex, 0 , self.connections)
+            trajectory.createTrajectory(firstConnectionIndex, 0 , self.connections, maxMinutes)
 
             # replace the trajectory and calculate the new score
             alternativeLijnvoering.trajectories[whichTrajectory] = trajectory
             scoreAlternative = alternativeLijnvoering.scoreOpdrachtB()
 
             # if the score is better, save this Lijnvoering
-            if scoreAlternative > score:
-                self.trajectories = alternativeLijnvoering.trajectories
-                score = scoreAlternative
+            if scoreAlternative > current:
+                self.trajectories.clear()
+                for trajectory in alternativeLijnvoering.trajectories:
+                    self.trajectories.append(trajectory)
+
+                current = scoreAlternative
 
                 # if there is only one trajectory, replace the same one
                 if len(self.trajectories) == 1:
@@ -86,39 +104,47 @@ class LijnVoering:
                 else:
                     whichTrajectory += 1
 
-            # if the score is lower, simulated annealing
-            else:
-                scores = []
-                chanceAlternative = self.acceptationChance(n, score, scoreAlternative) * 100
-                round(chanceAlternative,0)
-                chanceScore = 100 - chanceAlternative
-                scoresAlternative = [scoreAlternative] * int(chanceAlternative)
-                scores = [score] * int(chanceScore)
-                scores.extend(scoresAlternative)
-                score = random.choice(scores)
-                stopCounter += 1
-                if n % 10000 == 0:
-                    print("highscore was: " + str(score))
-                    print("alternative score was: " + str(scoreAlternative))
-                    print(n)
-                    print("acceptatiekans alternatief: " + str(chanceAlternative))
-                    # print("verkorting :" str(scoreAlternative - score))
-                    # print("temperatuur :" str(10000 * (n/1600000)))
+                temperature = self.newTemp(initialTemperature, temperature, maxn, n)
 
-                    print(score)
-        return score
+            # if the score is lower or equal, simulated annealing
+            # else:
+            #       # calculate the chance that the lower score is accepted
+            #       chanceAlternative = self.acceptationChance(current, scoreAlternative, temperature)
+            #       chanceRandom = random.choice([0.0, 1.0])
+            #
+            #       # print("cur: " + str(current))
+            #       # print("alt " + str(scoreAlternative))
+            #       # print("temp: " + str(temperature))
+            #       # print("chance: " + str(chanceAlternative))
+            #
+            #       # print("temp: " + str(temperature))
+            #       # print("verkorting: " + str(scoreAlternative - current))
+            #       # print("chance: " + str(chanceAlternative))
+            #       # if it's accepted
+            #       if chanceAlternative > chanceRandom:
+            #           current = scoreAlternative
+            #           self.trajectories.clear()
+            #           for trajectory in alternativeLijnvoering.trajectories:
+            #               self.trajectories.append(trajectory)
+            #
+            #       # cool down the temperature for the next run
+            #       temperature = self.newTemp(initialTemperature, temperature, maxn, n)
+
+
+        return current
+
+    def newTemp(self, initialTemperature, temperature, totalIterations, iteration):
+        """Returns the new temperature based on current temperature and
+        current iteration"""
+        base = (1 / initialTemperature)
+        exponent = iteration/totalIterations
+        newTemperature = initialTemperature * (base ** exponent)
+        return newTemperature
 
     # calculate acception chance for simulated annealing
-    def acceptationChance(self, iteration, highscore, alternative):
-        # aantal iteraties totaal
-        N = 1600000
-        verkorting = alternative - highscore
-        temperatuur = N - 0.5 * iteration
-        # print(temperatuur)
-        try:
-            chance = math.exp(verkorting/temperatuur)
-        except temperatuur == 0:
-            verkorting = 0
+    def acceptationChance(self, current, alternative, temperature):
+        shortening = alternative - current
+        chance = math.exp(shortening / temperature)
         return chance
 
     # queue method (breadth first)
@@ -153,7 +179,8 @@ class LijnVoering:
                 # breid de lijst uit met alle children alkmaar -> hoorn
                 # voorkom de bounce
                 if connections[child].station2.name not in connectionCheckList:
-                    if time + connections[child].time <= 120:
+                    # verander onderstaande naar 120 ipv 180 voor alleen holland
+                    if time + connections[child].time <= 180:
                         time += connections[child].time
                         connectionList.append(connections[child])
                         connectionCheckList.append(connections[child].station1.name)
@@ -170,8 +197,11 @@ class LijnVoering:
                 print ("Connectie: " + connection.station1.name + " -> " + connection.station2.name)
 
     def ScoreOpdrachtA(self):
+        kritiekTotaal = 0
+        for connection in connections:
+            if connection.critical == "TRUE":
+                kritiekTotaal += 1
         constant = 10000
-        kritiekTotaal = 20
         indexesAlGecheckt = []
         percentageKritiek = 0
         for trajectory in self.trajectories:
@@ -190,9 +220,19 @@ class LijnVoering:
         # 10000 * aantal kritieke connection in LineFeeding / (aantal kritieke connections totaal)
 
     def scoreOpdrachtB(self):
+        kritiekTotaal = 0
+
+        for connection in self.connections:
+            if connection.critical == True:
+                kritiekTotaal += 1
+
+        kritiekTotaal /= 2
+
         percentageKritiek = 0
         constanteP = 10000
-        kritiekTotaal = 20
+
+        # uncomment onderstaande voor alleen holland
+        # kritiekTotaal = 20
         trajecten = 0
         constanteTrajecten = 50
         minuten = 0
@@ -220,4 +260,5 @@ class LijnVoering:
 
         percentageKritiek = (len(indexesAlGecheckt) / 2) / kritiekTotaal
         score = percentageKritiek * constanteP - trajecten * constanteTrajecten - minuten / constanteMinuten
+
         return score
