@@ -24,4 +24,4 @@ class Connection :
 
 # return all details of a connection
 	def __str__(self):
-		return (self.station1.name + ", " + self.station2.name + ", " + str(self.time))
+		return (self.station1.name + ", " + self.station2.name + ", " + str(self.time) + str(self.critical))

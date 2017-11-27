@@ -10,6 +10,7 @@ class LijnVoering:
         self.trajectories = []
         self.connections = connections
         self.time = 0
+        self.kritiekTotaal = 0
 
 
     def __str__(self):
@@ -24,7 +25,7 @@ class LijnVoering:
     def createRandomLijnVoering(self, trajectories, amount):
 
         maxMinutes = 0
-        if len(self.connections) <= 28:
+        if len(self.connections) <= 56:
             maxMinutes = 120
         else:
             maxMinutes = 180
@@ -40,7 +41,7 @@ class LijnVoering:
     def hillClimber(self, trajectories, connections, amount):
 
         maxMinutes = 0
-        if len(self.connections) <= 28:
+        if len(self.connections) <= 56:
             maxMinutes = 120
         else:
             maxMinutes = 180
@@ -197,10 +198,9 @@ class LijnVoering:
                 print ("Connectie: " + connection.station1.name + " -> " + connection.station2.name)
 
     def ScoreOpdrachtA(self):
-        kritiekTotaal = 0
         for connection in connections:
             if connection.critical == "TRUE":
-                kritiekTotaal += 1
+                self.kritiekTotaal += 1
         constant = 10000
         indexesAlGecheckt = []
         percentageKritiek = 0
@@ -214,25 +214,24 @@ class LijnVoering:
                         else:
                             indexesAlGecheckt.append(connection.index)
                             indexesAlGecheckt.append(self.connections[connection.index + 1].index)
-        percentageKritiek = (len(indexesAlGecheckt) / 2) / kritiekTotaal
+        percentageKritiek = (len(indexesAlGecheckt) / 2) / self.kritiekTotaal
         score = constant * percentageKritiek
         return score
         # 10000 * aantal kritieke connection in LineFeeding / (aantal kritieke connections totaal)
 
     def scoreOpdrachtB(self):
-        kritiekTotaal = 0
+        self.kritiekTotaal = 0
 
         for connection in self.connections:
             if connection.critical == True:
-                kritiekTotaal += 1
+                self.kritiekTotaal += 1
 
-        kritiekTotaal /= 2
+        self.kritiekTotaal /= 2
 
+        self.kritiekTotaal = 59
         percentageKritiek = 0
         constanteP = 10000
 
-        # uncomment onderstaande voor alleen holland
-        # kritiekTotaal = 20
         trajecten = 0
         constanteTrajecten = 50
         minuten = 0
@@ -258,7 +257,7 @@ class LijnVoering:
                             indexesAlGecheckt.append(connection.index)
                             indexesAlGecheckt.append(self.connections[connection.index + 1].index)
 
-        percentageKritiek = (len(indexesAlGecheckt) / 2) / kritiekTotaal
+        percentageKritiek = (len(indexesAlGecheckt) / 2) / self.kritiekTotaal
         score = percentageKritiek * constanteP - trajecten * constanteTrajecten - minuten / constanteMinuten
 
         return score
