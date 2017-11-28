@@ -36,28 +36,75 @@ with open('csvFiles/ConnectiesHolland.csv', 'r') as csvfile:
 for connection in connections:
     connection.addChildren(connections)
 
-save_scores_traject1 = []
-# check all starter stations
-for i in range(0,56):
-    greed = Trajectory()
-    greed.createGreedyTrajectory(i, 0, connections)
-    score = sum(greed.bestScores) - 50
-    save_scores_traject1.append(score)
+allGreedy = []
+for i in range(0, 56):
+	Greedy = Trajectory()
+	Greedy.createGreedyTrajectory(i, 0, connections)
+	allGreedy.append(Greedy)
 
-# highest score for a single trajectory
-print(max(save_scores_traject1))
+allScores = []
+combinations = []
 
-test_1 = Trajectory()
-test_1.createGreedyTrajectory(0, 0, connections)
-print(test_1.indexes)
+for first_traject in allGreedy:
+	for second_traject in allGreedy:
+		for third_traject in allGreedy:
+			for fourth_traject in allGreedy:
+				combinedScore = first_traject.overallScore +\
+								second_traject.overallScore +\
+								third_traject.overallScore +\
+								fourth_traject.overallScore
 
-test_2 = Trajectory()
-test_2.createGreedyTrajectory(1, 0, connections)
-print(test_2.indexes)
+		for index in first_traject.indexes:
+			if index in second_traject.indexes or third_traject.indexes or fourth_traject.indexes:
+				combinedScore = combinedScore - 450
 
-test_3 = Trajectory()
-test_3.indexes = test_1.indexes + test_2.indexes
-print(test_3.indexes)
+			check = index % 2
+			if check == 0:
+				checker = index + 1
+				if checker in second_traject.indexes:
+					combinedScore = combinedScore - 450
+			if check == 1:
+				checker = index - 1
+				if checker in second_traject.indexes:
+					combinedScore = combinedScore - 450
 
-for index in test_1.indexes:
-	print(connections[index])
+		for index in second_traject.indexes:
+			if index in third_traject.indexes or fourth_traject.indexes:
+				combinedScore = combinedScore - 450
+
+			check = index % 2
+			if check == 0:
+				checker = index + 1
+				if checker in third_traject.indexes or fourth_traject.indexes:
+					combinedScore = combinedScore - 450
+			if check == 1:
+				checker = index - 1
+				if checker in third_traject.indexes or fourth_traject.indexes:
+					combinedScore = combinedScore - 450
+
+		for index in third_traject.indexes:
+			if index in fourth_traject.indexes:
+				combinedScore = combinedScore - 450
+
+			check = index % 2
+			if check == 0:
+				checker = index + 1
+				if checker in fourth_traject.indexes:
+					combinedScore = combinedScore - 450
+			if check == 1:
+				checker = index - 1
+				if checker in fourth_traject.indexes:
+					combinedScore = combinedScore - 450
+
+		allScores.append(combinedScore)
+		combinations.append([first_traject, second_traject, third_traject, fourth_traject])
+
+bestScore = max(allScores)
+print(bestScore)
+indexScore = allScores.index(bestScore)
+
+test = combinations[indexScore]
+print(test[0])
+print(test[1])
+print(test[2])
+print(test[3])

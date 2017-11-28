@@ -9,7 +9,7 @@ class Trajectory:
 		self.time = 0
 		self.connectionsAmount = 0
 		self.indexes = []
-		self.bestScores = []
+		self.overallScore = -50
 
 		for connection in self.connections:
 			self.time += connection.time
@@ -24,7 +24,7 @@ class Trajectory:
 
 		last_station = self.connections[-1]
 		output += last_station.station2.name
-		output += " total time: " + str(self.time) + " minutes" + "  Score: " + str(sum(self.bestScores) - 50)
+		output += " total time: " + str(self.time) + " minutes" + "  Score: " + str(self.overallScore)
 		return output
 
 	# create a random Trajectory
@@ -86,14 +86,32 @@ class Trajectory:
 				break
 
 			if len(connection.children) == 1:
-				index = connection.children[0]
+				newIndex = connection.children[0]
 
 			else:
+
+				newIndex = 0
 				scores = []
-				bestScore = -100
+				children = []
 
 				for child in connection.children:
 					placeholder = connections[child]
+
+					if placeholder.station2.name == connection.station1.name:
+						continue
+
+					elif placeholder.index in self.indexes:
+						continue
+
+					check = placeholder.index % 2
+					if check == 0:
+						checker = placeholder.index + 1
+						if checker in self.indexes:
+							continue
+					if check == 1:
+						checker = placeholder.index - 1
+						if checker in self.indexes:
+							continue
 
 					if placeholder.critical == True:
 						critical = 1
@@ -101,22 +119,20 @@ class Trajectory:
 						critical = 0
 
 					score = (10000 * (critical/20)) - placeholder.time
+
 					scores.append(score)
+					children.append(placeholder.index)
 
-					if placeholder.station2.name != connection.station1.name:
-						if score > bestScore:
-							bestScore = score
-							index = child
+				if not scores:
+					break
+				bestScore = max(scores)
 
-				if index in self.indexes:
-					scores.remove(bestScore)
-					bestScore = max(scores)
-					new_index = scores.index(new_score)
-					index = connection.children[new_index]
+				indexScore = scores.index(bestScore)
+				newIndex = children[indexScore]
 
-				self.bestScores.append(bestScore)
+				self.overallScore += bestScore
 
-			return self.createGreedyTrajectory(index, time, connections)
+			return self.createGreedyTrajectory(newIndex, time, connections)
 
 
 #pseudo code .
