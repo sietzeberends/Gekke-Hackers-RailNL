@@ -18,7 +18,6 @@ class LijnVoering:
         self.kritiekInLijnvoering = 0
         self.score = 0
 
-
     def __str__(self):
         output = ""
         for trajectory in self.trajectories:
@@ -38,7 +37,25 @@ class LijnVoering:
             self.trajectories.append(trajectory)
             self.time += trajectory.time
 
+<<<<<<< HEAD
     def hillClimber(self):
+=======
+    def createGreedyLijnvoering(self, trajectories, amount):
+
+        maxMinutes = 120
+
+        #pick the trajectory that maximizes the score
+        while len(trajectories) < amount:
+            trajectory = Trajectory()
+            firstConnectionIndex = random.choice(self.connections).index
+            trajectory.createGreedyTrajectory(firstConnectionIndex, maxMinutes, self.connections)
+            print(trajectory)
+            self.trajectories.append(trajectory)
+            self.time += trajectory.time
+
+
+    def hillClimber(self, trajectories, connections, amount):
+>>>>>>> 959d35ef0d17966db6c61cbb98a203689d194e9e
 
         for i in range(1, self.maxTrajectories):
             highestForThisLijnvoering = 0
