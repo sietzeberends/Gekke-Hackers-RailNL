@@ -132,18 +132,4 @@ class Trajectory:
 
 				self.overallScore += bestScore
 
-<<<<<<< HEAD
 			return self.createGreedyTrajectory(index, time, connections)
-=======
-			return self.createGreedyTrajectory(newIndex, time, connections)
-
-
-#pseudo code .
-
-# if connection.critical == True:
-	#critical = 1
-# else:
-	#critical = 0
-
-# score = (10.000 * (critical/22)) - connection.time
->>>>>>> 35712a4ff621fcb6fb1d3d225d6d209464bd22c3

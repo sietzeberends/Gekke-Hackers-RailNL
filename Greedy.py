@@ -68,6 +68,7 @@ for first_traject in allGreedy:
 				if checker in second_traject.indexes:
 					combinedScore = combinedScore - 450
 
+
 		for index in second_traject.indexes:
 			if index in third_traject.indexes or fourth_traject.indexes:
 				combinedScore = combinedScore - 450
