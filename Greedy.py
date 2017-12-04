@@ -49,6 +49,7 @@ for i in range(0, 56):
 	Greedy.createGreedyTrajectory(i, 0, connections)
 	allGreedy.append(Greedy)
 
+<<<<<<< HEAD
 allCombinations = []
 for line in itertools.product(allGreedy, allGreedy, allGreedy, allGreedy):
 	allCombinations.append(line)
@@ -92,3 +93,72 @@ print(topCombination[0])
 print(topCombination[1])
 print(topCombination[2])
 print(topCombination[3])
+=======
+allScores = []
+combinations = []
+
+for first_traject in allGreedy:
+	for second_traject in allGreedy:
+		for third_traject in allGreedy:
+			for fourth_traject in allGreedy:
+				combinedScore = first_traject.overallScore +\
+								second_traject.overallScore +\
+								third_traject.overallScore +\
+								fourth_traject.overallScore
+
+		for index in first_traject.indexes:
+			if index in second_traject.indexes or third_traject.indexes or fourth_traject.indexes:
+				combinedScore = combinedScore - 450
+
+			check = index % 2
+			if check == 0:
+				checker = index + 1
+				if checker in second_traject.indexes:
+					combinedScore = combinedScore - 450
+			if check == 1:
+				checker = index - 1
+				if checker in second_traject.indexes:
+					combinedScore = combinedScore - 450
+
+
+		for index in second_traject.indexes:
+			if index in third_traject.indexes or fourth_traject.indexes:
+				combinedScore = combinedScore - 450
+
+			check = index % 2
+			if check == 0:
+				checker = index + 1
+				if checker in third_traject.indexes or fourth_traject.indexes:
+					combinedScore = combinedScore - 450
+			if check == 1:
+				checker = index - 1
+				if checker in third_traject.indexes or fourth_traject.indexes:
+					combinedScore = combinedScore - 450
+
+		for index in third_traject.indexes:
+			if index in fourth_traject.indexes:
+				combinedScore = combinedScore - 450
+
+			check = index % 2
+			if check == 0:
+				checker = index + 1
+				if checker in fourth_traject.indexes:
+					combinedScore = combinedScore - 450
+			if check == 1:
+				checker = index - 1
+				if checker in fourth_traject.indexes:
+					combinedScore = combinedScore - 450
+
+		allScores.append(combinedScore)
+		combinations.append([first_traject, second_traject, third_traject, fourth_traject])
+
+bestScore = max(allScores)
+print(bestScore)
+indexScore = allScores.index(bestScore)
+
+test = combinations[indexScore]
+print(test[0])
+print(test[1])
+print(test[2])
+print(test[3])
+>>>>>>> 858d8a2dc9c985be4524ae69bfd272d24f9a7314
