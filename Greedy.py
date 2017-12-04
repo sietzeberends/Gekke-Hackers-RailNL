@@ -1,10 +1,10 @@
 from Classes.station import Station
 from Classes.connection import Connection
 from Classes.trajectory import Trajectory
-from Classes.lijnvoering import LijnVoering
 
 import csv
 import random
+import itertools
 
 # track all stations and connections in two lists
 stations = []
@@ -36,75 +36,59 @@ with open('csvFiles/ConnectiesHolland.csv', 'r') as csvfile:
 for connection in connections:
     connection.addChildren(connections)
 
+critical = []
+for connection in connections:
+	if connection.critical == True:
+		critical.append(connection.index)
+
+reduction = 500
+
 allGreedy = []
 for i in range(0, 56):
 	Greedy = Trajectory()
 	Greedy.createGreedyTrajectory(i, 0, connections)
 	allGreedy.append(Greedy)
 
-allScores = []
-combinations = []
+allCombinations = []
+for line in itertools.product(allGreedy, allGreedy, allGreedy, allGreedy):
+	allCombinations.append(line)
 
-for first_traject in allGreedy:
-	for second_traject in allGreedy:
-		for third_traject in allGreedy:
-			for fourth_traject in allGreedy:
-				combinedScore = first_traject.overallScore +\
-								second_traject.overallScore +\
-								third_traject.overallScore +\
-								fourth_traject.overallScore
 
-		for index in first_traject.indexes:
-			if index in second_traject.indexes or third_traject.indexes or fourth_traject.indexes:
-				combinedScore = combinedScore - 450
+combinationScores = []
+for combination in allCombinations:
+	combinationScore = 0
+	combinationIndexes = []
+	for traject in combination:
+		combinationScore = combinationScore + traject.overallScore
 
-			check = index % 2
-			if check == 0:
-				checker = index + 1
-				if checker in second_traject.indexes:
-					combinedScore = combinedScore - 450
-			if check == 1:
-				checker = index - 1
-				if checker in second_traject.indexes:
-					combinedScore = combinedScore - 450
+		for index in traject.indexes:
+			if index in critical:
+				if index in combinationIndexes:
+						combinationScore = combinationScore - reduction
 
-		for index in second_traject.indexes:
-			if index in third_traject.indexes or fourth_traject.indexes:
-				combinedScore = combinedScore - 450
+				elif index % 2 == 0:
+					checker = index + 1
+					if checker in combinationIndexes:
+						combinationScore = combinationScore - reduction
 
-			check = index % 2
-			if check == 0:
-				checker = index + 1
-				if checker in third_traject.indexes or fourth_traject.indexes:
-					combinedScore = combinedScore - 450
-			if check == 1:
-				checker = index - 1
-				if checker in third_traject.indexes or fourth_traject.indexes:
-					combinedScore = combinedScore - 450
+				elif index % 2 == 1:
+					checker = index - 1
+					if checker in combinationIndexes:
+						combinationScore = combinationScore - reduction
 
-		for index in third_traject.indexes:
-			if index in fourth_traject.indexes:
-				combinedScore = combinedScore - 450
 
-			check = index % 2
-			if check == 0:
-				checker = index + 1
-				if checker in fourth_traject.indexes:
-					combinedScore = combinedScore - 450
-			if check == 1:
-				checker = index - 1
-				if checker in fourth_traject.indexes:
-					combinedScore = combinedScore - 450
+		combinationIndexes.extend(traject.indexes)
 
-		allScores.append(combinedScore)
-		combinations.append([first_traject, second_traject, third_traject, fourth_traject])
+	combinationScores.append(combinationScore)
 
-bestScore = max(allScores)
-print(bestScore)
-indexScore = allScores.index(bestScore)
+print(combinationScores)
+print(len(combinationScores))
+print(max(combinationScores))
 
-test = combinations[indexScore]
-print(test[0])
-print(test[1])
-print(test[2])
-print(test[3])
+index = combinationScores.index(max(combinationScores))
+topCombination = allCombinations[index]
+
+print(topCombination[0])
+print(topCombination[1])
+print(topCombination[2])
+print(topCombination[3])
