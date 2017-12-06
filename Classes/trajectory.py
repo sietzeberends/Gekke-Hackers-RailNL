@@ -131,9 +131,5 @@ class Trajectory:
 				newIndex = children[indexScore]
 
 				self.overallScore += bestScore
-<<<<<<< HEAD
 
-=======
-				
->>>>>>> 959d35ef0d17966db6c61cbb98a203689d194e9e
 			return self.createGreedyTrajectory(index, time, connections)

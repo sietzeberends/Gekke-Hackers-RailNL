@@ -37,25 +37,7 @@ class LijnVoering:
             self.trajectories.append(trajectory)
             self.time += trajectory.time
 
-<<<<<<< HEAD
     def hillClimber(self):
-=======
-    def createGreedyLijnvoering(self, trajectories, amount):
-
-        maxMinutes = 120
-
-        #pick the trajectory that maximizes the score
-        while len(trajectories) < amount:
-            trajectory = Trajectory()
-            firstConnectionIndex = random.choice(self.connections).index
-            trajectory.createGreedyTrajectory(firstConnectionIndex, maxMinutes, self.connections)
-            print(trajectory)
-            self.trajectories.append(trajectory)
-            self.time += trajectory.time
-
-
-    def hillClimber(self, trajectories, connections, amount):
->>>>>>> 959d35ef0d17966db6c61cbb98a203689d194e9e
 
         for i in range(1, self.maxTrajectories):
             highestForThisLijnvoering = 0
@@ -307,3 +289,94 @@ class LijnVoering:
             trajectories = 21
 
         return trajectories
+
+    def depthFirstSearch(self):
+        highScoreLijnvoering = LijnVoering(self.csvFilepath)
+        trajectory = Trajectory()
+        stack = []
+        allTrajectories = []
+        time = 0
+
+        # push the first connection on the stack
+        stack.append(self.connections[0])
+        n = 0
+        c = 0
+
+        while len(stack) > 0:
+            # count the loop
+            n += 1
+            print("stacklen :" + str(len(stack)))
+            # grab a connection from the stack
+            connection = stack.pop()
+
+            # if the time of the connection and the current trajectory combined
+            # is too big
+            if time + connection.time > 120:
+                trajectory.connections.pop()
+                time -= connection.time
+
+                for i in range(0,c-1):
+                    stack.pop()
+                    print("stacklen :" + str(len(stack)))
+
+                connection = stack.pop()
+
+                c = 0
+                time -= trajectory.connections[-1].time
+                trajectory.connections[-1] = connection
+                time += connection.time
+
+            else:
+                trajectory.connections.append(connection)
+                time += connection.time
+
+            print(trajectory)
+            print("time: " + str(time))
+
+            # if/while we haven't reached 120 minutes, append it
+
+
+            allTrajectories.append(trajectory)
+            # edge of civilization check
+
+
+
+            if len(connection.children) == 1:
+                stack.append(self.connections[child])
+            #
+            else:
+                for child in connection.children:
+                    print("")
+                    if self.connections[child].station2.name == connection.station1.name:
+                        print("bounce, don't add")
+                    else:
+                        print("add")
+                        stack.append(self.connections[child])
+                        c += 1
+
+        #
+        # # pop the connection, and keep popping while there are still connections left
+        #
+        #     print (connection)
+        #     connection = stack.pop()
+        #     time += connection.time
+        #     print (connection)
+        #     firstTrajectory.connections.append(connection)
+        #     if time + connection.time >= 120:
+        #         connection = stack.pop()
+        #
+        #     if connection.station1.name != firstTrajectory.connections[-1].station2.name:
+        #
+        #         print (time)
+        #         print (highScoreLijnvoering)
+        #
+        #         n = 0
+        #         # add the children of the connection
+        #         for child in connection.children:
+        #             if len(connection.children) == 1:
+        #                 stack.append(self.connections[child])
+        #             elif n < 1:
+        #                 n+= 1
+        #             else:
+        #                 stack.append(self.connections[child])
+        #                 print(stack[-1])
