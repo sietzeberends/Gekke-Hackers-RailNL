@@ -33,7 +33,7 @@ startTime = datetime.now()
 # print ("Aantal kritieke trajecten: " + str(besteLijnvoering.kritiekInLijnvoering))
 
 test = LijnVoering('csvFiles/ConnectiesHolland.csv')
-test.depthFirstSearch()
+test.depthFirstSearch(0, 0, [])
 
 # print the runtime
 timeElapsed = datetime.now()-startTime
