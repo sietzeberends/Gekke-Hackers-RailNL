@@ -134,4 +134,8 @@ class Trajectory:
 
 				self.overallScore += bestScore
 
+<<<<<<< HEAD
 			return self.createGreedyTrajectory(newIndex, time, connections)
+=======
+			return self.createGreedyTrajectory(index, time, connections)
+>>>>>>> bf962a52671977566adf51d614aabb062e26daa1
