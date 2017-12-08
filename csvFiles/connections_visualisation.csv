@@ -1,27 +1,28 @@
 -
+Rotterdam Centraal, Schiedam Centrum, 5
+Schiedam Centrum, Delft, 7
+Delft, Den Haag Centraal, 13
+Den Haag Centraal, Leiden Centraal, 12
+Leiden Centraal, Alphen a/d Rijn, 14
+Alphen a/d Rijn, Gouda, 19
+Gouda, Rotterdam Alexander, 10
+Rotterdam Alexander, Rotterdam Centraal, 8
+Rotterdam Centraal, Dordrecht, 17
+-
+Heemstede-Aerdenhout, Haarlem, 6
+Haarlem, Beverwijk, 16
+Beverwijk, Zaandam, 25
+Zaandam, Amsterdam Sloterdijk, 6
+Amsterdam Sloterdijk, Amsterdam Zuid, 16
+Amsterdam Zuid, Amsterdam Amstel, 10
 Amsterdam Amstel, Amsterdam Centraal, 8
 Amsterdam Centraal, Amsterdam Sloterdijk, 6
 Amsterdam Sloterdijk, Haarlem, 11
 Haarlem, Heemstede-Aerdenhout, 6
-Heemstede-Aerdenhout, Leiden Centraal, 13
-Leiden Centraal, Den Haag Centraal, 12
-Den Haag Centraal, Gouda, 18
-Gouda, Rotterdam Alexander, 10
-Rotterdam Alexander, Rotterdam Centraal, 8
-Rotterdam Centraal, Schiedam Centrum, 5
-Schiedam Centrum, Delft, 7
-Delft, Den Haag Centraal, 13
 -
-Gouda, Alphen a/d Rijn, 19
-Alphen a/d Rijn, Leiden Centraal, 14
-Leiden Centraal, Heemstede-Aerdenhout, 13
-Heemstede-Aerdenhout, Haarlem, 6
-Haarlem, Beverwijk, 16
-Beverwijk, Zaandam, 25
+Castricum, Alkmaar, 9
+Alkmaar, Hoorn, 24
+Hoorn, Zaandam, 26
 Zaandam, Castricum, 12
 Castricum, Alkmaar, 9
--
-Amsterdam Sloterdijk, Zaandam, 6
-Zaandam, Hoorn, 26
-Hoorn, Alkmaar, 24
 Alkmaar, Den Helder, 36

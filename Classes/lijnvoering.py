@@ -2,9 +2,12 @@ from Classes.trajectory import Trajectory
 from Classes.connection import Connection
 from Classes.station import Station
 from queue import *
+import itertools
+
 import math
 import random
 import csv
+
 
 class LijnVoering:
     def __init__(self, csvFilepath):
@@ -383,6 +386,10 @@ class LijnVoering:
             print("Amount of critical connections: " + str(bestLijnvoering.kritiekInLijnvoering))
             print (len(allTrajectories))
             print(n)
+
+    def combineDepthFirst(self, trajectories):
+        highScore = 0
+        itertools.product(trajectories, trajectories, trajectories, trajectories)
 
     def ScoreOpdrachtA(self):
         for connection in connections:
