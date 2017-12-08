@@ -11,30 +11,30 @@ import sys
 # track how long the application runs
 startTime = datetime.now()
 
-lijnVoeringHolland = LijnVoering('csvFiles/ConnectiesHolland.csv')
-lijnVoeringNationaal = LijnVoering('csvFiles/ConnectionsNationaal.csv')
-
+# lijnVoeringHolland = LijnVoering('csvFiles/ConnectiesHolland.csv')
+# lijnVoeringNationaal = LijnVoering('csvFiles/ConnectiesNationaal.csv')
+#
 highScore = 0
 
-for i in range(1,1000):
-	print("run: " + str(i))
-	lijnVoeringHolland = LijnVoering('csvFiles/ConnectiesHolland.csv')
-	besteLijnvoering = testHillClimber.hillClimber()
-	if besteLijnvoering.scoreOpdrachtB() > highScore:
-		print("highScore tot nu toe: " + str(highScore))
-		highScore = besteLijnvoering.scoreOpdrachtB()
-		print(str(i) + " trajecten")
-		print(besteLijnvoering)
-		print ("Nieuwe highscore: " + str(highScore))
-		print ("Totale tijd van lijnvoering: " + str(besteLijnvoering.time))
-		print ("Aantal kritieke trajecten: " + str(besteLijnvoering.kritiekInLijnvoering))
-		print ("deler: " + str(besteLijnvoering.kritiekTotaal))
-
-print("Beste lijnvoering " + str(len(besteLijnvoering.trajectories)) + ": " + str(highScore))
-print(str(besteLijnvoering))
-print ("Totale tijd van lijnvoering: " + str(besteLijnvoering.time))
-print ("Aantal kritieke trajecten: " + str(besteLijnvoering.kritiekInLijnvoering))
-
+# for i in range(1,1000):
+# 	print("run: " + str(i))
+# 	lijnVoeringHolland = LijnVoering('csvFiles/ConnectiesHolland.csv')
+# 	besteLijnvoering = lijnVoeringHolland.hillClimber()
+# 	if besteLijnvoering.scoreOpdrachtB() > highScore:
+# 		print("highScore tot nu toe: " + str(highScore))
+# 		highScore = besteLijnvoering.scoreOpdrachtB()
+# 		print(str(i) + " trajecten")
+# 		print(besteLijnvoering)
+# 		print ("Nieuwe highscore: " + str(highScore))
+# 		print ("Totale tijd van lijnvoering: " + str(besteLijnvoering.time))
+# 		print ("Aantal kritieke trajecten: " + str(besteLijnvoering.kritiekInLijnvoering))
+# 		print ("deler: " + str(besteLijnvoering.kritiekTotaal))
+#
+# print("Beste lijnvoering " + str(len(besteLijnvoering.trajectories)) + ": " + str(highScore))
+# print(str(besteLijnvoering))
+# print ("Totale tijd van lijnvoering: " + str(besteLijnvoering.time))
+# print ("Aantal kritieke trajecten: " + str(besteLijnvoering.kritiekInLijnvoering))
+#
 test = LijnVoering('csvFiles/ConnectiesHolland.csv')
 test.depthFirstSearch(0, 0, [])
 
