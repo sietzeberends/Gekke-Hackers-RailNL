@@ -1,10 +1,12 @@
+from __future__ import division
 from Classes.station import Station
 from Classes.connection import Connection
 from Classes.trajectory import Trajectory
-from Classes.lijnvoering import LijnVoering
+
 
 import csv
 import random
+import itertools
 
 # track all stations and connections in two lists
 stations = []
@@ -36,76 +38,75 @@ with open('csvFiles/ConnectiesHolland.csv', 'r') as csvfile:
 for connection in connections:
     connection.addChildren(connections)
 
+critical = []
+for connection in connections:
+	if connection.critical == True:
+		critical.append(connection.index)
+
+
+reduction = 500
 allGreedy = []
+
 for i in range(0, 56):
 	Greedy = Trajectory()
 	Greedy.createGreedyTrajectory(i, 0, connections)
 	allGreedy.append(Greedy)
 
+
+combinationScores = []
+allCombinations = {}
+counter = 0
 allScores = []
-combinations = []
 
-for first_traject in allGreedy:
-	for second_traject in allGreedy:
-		for third_traject in allGreedy:
-			for fourth_traject in allGreedy:
-				combinedScore = first_traject.overallScore +\
-								second_traject.overallScore +\
-								third_traject.overallScore +\
-								fourth_traject.overallScore
+def insertIntoDict(name,traject,Dict):
+    if not name in Dict:
+        Dict[name] = traject.indexes
+    else:
+        Dict[name] = Dict[name] + traject.indexes
 
-		for index in first_traject.indexes:
-			if index in second_traject.indexes or third_traject.indexes or fourth_traject.indexes:
-				combinedScore = combinedScore - 450
+amountCritical = []
 
-			check = index % 2
-			if check == 0:
+for combination in itertools.product(allGreedy, allGreedy, allGreedy, allGreedy):
+
+	combinationIndexes = []
+	criticalIndexes = 0
+	totalTime = 0
+
+	for traject in combination:
+		insertIntoDict("combination" + str(counter),traject,allCombinations)
+		totalTime = totalTime + traject.time
+
+	currentCombination = allCombinations["combination" + str(counter)]
+
+	for index in currentCombination:
+		if index in critical:
+			if index in combinationIndexes:
+				continue
+			elif index % 2 == 0:
 				checker = index + 1
-				if checker in second_traject.indexes:
-					combinedScore = combinedScore - 450
-			if check == 1:
+				if checker in combinationIndexes:
+					continue
+			elif index % 2 == 1:
 				checker = index - 1
-				if checker in second_traject.indexes:
-					combinedScore = combinedScore - 450
+				if checker in combinationIndexes:
+					continue
 
+			criticalIndexes = criticalIndexes + 1
 
-		for index in second_traject.indexes:
-			if index in third_traject.indexes or fourth_traject.indexes:
-				combinedScore = combinedScore - 450
+		combinationIndexes.append(index)
+	score = 10000 * (criticalIndexes/21) - 50 - totalTime
+	allScores.append(score)
+	counter = counter + 1
+	amountCritical.append(criticalIndexes)
 
-			check = index % 2
-			if check == 0:
-				checker = index + 1
-				if checker in third_traject.indexes or fourth_traject.indexes:
-					combinedScore = combinedScore - 450
-			if check == 1:
-				checker = index - 1
-				if checker in third_traject.indexes or fourth_traject.indexes:
-					combinedScore = combinedScore - 450
+print(len(allCombinations))
+print(max(allScores))
 
-		for index in third_traject.indexes:
-			if index in fourth_traject.indexes:
-				combinedScore = combinedScore - 450
+indexTop = allScores.index(max(allScores))
 
-			check = index % 2
-			if check == 0:
-				checker = index + 1
-				if checker in fourth_traject.indexes:
-					combinedScore = combinedScore - 450
-			if check == 1:
-				checker = index - 1
-				if checker in fourth_traject.indexes:
-					combinedScore = combinedScore - 450
+indexesTop = allCombinations["combination" + str(indexTop)]
 
-		allScores.append(combinedScore)
-		combinations.append([first_traject, second_traject, third_traject, fourth_traject])
+for index in indexesTop:
+	print(connections[index])
 
-bestScore = max(allScores)
-print(bestScore)
-indexScore = allScores.index(bestScore)
-
-test = combinations[indexScore]
-print(test[0])
-print(test[1])
-print(test[2])
-print(test[3])
+print("Amount of critical connections =" + str(amountCritical[indexTop]))

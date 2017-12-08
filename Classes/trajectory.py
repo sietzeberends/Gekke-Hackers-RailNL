@@ -9,7 +9,7 @@ class Trajectory:
 		self.time = 0
 		self.connectionsAmount = 0
 		self.indexes = []
-		self.overallScore = -50
+		self.overallScore = - 50
 
 		for connection in self.connections:
 			self.time += connection.time
@@ -74,6 +74,7 @@ class Trajectory:
 			return self.createTrajectory(index, time, connections, maxMinutes)
 
 	def createGreedyTrajectory(self, index, time, connections):
+
 		connection = connections[index]
 
 		while True:
@@ -90,7 +91,7 @@ class Trajectory:
 
 			else:
 
-				newIndex = 0
+				newIndex = None
 				scores = []
 				children = []
 
@@ -113,18 +114,19 @@ class Trajectory:
 						if checker in self.indexes:
 							continue
 
-					if placeholder.critical == True:
-						critical = 1
-					else:
-						critical = 0
+					score = None
 
-					score = (10000 * (critical/20)) - placeholder.time
+					if placeholder.critical == True:
+						score = 500 - placeholder.time
+					else:
+						score = 0 - placeholder.time
 
 					scores.append(score)
 					children.append(placeholder.index)
 
 				if not scores:
 					break
+
 				bestScore = max(scores)
 
 				indexScore = scores.index(bestScore)
@@ -132,4 +134,8 @@ class Trajectory:
 
 				self.overallScore += bestScore
 
+<<<<<<< HEAD
+			return self.createGreedyTrajectory(newIndex, time, connections)
+=======
 			return self.createGreedyTrajectory(index, time, connections)
+>>>>>>> bf962a52671977566adf51d614aabb062e26daa1
