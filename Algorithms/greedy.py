@@ -3,7 +3,6 @@ from Classes.station import Station
 from Classes.connection import Connection
 from Classes.trajectory import Trajectory
 
-
 import csv
 import random
 import itertools
@@ -94,7 +93,7 @@ for combination in itertools.product(allGreedy, allGreedy, allGreedy, allGreedy)
 			criticalIndexes = criticalIndexes + 1
 
 		combinationIndexes.append(index)
-	score = 10000 * (criticalIndexes/21) - 50 - totalTime
+	score = 10000 * (criticalIndexes/20) - (50 * len(currentCombination)) - totalTime
 	allScores.append(score)
 	counter = counter + 1
 	amountCritical.append(criticalIndexes)

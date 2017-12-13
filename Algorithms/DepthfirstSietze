@@ -1,0 +1,171 @@
+def depthFirstSearch(self, rootInput, nInput, allTrajectoriesInput, archiveInput):
+    highScoreLijnvoering = LijnVoering(self.csvFilepath)
+    trajectory = Trajectory()
+    stack = []
+    allTrajectories = []
+    for traject in allTrajectoriesInput:
+        allTrajectories.append(traject)
+    allIsWell = True
+
+    # push the first connection on the stack
+    root = rootInput
+    stack.append(self.connections[root])
+    n = nInput
+    archive = archiveInput
+
+    while len(stack) > 0:
+        connection = stack.pop()
+        if n == 0 or len(trajectory.connections) == 0:
+            trajectory.connections.append(connection)
+            trajectory.time += connection.time
+            goodToGo = True
+            stringKey = ""
+            if len(trajectory.connections) > 0:
+                for tconnection in trajectory.connections:
+                    stringKey += str(tconnection.index)
+                stringKey += str(connection.index)
+
+        else:
+            goodToGo = False
+        while not goodToGo:
+            print("Trajectory until now: " + str(trajectory))
+            print("Try to add : " + str(connection) + " to the trajectory above")
+            levelUpIsPossible = False
+            willExceedTime = False
+            isInArchive = False
+
+            # if we're not good to go, pop the next one
+            if len(stack) > 0:
+                print("not good to go, pop the next one")
+                connection = stack.pop()
+
+            # if the stack is empty, go to the next root
+            else:
+                print("not good to go, pop the next one")
+                print("nothing left to pop, go to the next root")
+                print (root)
+                if root < 55:
+                    root += 1
+                    return self.depthFirstSearch(root, n, allTrajectories, archive)
+                else:
+                    break
+
+            # check if level up is possible
+            # basically, it's possible if the station names match.
+            # the connection index however, is not allowed to match
+            # we don't want to run the exact same connection twice
+            # also, remember how high up we have to go in the tree
+            level = 1
+            for tconnection in reversed(trajectory.connections):
+                if (connection.station1.name == tconnection.station1.name
+                and connection.index != tconnection.index):
+                    levelUpIsPossible = True
+                    print("Level up is possible " + str(level) + " levels higher")
+                    break
+                else:
+                    level += 1
+
+            if not levelUpIsPossible:
+                print("Level up not possible")
+
+
+            # check if time exceeds
+            if trajectory.time + connection.time > 120:
+                willExceedTime = True
+                print("Will exceed time")
+
+            # check if adding the connection to the trajectory
+            # would result in a state we already visited
+            stringKey = ""
+            if len(trajectory.connections) > 0:
+                for tconnection in trajectory.connections:
+                    stringKey += str(tconnection.index)
+                stringKey += str(connection.index)
+
+            # and check if it's in the archive
+            if stringKey in archive:
+                print("Is in archive")
+                isInArchive = True
+            else:
+                print("Is not in archive")
+                isInArchive = False
+
+            # now check if we're good to go
+            # if it's not in the archive, we might be good to go
+            if not isInArchive:
+                # if it also won't exceed the time: Go!
+                if not willExceedTime:
+                    # check if the connection actually matches
+                    if connection.station1.name == trajectory.connections[-1].station2.name:
+                        print("matches, go.")
+                        goodToGo = True
+                    else:
+                        print("does not match. no go")
+                        goodToGo = False
+                else:
+                    # if it exceeds the time but we can level up: Go!
+                    if levelUpIsPossible:
+                        # prepare for appending the connection
+                        # which means, pop connections from the trajectory
+                        # until we're on the right level in the tree
+                        for j in range(0, level):
+                            if len(trajectory.connections) > 1:
+                                x = trajectory.connections.pop()
+                                trajectory.time -= x.time
+                        print("trajectory after popping: " + str(trajectory))
+                        # check if the new trajectory is already in the archive
+                        # if so, we're not good to go
+                        stringKey = ""
+                        if len(trajectory.connections) > 0:
+                            for tconnection in trajectory.connections:
+                                stringKey += str(tconnection.index)
+                            stringKey += str(connection.index)
+
+                        # and check if it's in the dict
+                        if stringKey in archive:
+                            print("Is in dict")
+                            isInArchive = True
+                            goodToGo = False
+                        else:
+                            print("Is not in dict")
+                            isInArchive = False
+                            if connection.station1.name == trajectory.connections[-1].station2.name:
+                                print("matches, go.")
+                                goodToGo = True
+
+        # if we're good to go, add the connection to the trajectory
+        # and the children to the stack
+        if n == 0:
+            print("First round, connection already added")
+        else:
+            trajectory.connections.append(connection)
+            trajectory.time += connection.time
+            archive[stringKey] = True
+
+        # we append everything, including bounces
+        # archive will take care of the rest
+        for child in connection.children:
+            stack.append(self.connections[child])
+            print("child added: " + str(self.connections[child]))
+
+        n += 1
+def combineDepthFirst(self, trajectories):
+    n = 0
+    lijnVoering = LijnVoering('csvFiles/ConnectiesHolland.csv')
+    alternativeLijnVoering = LijnVoering('csvFiles/ConnectiesHolland.csv')
+    highScore = 0
+    for combination in itertools.product(trajectories, trajectories, trajectories):
+        alternativeLijnVoering.trajectories.clear()
+        n += 1
+        if n % 1000000 == 0:
+            print(n)
+        for trajectory in combination:
+            alternativeLijnVoering.trajectories.append(trajectory)
+        alternativeScore = alternativeLijnVoering.scoreOpdrachtB()
+        if alternativeScore > highScore:
+            lijnVoering.trajectories.clear()
+            for trajectory in alternativeLijnVoering.trajectories:
+                lijnVoering.trajectories.append(trajectory)
+            highScore = alternativeScore
+    print(lijnVoering)
+    print(lijnVoering.scoreOpdrachtB())

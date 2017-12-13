@@ -24,7 +24,7 @@ class Trajectory:
 
 		last_station = self.connections[-1]
 		output += last_station.station2.name
-		output += " total time: " + str(self.time) + " minutes" + "  Score: " + str(self.overallScore)
+		output += " total time: " + str(self.time) + " minutes"
 		return output
 
 	# create a random Trajectory
@@ -134,4 +134,4 @@ class Trajectory:
 
 				self.overallScore += bestScore
 
-			return self.createGreedyTrajectory(index, time, connections)
+			return self.createGreedyTrajectory(newIndex, time, connections)

@@ -1,3 +1,13 @@
+from Classes.trajectory import Trajectory
+from Classes.connection import Connection
+from Classes.station import Station
+from queue import *
+import itertools
+
+import math
+import random
+import csv
+
 # alles onder de while len stack > 0 loop
             # pop a connection from the stack on the first run
             if n == 0:
@@ -188,4 +198,25 @@
             print (len(allTrajectories))
             print(n)
 
-        # self.combineDepthFirst(allTrajectories)
+        self.combineDepthFirst(allTrajectories)
+
+    def combineDepthFirst(self, trajectories):
+        n = 0
+        lijnVoering = LijnVoering('csvFiles/ConnectiesHolland.csv')
+        alternativeLijnVoering = LijnVoering('csvFiles/ConnectiesHolland.csv')
+        highScore = 0
+        for combination in itertools.product(trajectories, trajectories, trajectories):
+            alternativeLijnVoering.trajectories.clear()
+            n += 1
+            if n % 1000000 == 0:
+                print(n)
+            for trajectory in combination:
+                alternativeLijnVoering.trajectories.append(trajectory)
+            alternativeScore = alternativeLijnVoering.scoreOpdrachtB()
+            if alternativeScore > highScore:
+                lijnVoering.trajectories.clear()
+                for trajectory in alternativeLijnVoering.trajectories:
+                    lijnVoering.trajectories.append(trajectory)
+                highScore = alternativeScore
+        print(lijnVoering)
+        print(lijnVoering.scoreOpdrachtB())

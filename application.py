@@ -1,43 +1,80 @@
-from Classes.station import Station
-from Classes.connection import Connection
-from Classes.trajectory import Trajectory
-from Classes.lijnvoering import LijnVoering
+#!/usr/bin/env python
+"""Application file that runs all algorithms for the RailNL case that were
+created by Team Gekke Hackers.
+
+Algorithms:
+
+0. Hillclimber > works for Holland map and National map
+1. Hillclimber with simulated annealing > works for Holland map and National map
+2. Greedy > due to performance only works for Holland map
+3. Depthfirst > works for Holland map, but isn't correct and therefore disabled
+in this version
+
+Options:
+
+0: Choose which map to use (use either HollandFilepath or NetherlandsFilepath)
+1: Amount of Hillclimbers that are created
+2: Amount of iterations that every Hillclimber does.
+3: Turn simulated annealing on or off for every Hillclimber
+   and Choose a cooling strategy:
+   	a: off
+	b: linear
+	c: exponential
+	d: Geman & Geman
+	e: hardcoded on a very low acceptation chance
+
+5: Print additional details e.g. new highscores that are reached while
+   the algorithm is running"""
+
+__author__ = "Sietze Berends, Daan Uittenhout, Floris Holstege"
+__version__ = "1.0"
+__maintainer__ = "Sietze Berends"
+__email__ = "sietze.berends@student.uva.nl"
+__status__ = "Production"
+
+# Built-in modules
 from datetime import datetime
 
-import csv
-import random
-import sys
+# Own modules and classes
+from Algorithms.hillclimberiterator import HillclimberIterator
 
-# track how long the application runs
+# Track how long the application runs
 startTime = datetime.now()
 
-# lijnVoeringHolland = LijnVoering('csvFiles/ConnectiesHolland.csv')
-# lijnVoeringNationaal = LijnVoering('csvFiles/ConnectiesNationaal.csv')
-#
-highScore = 0
+# Configure the algorithms
+hollandFilepath = 'csvFiles/ConnectiesHolland.csv'
+netherlandsFilepath = 'csvFiles/ConnectiesNationaal.csv'
+amountOfHillclimbers = 500
+iterationsInHillclimber = 1600
+simulatedAnnealing = "a"
+additionalDetails = True
 
-for i in range(1,500):
-	print("run: " + str(i))
-	lijnVoeringHolland = LijnVoering('csvFiles/ConnectiesHolland.csv')
-	besteLijnvoering = lijnVoeringHolland.hillClimber()
-	if besteLijnvoering.scoreOpdrachtB() > highScore:
-		print("highScore tot nu toe: " + str(highScore))
-		highScore = besteLijnvoering.scoreOpdrachtB()
-		print(str(i) + " trajecten")
-		print(besteLijnvoering)
-		print ("Nieuwe highscore: " + str(highScore))
-		print ("Totale tijd van lijnvoering: " + str(besteLijnvoering.time))
-		print ("Aantal kritieke trajecten: " + str(besteLijnvoering.kritiekInLijnvoering))
-		print ("deler: " + str(besteLijnvoering.kritiekTotaal))
 
-print("Beste lijnvoering " + str(len(besteLijnvoering.trajectories)) + ": " + str(highScore))
-print(str(besteLijnvoering))
-print ("Totale tijd van lijnvoering: " + str(besteLijnvoering.time))
-print ("Aantal kritieke trajecten: " + str(besteLijnvoering.kritiekInLijnvoering))
+# Run hillclimber algorithm on Holland map
+hc = HillclimberIterator(hollandFilepath, amountOfHillclimbers
+						 , iterationsInHillclimber, simulatedAnnealing
+						 , additionalDetails)
+hc.algorithm()
+# Run hillclimber algorithm on National map
+hc = HillclimberIterator(netherlandsFilepath, amountOfHillclimbers
+				 , iterationsInHillclimber, simulatedAnnealing
+				 , additionalDetails)
+hc.algorithm()
 
-test = LijnVoering('csvFiles/ConnectiesHolland.csv')
-test.hillClimber()
+# Run hillclimber algorithm on Holland map with simulated annealing (linear)
+simulatedAnnealing = "b"
+hcAnnealing = HillclimberIterator(hollandFilepath, amountOfHillclimbers
+						   , iterationsInHillclimber, simulatedAnnealing
+						   , additionalDetails)
+hcAnnealing.algorithm()
 
-# print the runtime
+# Run greedy algorithm on Holland map
+from Algorithms.greedy import greedy
+
+greedy.py
+
+# Run depthfirst
+
+# Print the runtime
 timeElapsed = datetime.now()-startTime
 print('Time elapsed (hh:mm:ss.ms) {}'.format(timeElapsed))
