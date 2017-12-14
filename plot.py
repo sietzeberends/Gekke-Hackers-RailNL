@@ -7,7 +7,8 @@ x = []
 y = []
 z = []
 
-with open ("Experiments/HC-500-1600.csv", "r") as csvfile:
+
+with open ("Experiments/HC-5-160000.csv", "r") as csvfile:
     plots = csv.reader(csvfile, delimiter =",")
     for row in plots:
         x.append(int(row[2]))
@@ -15,9 +16,36 @@ with open ("Experiments/HC-500-1600.csv", "r") as csvfile:
         y.append(float(row[1]))
 
 # Plot...
-plt.scatter(x, y, c=z, s=50)
+fig = plt.figure()
+ax1 = fig.add_subplot(111)
+
+
+
+ymax = max(y)
+xpos = y.index(ymax)
+xmax = x[xpos]
+zmax = z[xpos]
+
+ax1.annotate( str(ymax), xy=(xmax, ymax), xytext=(xmax, ymax+20),
+arrowprops=dict(facecolor='yellow', shrink=0.01),
+)
+
+
+ax = plt.gca()
+ax.set_facecolor('blue')
+ax.set_facecolor((1, 1, 0))
+plt.scatter(x, y, label = "Lijnvoering", c=z, s=5)
+
+
 plt.gray()
 print(x)
+plt.xlabel("minuten")
+plt.ylabel("score")
+plt.title("SBG")
+plt.legend()
+cbar = plt.colorbar()
+cbar.set_label('# trajecten')
+
 # use_colours = {"1": "red", "2": "green", "3": "blue", "4": "purple", "5": "yellow", "6": "Black", "7" : "grey"}
 # if z > 2:
 #     plt.scatter(x,y, label = 'min', color = 'red', s =5)
