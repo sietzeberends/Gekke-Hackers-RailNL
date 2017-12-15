@@ -34,45 +34,60 @@ __status__ = "Production"
 
 # Built-in modules
 from datetime import datetime
+import sys
 
 # Own modules and classes
 from Algorithms.hillclimberiterator import HillclimberIterator
 from Algorithms.greedy import Greedy
 from Algorithms.depthfirst import DepthfirstAlgorithm
 
-# Track how long the application runs
-startTime = datetime.now()
+def main():
+    print("jasdkljasd")
+    if len(sys.argc) != 5:
+        print("Usage: application.py arg1 arg2 arg3 arg4")
+        print("Recommended configuration: application.py 500 1600 a True")
+        print("arg1: amount of hillclimbers (int > 0, recommended: 500)")
+        print("arg2: amount of iterations (int > 0, recommended: 1600)")
+        print("arg3: annealing (String[a, b, c, d, e]), recommended: a)")
+        print("arg4: show additional details (Bool, recommended: True)")
 
-# Configure the algorithms
-hollandFilepath = 'csvFiles/ConnectiesHolland.csv'
-netherlandsFilepath = 'csvFiles/ConnectiesNationaal.csv'
-amountOfHillclimbers = 500
-iterationsInHillclimber = 1600
-simulatedAnnealing = "a"
-additionalDetails = True
+    else:
+        # Track how long the application runs
+        startTime = datetime.now()
 
-# Run hillclimber algorithm on Holland map
-hc = HillclimberIterator(hollandFilepath, amountOfHillclimbers
-						 , iterationsInHillclimber, simulatedAnnealing
-						 , additionalDetails)
-hc.algorithm()
-# Run hillclimber algorithm on National map
-hc = HillclimberIterator(netherlandsFilepath, amountOfHillclimbers
-				 , iterationsInHillclimber, simulatedAnnealing
-				 , additionalDetails)
-hc.algorithm()
+        # Configure the algorithms
+        hollandFilepath = 'csvFiles/ConnectiesHolland.csv'
+        netherlandsFilepath = 'csvFiles/ConnectiesNationaal.csv'
+        amountOfHillclimbers = argv[1]
+        iterationsInHillclimber = argv[2]
+        simulatedAnnealing = argv[3]
+        additionalDetails = argv[4]
 
-# Run hillclimber algorithm on Holland map with simulated annealing (linear)
-simulatedAnnealing = "b"
-hcAnnealing = HillclimberIterator(hollandFilepath, amountOfHillclimbers
-						   , iterationsInHillclimber, simulatedAnnealing
-						   , additionalDetails)
-hcAnnealing.algorithm()
+        # Run hillclimber algorithm on Holland map
+        hc = HillclimberIterator(hollandFilepath, amountOfHillclimbers
+        						 , iterationsInHillclimber, simulatedAnnealing
+        						 , additionalDetails)
+        hc.algorithm()
+        # Run hillclimber algorithm on National map
+        hc = HillclimberIterator(netherlandsFilepath, amountOfHillclimbers
+        				 , iterationsInHillclimber, simulatedAnnealing
+        				 , additionalDetails)
+        hc.algorithm()
 
-# Run greedy algorithm on Holland map
-Greedy()
+        # Run hillclimber algorithm on Holland map with simulated annealing (linear)
+        simulatedAnnealing = "b"
+        hcAnnealing = HillclimberIterator(hollandFilepath, amountOfHillclimbers
+        						   , iterationsInHillclimber, simulatedAnnealing
+        						   , additionalDetails)
+        hcAnnealing.algorithm()
+
+        # Run greedy algorithm on Holland map
+        Greedy()
 
 
-# Print the runtime
-timeElapsed = datetime.now()-startTime
-print('Time elapsed (hh:mm:ss.ms) {}'.format(timeElapsed))
+        # Print the runtime
+        timeElapsed = datetime.now()-startTime
+        print('Time elapsed (hh:mm:ss.ms) {}'.format(timeElapsed))
+
+if __name__ == '__main__':
+    main()
