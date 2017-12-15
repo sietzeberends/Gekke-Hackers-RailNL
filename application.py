@@ -37,6 +37,8 @@ from datetime import datetime
 
 # Own modules and classes
 from Algorithms.hillclimberiterator import HillclimberIterator
+from Algorithms.greedy import Greedy
+from Algorithms.depthfirst import DepthfirstAlgorithm
 
 # Track how long the application runs
 startTime = datetime.now()
@@ -69,11 +71,8 @@ hcAnnealing = HillclimberIterator(hollandFilepath, amountOfHillclimbers
 hcAnnealing.algorithm()
 
 # Run greedy algorithm on Holland map
-from Algorithms.greedy import greedy
+Greedy()
 
-greedy.py
-
-# Run depthfirst
 
 # Print the runtime
 timeElapsed = datetime.now()-startTime

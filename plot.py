@@ -8,7 +8,7 @@ y = []
 z = []
 
 
-with open ("Experiments/SA-500-1600-T1000-GEMAN.csv", "r") as csvfile:
+with open ("Experiments/HC-500-1600 - NAT.csv", "r") as csvfile:
     plots = csv.reader(csvfile, delimiter =",")
     for row in plots:
         x.append(int(row[2]))
@@ -33,18 +33,18 @@ arrowprops=dict(facecolor='yellow', shrink=0.01),
 
 ax = plt.gca()
 ax.set_facecolor('blue')
-ax.set_facecolor((1, 1, 0))
+ax.set_facecolor((1 , 1, 1))
 plt.scatter(x, y, label = "Lijnvoering", c=z, s=5)
 
 
 plt.gray()
 print(x)
-plt.xlabel("minuten")
+plt.xlabel("minutes")
 plt.ylabel("score")
-plt.title("SBG")
+plt.title("HC-500-1600 - NAT")
 plt.legend()
 cbar = plt.colorbar()
-cbar.set_label('# trajecten')
+cbar.set_label('# Trajectories')
 
 # use_colours = {"1": "red", "2": "green", "3": "blue", "4": "purple", "5": "yellow", "6": "Black", "7" : "grey"}
 # if z > 2:
