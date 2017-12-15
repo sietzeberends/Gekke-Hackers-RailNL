@@ -65,58 +65,86 @@ In the program we've applied several cooling strategies for the simulated anneal
 
 1. Cooling strategy
   a. Linear
+  
   b. Exponential
+  
   c. Geman & Geman
+  
   d. No cooling strategy, instead, us a hardcoded acceptation chance of 0.01 in order to compare results with the regular hillclimber
   
 2. Temperature
   a. T = 750
+  
   b. T = 1.000
+  
   c. T = 1.250
+  
   d. T = 50.000
   
 3. Map
   a. Map with connections in the provinces of North- and South Holland
+  
   b. Map with connection from The Netherlands
+  
 
 4. Runs/Iterations
   a. Run a new hillclimber 5 times. Inside the hillclimber, iterate 1.600.000 times
+  
   b. Run a new hillclimber 500 times. Inside the hillclimber, iterate 16.000 times
-
+  
 ## Results/Max scores per configuration:
 
 The results don't differ a lot from each other. Also, the temperature doesn't seem to have a lot of influence. The highest score is reached with Geman & Geman's cooling strategy, with a temperature of 750, 500 runs and 1.600.000 iterations. However, the results when running a new hillclimber 500 times vs. just 5 times do make a difference. Why we think this is happening will be shown in the next experiment.
 
 Linear, T750, holland map, 500 runs, 16.000 iterations - 9412
+
 Linear, T1000, holland map, 500 runs, 16.000 iterations - 9406
+
 Linear, T1250, holland map, 500 runs, 16.000 iterations - 9414
+
 Linear, T50000, holland map, 500 runs, 16.000 iterations - 9420
 
+
 Exponential, T750, holland map, 500 runs, 16.000 iterations - 9514
+
 Exponential, T1000, holland map, 500 runs, 16.000 iterations - 9415
+
 Exponential, T1250, holland map, 500 runs, 16.000 iterations - 9416
+
 Exponential, T50000, holland map, 500 runs, 16.000 iterations - 9418
 
 Geman & Geman, T750, holland map, 500 runs, 16.000 iterations - 9514
+
 Geman & Geman, T1000, holland map, 500 runs, 16.000 iterations - 9410
+
 Geman & Geman, T1250, holland map, 500 runs, 16.000 iterations - 9418
+
 Geman & Geman, T50000, holland map, 500 runs, 16.000 iterations - 9408
 
 Hardcoded, acceptation chance 0.01, holland map, 500 runs, 16.000 iterations - 9411
 
 Linear, T750, holland map, 5 runs, 1.600.000 iterations - 9389
+
 Linear, T1000, holland map, 5 runs, 1.600.000 iterations - 9401
+
 Linear, T1250, holland map, 5 runs, 1.600.000 iterations - 9404
+
 Linear, T50000, holland map, 5 runs, 1.600.000 iterations - 9399
 
 Exponential, T750, holland map, 5 runs, 1.600.000 iterations - 9404
+
 Exponential, T1000, holland map, 5 runs, 1.600.000 iterations - 9401
+
 Exponential, T1250, holland map, 5 runs, 1.600.000 iterations - 9404
+
 Exponential, T50000, holland map, 5 runs, 1.600.000 iterations - 9399
 
 Geman & Geman, T750, holland map, 5 runs, 1.600.000 iterations - 9395
+
 Geman & Geman, T1000, holland map, 5 runs, 1.600.000 iterations - 9403
+
 Geman & Geman, T1250, holland map, 5 runs, 1.600.000 iterations - 9409
+
 Geman & Geman, T50000, holland map, 5 runs, 1.600.000 iterations - 9399
 
 Hardcoded, acceptation chance 0.01, holland map, 5 runs, 1.600.000 iterations - 9395
@@ -125,10 +153,12 @@ Hardcoded, acceptation chance 0.01, holland map, 5 runs, 1.600.000 iterations - 
 In the program we've run several cooling strategies for the simulated annealing, but we also ran hillclimbers that don't use simulated annealing. All the simulated annealing strategies from experiment 1 have been compared with the following hillclimbers:
 
 Hillclimber, 500 runs, 16.000 iteration
+
 Hillclimber, 5 runs, 1.600.000 iterations
 
 ### Results/Max scores per configuration:
 When looking at the results of the hillclimber and the simulated annealing, the hillclimber performs better. While this is strange at first sight, we think there might be a logical explanation for this: when making an iteration, our hillcimber replaces a whole trajectory at once, which means that pretty large 'steps' are taken. Therefore, it doesn't profit from simulated annealing. 
 
 Hillclimber, 500 runs, 16.000 iteration - 9405
+
 Hillclimber, 5 runs, 1.600.000 iterations - 9515
