@@ -21,6 +21,7 @@ Command-line arguments will be used in the final version of this project. Howeve
 2: Amount of iterations that every Hillclimber does -> change the value of iterationsInHillclimber
 3: Turn simulated annealing on or off for every Hillclimber
    and Choose a cooling strategy -> change value of simulatedAnnealing in:
+   
     a: off
     
     b: linear
@@ -63,7 +64,8 @@ Our score function resulted in lower scores. We expect that the best results of 
 ## Experiment 1 - different simulated annealing cooling strategies and temperatures:
 In the program we've applied several cooling strategies for the simulated annealing. We also used several values for the initial- and end temperatures. Combinations with the following parameters have been tried:
 
-1. Cooling strategy
+1. Cooling strategy:
+
   a. Linear
   
   b. Exponential
@@ -72,7 +74,8 @@ In the program we've applied several cooling strategies for the simulated anneal
   
   d. No cooling strategy, instead, us a hardcoded acceptation chance of 0.01 in order to compare results with the regular hillclimber
   
-2. Temperature
+2. Temperature:
+
   a. T = 750
   
   b. T = 1.000
@@ -81,20 +84,24 @@ In the program we've applied several cooling strategies for the simulated anneal
   
   d. T = 50.000
   
-3. Map
+3. Map:
+
   a. Map with connections in the provinces of North- and South Holland
   
   b. Map with connection from The Netherlands
   
 
-4. Runs/Iterations
+4. Runs/Iterations:
+
   a. Run a new hillclimber 5 times. Inside the hillclimber, iterate 1.600.000 times
   
   b. Run a new hillclimber 500 times. Inside the hillclimber, iterate 16.000 times
   
-## Results/Max scores per configuration:
+### Results:
 
 The results don't differ a lot from each other. Also, the temperature doesn't seem to have a lot of influence. The highest score is reached with Geman & Geman's cooling strategy, with a temperature of 750, 500 runs and 1.600.000 iterations. However, the results when running a new hillclimber 500 times vs. just 5 times do make a difference. Why we think this is happening will be shown in the next experiment.
+
+### Max scores per configuration:
 
 Linear, T750, holland map, 500 runs, 16.000 iterations - 9412
 
@@ -156,8 +163,10 @@ Hillclimber, 500 runs, 16.000 iteration
 
 Hillclimber, 5 runs, 1.600.000 iterations
 
-### Results/Max scores per configuration:
+### Results:
 When looking at the results of the hillclimber and the simulated annealing, the hillclimber performs better. While this is strange at first sight, we think there might be a logical explanation for this: when making an iteration, our hillcimber replaces a whole trajectory at once, which means that pretty large 'steps' are taken. Therefore, it doesn't profit from simulated annealing. 
+
+### Max scores per configuration:
 
 Hillclimber, 500 runs, 16.000 iteration - 9405
 
