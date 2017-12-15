@@ -42,8 +42,8 @@ from Algorithms.greedy import Greedy
 from Algorithms.depthfirst import DepthfirstAlgorithm
 
 def main():
-    print("jasdkljasd")
-    if len(sys.argc) != 5:
+
+    if len(sys.argv) != 5:
         print("Usage: application.py arg1 arg2 arg3 arg4")
         print("Recommended configuration: application.py 500 1600 a True")
         print("arg1: amount of hillclimbers (int > 0, recommended: 500)")
@@ -51,17 +51,69 @@ def main():
         print("arg3: annealing (String[a, b, c, d, e]), recommended: a)")
         print("arg4: show additional details (Bool, recommended: True)")
 
+
     else:
+        print("filename: " + sys.argv[0])
+        print("runs: " + sys.argv[1])
+        print("iterations: " + sys.argv[2])
+        print("annealing: " + sys.argv[3])
+        print("details: " + sys.argv[4])
+
         # Track how long the application runs
         startTime = datetime.now()
 
         # Configure the algorithms
         hollandFilepath = 'csvFiles/ConnectiesHolland.csv'
         netherlandsFilepath = 'csvFiles/ConnectiesNationaal.csv'
-        amountOfHillclimbers = argv[1]
-        iterationsInHillclimber = argv[2]
-        simulatedAnnealing = argv[3]
-        additionalDetails = argv[4]
+
+        # check for positive integer
+        try:
+            if isinstance(int(sys.argv[1]), int):
+                if int(sys.argv[1]) > 0:
+                    amountOfHillclimbers = int(sys.argv[1])
+                else:
+                    print("Please enter a positive integer")
+                    return
+            else:
+                print("Please enter a positive integer")
+                return
+        except:
+            print("Please enter an integer")
+            return
+
+
+
+        # check for positive integer
+        try:
+            if isinstance(int(sys.argv[2]), int):
+                if int(sys.argv[2]) > 0:
+                    iterationsInHillclimber = int(sys.argv[2])
+                else:
+                    print("Please enter a positive integer")
+                    return
+            else:
+                print("Please enter a positive integer")
+                return
+        except:
+            print("Please enter an integer")
+            return
+
+
+        # check simulated annealing yes/no/cooling strategy/hardcoded
+        if sys.argv[3] in ("a", "b", "c", "d", "e"):
+            simulatedAnnealing = sys.argv[3]
+        else:
+            print("use 'a', 'b', 'c', 'd', 'e' for arg3")
+            return
+
+        # check for boolean to print details or not
+        if sys.argv[4] == "True":
+            additionalDetails = True
+        elif sys.argv[4] == "False":
+            additionalDetails = False
+        else:
+            print("Use 'True' or 'False' (first letter capitalized) for arg4")
+            return
 
         # Run hillclimber algorithm on Holland map
         hc = HillclimberIterator(hollandFilepath, amountOfHillclimbers

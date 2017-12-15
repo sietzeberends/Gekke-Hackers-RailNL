@@ -1,4 +1,3 @@
-<<<<<<< current
 from Classes.trajectory import Trajectory
 from Classes.connection import Connection
 from Classes.station import Station
@@ -670,7 +669,7 @@ class Lijnvoering:
             trajectories = 21
 
         return trajectories
-=======
+        
 from Classes.trajectory import Trajectory
 from Classes.connection import Connection
 from Classes.station import Station
@@ -924,4 +923,3 @@ class LijnVoering:
             # actually 20, but we use range(1,21)
             self.maxTrajectories = 21
             self.maxMinutes = 180
->>>>>>> before discard
