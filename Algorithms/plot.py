@@ -8,7 +8,7 @@ y = []
 z = []
 
 
-with open ("Experiments/HC-500-1600 - NAT.csv", "r") as csvfile:
+with open ("C:/Users/User4/Documents/GitHub/Gekke-Hackers-RailNL/Experiments/HC-500-1600 - NAT.csv", "r") as csvfile:
     plots = csv.reader(csvfile, delimiter =",")
     for row in plots:
         x.append(int(row[2]))
