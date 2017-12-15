@@ -228,7 +228,7 @@ class Lijnvoering:
                     elif strategy == "d":
                         filename += "GEMAN.csv"
                     else:
-                        filename += "HC"
+                        filename += "HARDCODED"
                 else:
                     filename += "HC-" + "500-" + str(maxN) + ".csv"
 
@@ -461,7 +461,7 @@ class Lijnvoering:
                     for child in connection.children:
                         # if it's a bounce, don't add it to the stack
                         if (connection.station1.name ==
-                            self.connections[child].station2.name_:
+                            self.connections[child].station2.name):
                             print("")
                             print(self.connections[child])
                             print("invalid bounce, don't add to stack")
