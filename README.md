@@ -99,7 +99,10 @@ In the program we've applied several cooling strategies for the simulated anneal
   
 ### Results:
 
-The results don't differ a lot from each other. Also, the temperature doesn't seem to have a lot of influence. The highest score is reached with Geman & Geman's cooling strategy, with a temperature of 750, 500 runs and 1.600.000 iterations. However, the results when running a new hillclimber 500 times vs. just 5 times do make a difference. Why we think this is happening will be shown in the next experiment.
+The results don't differ a lot from each other. Also, the temperature doesn't seem to have a lot of influence. The highest score is reached with Geman & Geman's cooling strategy, with a temperature of 750, 500 runs and 1.600.000 iterations:
+![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/SA-500-1600-T750-GEMAN.png)
+
+However, the results when running a new hillclimber 500 times vs. just 5 times do make a difference. Why we think this is happening will be shown in the next experiment.
 
 ### Max scores per configuration:
 
@@ -122,13 +125,17 @@ Exponential, T50000, holland map, 500 runs, 16.000 iterations - 9418
 
 Geman & Geman, T750, holland map, 500 runs, 16.000 iterations - 9514
 
+
 Geman & Geman, T1000, holland map, 500 runs, 16.000 iterations - 9410
 
 Geman & Geman, T1250, holland map, 500 runs, 16.000 iterations - 9418
 
 Geman & Geman, T50000, holland map, 500 runs, 16.000 iterations - 9408
 
+
 Hardcoded, acceptation chance 0.01, holland map, 500 runs, 16.000 iterations - 9411
+
+
 
 Linear, T750, holland map, 5 runs, 1.600.000 iterations - 9389
 
@@ -138,6 +145,7 @@ Linear, T1250, holland map, 5 runs, 1.600.000 iterations - 9404
 
 Linear, T50000, holland map, 5 runs, 1.600.000 iterations - 9399
 
+
 Exponential, T750, holland map, 5 runs, 1.600.000 iterations - 9404
 
 Exponential, T1000, holland map, 5 runs, 1.600.000 iterations - 9401
@@ -146,6 +154,7 @@ Exponential, T1250, holland map, 5 runs, 1.600.000 iterations - 9404
 
 Exponential, T50000, holland map, 5 runs, 1.600.000 iterations - 9399
 
+
 Geman & Geman, T750, holland map, 5 runs, 1.600.000 iterations - 9395
 
 Geman & Geman, T1000, holland map, 5 runs, 1.600.000 iterations - 9403
@@ -153,6 +162,7 @@ Geman & Geman, T1000, holland map, 5 runs, 1.600.000 iterations - 9403
 Geman & Geman, T1250, holland map, 5 runs, 1.600.000 iterations - 9409
 
 Geman & Geman, T50000, holland map, 5 runs, 1.600.000 iterations - 9399
+
 
 Hardcoded, acceptation chance 0.01, holland map, 5 runs, 1.600.000 iterations - 9395
 
@@ -166,8 +176,19 @@ Hillclimber, 5 runs, 1.600.000 iterations
 ### Results:
 When looking at the results of the hillclimber and the simulated annealing, the hillclimber performs better. While this is strange at first sight, we think there might be a logical explanation for this: when making an iteration, our hillcimber replaces a whole trajectory at once, which means that pretty large 'steps' are taken. Therefore, it doesn't profit from simulated annealing. 
 
+Best hillclimber without simulated annealing:
+
+![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/HC-500-1600.png)
+
 ### Max scores per configuration:
 
 Hillclimber, 500 runs, 16.000 iteration - 9405
 
 Hillclimber, 5 runs, 1.600.000 iterations - 9515
+
+
+## Experiment 3 - disable Utrecht:
+Utrecht is a very important station in The Netherlands and has a lot of critical connections around it. To measure the importance of this station we ran the maps of Holland with both Utrecht and without Utrecht to see the difference.
+
+### Results:
+The results are still being processed at the moment and will be available in the final version of this project.
