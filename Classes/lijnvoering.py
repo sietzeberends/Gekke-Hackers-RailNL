@@ -1,3 +1,4 @@
+<<<<<<< current
 from Classes.trajectory import Trajectory
 from Classes.connection import Connection
 from Classes.station import Station
@@ -669,3 +670,258 @@ class Lijnvoering:
             trajectories = 21
 
         return trajectories
+=======
+from Classes.trajectory import Trajectory
+from Classes.connection import Connection
+from Classes.station import Station
+
+from queue import *
+import math
+import random
+import csv
+
+class LijnVoering:
+    def __init__(self, connectionsFilepath, stationsFilepath):
+        self.connectionsFilepath = connectionsFilepath
+        self.stationsFilepath = stationsFilepath
+        self.connections = self.loadConnectionsAndStations(self.connectionsFilepath,
+                                                           self.stationsFilepath)
+
+        self.criticalTotal = 0
+        self.maxTrajectories = 0
+        self.maxMinutes = 0
+
+        self.setVariables(self.connections)
+
+        self.trajectories = []
+        self.time = 0
+
+    def __str__(self):
+        output = ""
+        for trajectory in self.trajectories:
+            output += str(trajectory)
+            output += "\n\n"
+        # output += "Totale tijd van lijnvoering: " + str(self.time)
+        return output
+
+    # create a random Lijnvoering
+    def createRandomLijnVoering(self, trajectories, amount):
+
+        # add random trajectories while we haven't created them
+        while len(trajectories) < amount:
+            trajectory = Trajectory()
+            firstConnectionIndex = random.choice(self.connections).index
+            trajectory.createTrajectory(firstConnectionIndex, 0 , self.connections, self.maxMinutes)
+            self.trajectories.append(trajectory)
+            self.time += trajectory.time
+
+    def hillClimber(self, trajectories, connections, amount, runs):
+
+        n = 0
+        maxn = 16000
+        temperature = 1
+        initialTemperature = 1
+        self.time = 0
+
+        # create a random Lijnvoering with a certain amount of trajectories
+        self.createRandomLijnVoering(self.trajectories, amount)
+
+        # also create a copy of this Lijnvoering in which trajectories
+        # can be changed so that we can compare their scores
+        alternativeLijnvoering = LijnVoering(self.connectionsFilepath, self.stationsFilepath)
+
+        for trajectory in self.trajectories:
+            alternativeLijnvoering.trajectories.append(trajectory)
+
+        # set the base score of the Lijnvoering
+        current = self.scoreOpdrachtB()
+
+        # track the time, we can print this out later
+        for trajectory in trajectories:
+            self.time += trajectory.time
+
+        # start with replacing the first trajectory
+        whichTrajectory = 0
+
+        # check for improved score 16.000 times
+        while n < maxn:
+            n += 1
+
+            # generate a new random trajectory
+            trajectory = Trajectory()
+            firstConnectionIndex = random.choice(self.connections).index
+            trajectory.createTrajectory(firstConnectionIndex, 0 , self.connections, self.maxMinutes)
+
+            # replace the trajectory and calculate the new score
+            alternativeLijnvoering.trajectories[whichTrajectory] = trajectory
+            scoreAlternative = alternativeLijnvoering.scoreOpdrachtB()
+
+            # if the score is better, save this Lijnvoering
+            if scoreAlternative > current:
+                self.trajectories.clear()
+                for trajectory in alternativeLijnvoering.trajectories:
+                    self.trajectories.append(trajectory)
+
+                current = scoreAlternative
+
+                # if there is only one trajectory, replace the same one
+                if len(self.trajectories) == 1:
+                    whichTrajectory = whichTrajectory
+
+                # if we've reached the last trajectory, start with the first one
+                elif len(self.trajectories) - 1 == whichTrajectory:
+                    whichTrajectory = 0
+
+                # if we haven't reached the last trajectory, get the next one
+                else:
+                    whichTrajectory += 1
+
+                temperature = self.newTemp(initialTemperature, temperature, maxn, n)
+
+            # if the score is lower or equal, simulated annealing
+            # else:
+            #       # calculate the chance that the lower score is accepted
+            #       chanceAlternative = self.acceptationChance(current, scoreAlternative, temperature)
+            #       chanceRandom = random.choice([0.0, 1.0])
+            #
+            #       # print("cur: " + str(current))
+            #       # print("alt " + str(scoreAlternative))
+            #       # print("temp: " + str(temperature))
+            #       # print("chance: " + str(chanceAlternative))
+            #
+            #       # print("temp: " + str(temperature))
+            #       # print("verkorting: " + str(scoreAlternative - current))
+            #       # print("chance: " + str(chanceAlternative))
+            #       # if it's accepted
+            #       if chanceAlternative > chanceRandom:
+            #           current = scoreAlternative
+            #           self.trajectories.clear()
+            #           for trajectory in alternativeLijnvoering.trajectories:
+            #               self.trajectories.append(trajectory)
+            #
+            #       # cool down the temperature for the next run
+            #       temperature = self.newTemp(initialTemperature, temperature, maxn, n)
+
+
+            return current
+
+    def newTemp(self, initialTemperature, temperature, totalIterations, iteration):
+        """Returns the new temperature based on current temperature and
+        current iteration"""
+        base = (1 / initialTemperature)
+        exponent = iteration/totalIterations
+        newTemperature = initialTemperature * (base ** exponent)
+        return newTemperature
+
+    # calculate acception chance for simulated annealing
+    def acceptationChance(self, current, alternative, temperature):
+        shortening = alternative - current
+        chance = math.exp(shortening / temperature)
+        return chance
+
+    def ScoreOpdrachtA(self):
+        constant = 10000
+        indexesAlGecheckt = []
+        percentageKritiek = 0
+        for trajectory in self.trajectories:
+            for connection in trajectory.connections:
+                if connection.critical:
+                    if connection.index not in indexesAlGecheckt:
+                        if connection.index % 2 != 0:
+                            indexesAlGecheckt.append(connection.index)
+                            indexesAlGecheckt.append(self.connections[connection.index - 1].index)
+                        else:
+                            indexesAlGecheckt.append(connection.index)
+                            indexesAlGecheckt.append(self.connections[connection.index + 1].index)
+        percentageKritiek = (len(indexesAlGecheckt) / 2) / self.criticalTotal
+        score = constant * percentageKritiek
+        return score
+        # 10000 * aantal kritieke connection in LineFeeding / (aantal kritieke connections totaal)
+
+    def scoreOpdrachtB(self):
+
+        percentageKritiek = 0
+        constanteP = 10000
+
+        trajecten = 0
+        constanteTrajecten = 50
+        minuten = 0
+        constanteMinuten = 1
+        indexesAlGecheckt = []
+
+        # ga alle trajecten in de lijnvoering langs
+        for trajectory in self.trajectories:
+            minuten += trajectory.time
+            trajecten += 1
+            # en alle connecties per traject
+            for connection in trajectory.connections:
+                # kijk of de connectie kritiek is
+                if connection.critical:
+                    # als de connectie al eerder is meegerekend
+                    if connection.index not in indexesAlGecheckt:
+                        # als de connectie op een oneven positie staat, voeg de connectie toe (en z'n broertje ook)
+                        if connection.index % 2 != 0:
+                            indexesAlGecheckt.append(connection.index)
+                            indexesAlGecheckt.append(self.connections[connection.index - 1].index)
+                        # als de connectie op een oneven positie staat, voeg de connectie toe (en z'n broertje ook)
+                        else:
+                            indexesAlGecheckt.append(connection.index)
+                            indexesAlGecheckt.append(self.connections[connection.index + 1].index)
+
+        percentageKritiek = (len(indexesAlGecheckt) / 2) / self.criticalTotal
+        score = percentageKritiek * constanteP - trajecten * constanteTrajecten - minuten / constanteMinuten
+
+        return score
+
+    def loadConnectionsAndStations(self, connectionsFilepath, stationsFilepath):
+        """Load stations and connections from CSV files and returns them as a list"""
+
+        # first the stations
+        stationsList = []
+        with open(stationsFilepath, 'r') as csvfile:
+            rows = csv.reader(csvfile)
+            for row in rows:
+                stationsList.append(Station(row[0], row[1], row[2], row[3]))
+
+        # now the connections
+        connectionsList = []
+        index = 0;
+        with open(connectionsFilepath, 'r') as csvfile:
+            rows = csv.reader(csvfile)
+            for row in rows:
+                connectionsList.append(Connection(Station(row[0], "", "", row[3]),
+                Station(row[1], "", "", row[3]), row[2], row[3], index))
+
+                index += 1
+
+                connectionsList.append(Connection(Station(row[1], "", "", row[3]),
+                Station(row[0], "", "", row[3]), row[2], row[3], index))
+
+                index += 1
+
+        # add the children to the connections
+        for connection in connectionsList:
+            connection.addChildren(connectionsList)
+
+        return connectionsList
+
+    def setVariables(self, connections):
+        """Calculates the amount of critical connections
+        The maximum amount of trajectories that are allowed
+        And the maximum amount of minutes that is allowed per Trajectory"""
+
+        for connection in self.connections:
+            if connection.critical == True:
+                self.criticalTotal += 1
+        # divided by two, because you can go back and forth
+        self.criticalTotal /= 2
+
+        if len(connections) <= 56:
+            # actually 7, but we use range(1,8)
+            self.maxTrajectories = 8
+            self.maxMinutes = 120
+        else:
+            # actually 20, but we use range(1,21)
+            self.maxTrajectories = 21
+            self.maxMinutes = 180
+>>>>>>> before discard
