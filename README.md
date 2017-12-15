@@ -48,9 +48,11 @@ S = p*10000 - (t*20 + min/100000)
 S = p*10000 - (t*50 + min)
 
 ### Results:
-Best score with original score function on national map: 9779.98214
+Best score with original score function on national map: 9779.98214:
+![alt text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/HC-OriginalScore-500-1600-NAT.png)
 
-Best score with our own score function on national map: 7673.016949 
+Best score with our own score function on national map: 7673.016949:
+![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/HC-500-1600%20-%20NAT.png)
 
 Our score function resulted in lower scores. We expect that the best results of both score functions will also have different amounts of trajectories and use different connections due to a different impact of these variables.
 
