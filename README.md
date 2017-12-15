@@ -176,9 +176,13 @@ Hillclimber, 5 runs, 1.600.000 iterations
 ### Results:
 When looking at the results of the hillclimber and the simulated annealing, the hillclimber performs better. While this is strange at first sight, we think there might be a logical explanation for this: when making an iteration, our hillcimber replaces a whole trajectory at once, which means that pretty large 'steps' are taken. Therefore, it doesn't profit from simulated annealing. 
 
-Best hillclimber without simulated annealing:
+Best hillclimber without simulated annealing for Holland map:
 
 ![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/HC-500-1600.png)
+
+Best hillclimber without simulated annealing for National map:
+
+![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/HC-500-1600 - NAT.png)
 
 ### Max scores per configuration:
 
@@ -192,3 +196,14 @@ Utrecht is a very important station in The Netherlands and has a lot of critical
 
 ### Results:
 The results are still being processed at the moment and will be available in the final version of this project.
+
+## Experiment 4 - make all stations critical:
+Making all connections critical should have quite an impact on the score, given the score function that we are using (not the original one). This can be done on both the national map and the holland map.
+
+### Results:
+The scores when all connections are critical drop when compared with the plots of Experiment 2.
+
+Best score on Holland map when all connections are critical:
+![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/HC-Critical-500-16000.png)
+Best score on National map when all connections are critical:
+![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/HC- Critical-500-1600 - NAT.png)
