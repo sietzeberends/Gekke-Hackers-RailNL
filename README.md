@@ -22,9 +22,13 @@ Command-line arguments will be used in the final version of this project. Howeve
 3: Turn simulated annealing on or off for every Hillclimber
    and Choose a cooling strategy -> change value of simulatedAnnealing in:
     a: off
+    
     b: linear
+    
     c: exponential
+    
     d: Geman & Geman
+    
     e: hardcoded on a very low acceptation chance
 
 5: Print additional details e.g. new highscores that are reached while
