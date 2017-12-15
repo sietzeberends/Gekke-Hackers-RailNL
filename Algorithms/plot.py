@@ -8,7 +8,7 @@ y = []
 z = []
 
 
-with open ("C:/Users/User4/Documents/GitHub/Gekke-Hackers-RailNL/Experiments/HC-500-1600 - NAT.csv", "r") as csvfile:
+with open ("C:/Users/User4/Documents/GitHub/Gekke-Hackers-RailNL/Experiments/HC-Critical-5-160000-NAT.csv", "r") as csvfile:
     plots = csv.reader(csvfile, delimiter =",")
     for row in plots:
         x.append(int(row[2]))
@@ -41,7 +41,7 @@ plt.gray()
 print(x)
 plt.xlabel("minutes")
 plt.ylabel("score")
-plt.title("HC-500-1600 - NAT")
+plt.title("HC-Critical-5-160000-NAT")
 plt.legend()
 cbar = plt.colorbar()
 cbar.set_label('# Trajectories')

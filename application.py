@@ -51,7 +51,6 @@ iterationsInHillclimber = 1600
 simulatedAnnealing = "a"
 additionalDetails = True
 
-
 # Run hillclimber algorithm on Holland map
 hc = HillclimberIterator(hollandFilepath, amountOfHillclimbers
 						 , iterationsInHillclimber, simulatedAnnealing
