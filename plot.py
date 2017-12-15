@@ -8,7 +8,7 @@ y = []
 z = []
 
 
-with open ("Experiments/HC-5-160000.csv", "r") as csvfile:
+with open ("Experiments/SA-500-1600-T1000-GEMAN.csv", "r") as csvfile:
     plots = csv.reader(csvfile, delimiter =",")
     for row in plots:
         x.append(int(row[2]))
