@@ -207,5 +207,5 @@ Best score on Holland map when all connections are critical:
 ![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/HC-Critical-500-1600.png)
 
 Best score on National map when all connections are critical:
-![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/HC- Critical-500-1600-NAT.png)
+![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/HC-Critical-500-1600-NAT.png)
 
