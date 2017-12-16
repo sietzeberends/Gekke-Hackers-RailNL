@@ -10,11 +10,11 @@ When looking at the results of the hillclimber and the simulated annealing, the 
 
 Best hillclimber without simulated annealing for Holland map:
 
-![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/HC-500-1600.png)
+![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/Experiment2HillclimberWithOrWithoutSimulatedAnnealing/HC-500-1600.png)
 
 Best hillclimber without simulated annealing for National map:
 
-![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/HC-500-1600-NAT.png)
+![alt_text](https://github.com/sietzeberends/Gekke-Hackers-RailNL/blob/master/Experiments/Experiment2HillclimberWithOrWithoutSimulatedAnnealing/HC-500-1600-NAT.png)
 
 ### Max scores per configuration:
 
