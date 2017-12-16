@@ -14,27 +14,35 @@ Case: RailNL - finding an optimal Lijnvoering for a fictional railway company. F
 ### Running the program
 The application is run by executing application.py with command line arguments:
 
-application.py arg1 arg2 arg3 arg4 arg5
+      application.py arg1 arg2 arg3 arg4 arg5
 
 The following arguments should be given:
 
 arg1: Choose which map to use:
-   National
-   Holland
+
+      National
+      Holland
+
 arg2: Amount of Hillclimbers that are created:
-   Positive integer 
+
+      Positive integer 
+
 arg3: Amount of iterations that every Hillclimber does -> change the value of iterationsInHillclimber:
-   Positive integer
+
+      Positive integer
+
 arg4: Turn simulated annealing on or off for every Hillclimber and choose a cooling strategy:
-   a: off
-   b: linear
-   c: exponential
-   d: Geman & Geman
-   e: hardcoded on a very low acceptation chance
+
+      a: off
+      b: linear
+      c: exponential
+      d: Geman & Geman
+      e: hardcoded on a very low acceptation chance
   
 arg5: print additional details e.g. new highscores that are reached while the algorithm is running:
-   True
-   False
+
+      True
+      False
 
 ## Structure
 0. The application is run by executing application.py from the main folder
