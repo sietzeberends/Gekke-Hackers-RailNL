@@ -8,32 +8,33 @@ Case: RailNL - finding an optimal Lijnvoering for a fictional railway company. F
 ## Getting started
 
 ### Prerequisites
-1. Powershell
+1. Powershell/Cmd
 2. Python 3.6.3
 
 ### Running the program
-The application is run by executing application.py from the main folder.
+The application is run by executing application.py with command line arguments:
 
-Command-line arguments will be used in the final version of this project. However, right now, configuration of the application is still done in application.py. Running application.py runs the program and all it's algorithms. The following configurations are possible:
+application.py arg1 arg2 arg3 arg4 arg5
 
-0: Choose which map to use (use either HollandFilepath or NetherlandsFilepath)
-1: Amount of Hillclimbers that are created -> change the value of amountOfHillclimbers
-2: Amount of iterations that every Hillclimber does -> change the value of iterationsInHillclimber
-3: Turn simulated annealing on or off for every Hillclimber
-   and Choose a cooling strategy -> change value of simulatedAnnealing in:
-   
-    a: off
-    
-    b: linear
-    
-    c: exponential
-    
-    d: Geman & Geman
-    
-    e: hardcoded on a very low acceptation chance
+The following arguments should be given:
 
-5: Print additional details e.g. new highscores that are reached while
-   the algorithm is running -> change the value of additionalDetails
+arg1: Choose which map to use:
+   National
+   Holland
+arg2: Amount of Hillclimbers that are created:
+   Positive integer 
+arg3: Amount of iterations that every Hillclimber does -> change the value of iterationsInHillclimber:
+   Positive integer
+arg4: Turn simulated annealing on or off for every Hillclimber and choose a cooling strategy:
+   a: off
+   b: linear
+   c: exponential
+   d: Geman & Geman
+   e: hardcoded on a very low acceptation chance
+  
+arg5: print additional details e.g. new highscores that are reached while the algorithm is running:
+   True
+   False
 
 ## Structure
 0. The application is run by executing application.py from the main folder
