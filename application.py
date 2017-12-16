@@ -61,7 +61,7 @@ def main():
             "holland"):
             print("To choose a map, please enter 'National' or 'Holland'")
             return
-        elif sys.argv[1].lower == 'national':
+        elif sys.argv[1].lower() == "national":
             mapChoice += str(netherlandsFilepath)
         else:
             mapChoice += str(hollandFilepath)
@@ -134,7 +134,7 @@ def main():
         hcAnnealing.algorithm()
 
         # Run greedy algorithm on Holland map
-        Greedy()
+        # Greedy()
 
 
         # Print the runtime

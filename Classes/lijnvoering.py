@@ -205,40 +205,40 @@ class Lijnvoering:
                 self.score = highestForThisLijnvoering
                 besteLijnvoering.score = self.score
 
-                with open ("csvFiles/connections_visualisation.csv",
-                           "w") as out:
-                    writer = csv.writer(out, dialect='excel')
-                    for trajectory in besteLijnvoering.trajectories:
-                        writer.writerow("-")
-                        for connection in trajectory.connections:
-                            placeholder = connection.station1.name + ", " +\
-                                          connection.station2.name + ", " +\
-                                          str(connection.time)
-                            placeholder = placeholder.split(",")
-                            writer.writerow(placeholder)
-                # filename depends on parameters
-                filename = ""
-                if simulatedAnnealing:
-                    filename += "SA-" + "500-" + str(maxN) + "-T"
-                    filename += str(initialTemperature) + "-"
-                    if strategy == "b":
-                        filename += "LIN.csv"
-                    elif strategy == "c":
-                        filename += "EXP.csv"
-                    elif strategy == "d":
-                        filename += "GEMAN.csv"
-                    else:
-                        filename += "HARDCODED"
-                else:
-                    filename += "HC-" + "500-" + str(maxN) + ".csv"
-
-                with open (filename, "a", newline="") as out:
-                    writer = csv.writer(out, dialect="excel")
-                    placeholder1 =	str(len(besteLijnvoering.trajectories)) +\
-                                    ", " + str(besteLijnvoering.score) + ", " +\
-                                    str(besteLijnvoering.time)
-                    placeholder1 = placeholder1.split(",")
-                    writer.writerow(placeholder1)
+                # with open ("csvFiles/connections_visualisation.csv",
+                #            "w") as out:
+                #     writer = csv.writer(out, dialect='excel')
+                #     for trajectory in besteLijnvoering.trajectories:
+                #         writer.writerow("-")
+                #         for connection in trajectory.connections:
+                #             placeholder = connection.station1.name + ", " +\
+                #                           connection.station2.name + ", " +\
+                #                           str(connection.time)
+                #             placeholder = placeholder.split(",")
+                #             writer.writerow(placeholder)
+                # # filename depends on parameters
+                # filename = ""
+                # if simulatedAnnealing:
+                #     filename += "SA-" + "500-" + str(maxN) + "-T"
+                #     filename += str(initialTemperature) + "-"
+                #     if strategy == "b":
+                #         filename += "LIN.csv"
+                #     elif strategy == "c":
+                #         filename += "EXP.csv"
+                #     elif strategy == "d":
+                #         filename += "GEMAN.csv"
+                #     else:
+                #         filename += "HARDCODED"
+                # else:
+                #     filename += "HC-" + "500-" + str(maxN) + ".csv"
+                #
+                # with open (filename, "a", newline="") as out:
+                #     writer = csv.writer(out, dialect="excel")
+                #     placeholder1 =	str(len(besteLijnvoering.trajectories)) +\
+                #                     ", " + str(besteLijnvoering.score) + ", " +\
+                #                     str(besteLijnvoering.time)
+                #     placeholder1 = placeholder1.split(",")
+                #     writer.writerow(placeholder1)
 
         return besteLijnvoering
 
@@ -669,7 +669,7 @@ class Lijnvoering:
             trajectories = 21
 
         return trajectories
-        
+
 from Classes.trajectory import Trajectory
 from Classes.connection import Connection
 from Classes.station import Station
