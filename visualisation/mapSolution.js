@@ -73,6 +73,7 @@ var q = d3.queue()
   .defer(d3.json, "Greedy_4.json")
   .defer(d3.json, "HillclimberNoordZuid.json")
   .defer(d3.json, "HillclimberNationaal.json")
+  .defer(d3.json, "HillclimberNationaalNoUtrecht.json")
   .await(makemap);
 
   function createSolution (data){
@@ -87,7 +88,7 @@ var q = d3.queue()
   .data(data)
     .enter().append("line")
     .transition()
-    .delay(function(d,i){ return i * 50})
+    .delay(function(d,i){ return i * 200})
     .attr('class', 'connection')
     .attr('x1', function(d){if (d.nextTrajectory=="False")
                             {
@@ -123,7 +124,7 @@ var q = d3.queue()
 
     
 
-function makemap(error, stations, Greedy, HillclimberNoordZuid, HillclimberNationaal){
+function makemap(error, stations, Greedy, HillclimberNoordZuid, HillclimberNationaal, HillclimberNoUtrecht){
   if (error) throw error;
 
 console.log(Greedy)
@@ -172,7 +173,9 @@ var circles = map.selectAll("dot")
 
 
 
-var solutions = ["Greedy", "Hillclimber - NoordZuid", "Hillclimber - Nationaal"]
+var solutions = ["Greedy", "Hillclimber - NoordZuid", 
+                 "Hillclimber - Nationaal", 
+                 "Hillcimber - Nationaal - No Utrecht"]
 
 // create dropdown menu when button is pressed
 var menu = button.append("ul")
@@ -199,6 +202,9 @@ var menu = button.append("ul")
             }
             else if (solution == "Hillclimber - Nationaal"){
               createSolution(HillclimberNationaal)
+            }
+            else if (solution == "Hillcimber - Nationaal - No Utrecht"){
+              createSolution(HillclimberNoUtrecht)
             }
           })
 
