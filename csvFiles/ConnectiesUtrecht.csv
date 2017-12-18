@@ -2,10 +2,10 @@ Alkmaar,Hoorn,24,TRUE
 Alkmaar,Den Helder,36,TRUE
 Almelo,Hengelo,10,TRUE
 Almere Centrum,Lelystad Centrum,14,FALSE
-Amsterdam Amstel,Almere Centrum,27,FALSE
+Amsterdam Amstel,Almere Centrum,27,TRUE
 Amsterdam Amstel,Amsterdam Centraal,8,TRUE
-Amsterdam Amstel,Amsterdam Zuid,10,FALSE
-Amsterdam Amstel,Hilversum,28,FALSE
+Amsterdam Amstel,Amsterdam Zuid,10,TRUE
+Amsterdam Amstel,Hilversum,28,TRUE
 Amsterdam Centraal,Almere Centrum,20,TRUE
 Amsterdam Centraal,Amsterdam Sloterdijk,6,TRUE
 Amsterdam Sloterdijk,Haarlem,11,TRUE
@@ -29,7 +29,7 @@ Den Haag Centraal,Leiden Centraal,12,TRUE
 Den Haag HS,Gouda,21,TRUE
 Den Haag HS,Leiden Centraal,12,TRUE
 Den Haag Laan v NOI,Leiden Centraal,9,TRUE
-Den Haag Laan v NOI,Gouda,28,FALSE
+Den Haag Laan v NOI,Gouda,28,TRUE
 Deventer,Apeldoorn,10,FALSE
 Deventer,Almelo,24,FALSE
 Deventer,Zutphen,12,FALSE
@@ -39,14 +39,14 @@ Eindhoven,Helmond,9,TRUE
 Eindhoven,s-Hertogenbosch,18,TRUE
 Eindhoven,Tilburg,21,TRUE
 Etten-Leur,Roosendaal,11,FALSE
-Gouda,Alphen a/d Rijn,19,FALSE
+Gouda,Alphen a/d Rijn,19,TRUE
 Groningen,Assen,17,TRUE
 Haarlem,Beverwijk,16,TRUE
 Heemstede-Aerdenhout,Haarlem,6,TRUE
 Heerenveen,Steenwijk,14,FALSE
 Helmond,Venlo,30,FALSE
 Hengelo,Enschede,7,TRUE
-Hilversum,Almere Centrum,26,FALSE
+Hilversum,Almere Centrum,26,TRUE
 Leeuwarden,Heerenveen,16,TRUE
 Leeuwarden,Groningen,35,TRUE
 Leiden Centraal,Schiphol Airport,15,TRUE
@@ -58,7 +58,7 @@ Oss,Nijmegen,16,TRUE
 Roermond,Weert,14,FALSE
 Roosendaal,Vlissingen,63,FALSE
 Roosendaal,Dordrecht,22,TRUE
-Rotterdam Alexander,Gouda,10,FALSE
+Rotterdam Alexander,Gouda,10,TRUE
 Rotterdam Blaak,Rotterdam Alexander,9,FALSE
 Rotterdam Blaak,Schiedam Centrum,11,FALSE
 Rotterdam Centraal,Rotterdam Alexander,8,TRUE
@@ -68,15 +68,6 @@ Sittard,Heerlen,15,TRUE
 Sittard,Roermond,15,TRUE
 Steenwijk,Zwolle,24,TRUE
 Tilburg,Breda,13,TRUE
-Utrecht Centraal,Amsterdam Centraal,27,TRUE
-Utrecht Centraal,Amsterdam Amstel,19,TRUE
-Utrecht Centraal,Hilversum,15,TRUE
-Utrecht Centraal,Ede-Wageningen,24,TRUE
-Utrecht Centraal,Amersfoort,14,TRUE
-Utrecht Centraal,Gouda,18,TRUE
-Utrecht Centraal,Alphen a/d Rijn,28,TRUE
-Utrecht Centraal,Schiphol Airport,33,TRUE
-Utrecht Centraal,s-Hertogenbosch,27,TRUE
 Weert,Eindhoven,17,TRUE
 Zaandam,Hoorn,26,FALSE
 Zaandam,Castricum,12,FALSE
@@ -85,5 +76,5 @@ Zutphen,Dieren,8,FALSE
 Zwolle,Amersfoort,35,TRUE
 Zwolle,Deventer,24,TRUE
 Zwolle,Almelo,42,TRUE
-s-Hertogenbosch,Oss,11,FALSE
+s-Hertogenbosch,Oss,11,TRUE
 s-Hertogenbosch,Tilburg,15,TRUE

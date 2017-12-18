@@ -25,12 +25,14 @@ import sys
 from Algorithms.hillclimberiterator import HillclimberIterator
 from Algorithms.greedy import Greedy
 from Algorithms.depthfirst import DepthfirstAlgorithm
+from Classes.lijnvoering import Lijnvoering
 
 def main():
 
     if len(sys.argv) != 6:
         print("Usage: application.py arg1 arg2 arg3 arg4 arg5")
-        print("Recommended configuration: application.py 500 1600 a True")
+        print("Recommended configuration: application.py holland 500 1600 a " +\
+              "True")
         print("arg1: choose the map (String: 'Holland' or 'National')")
         print("arg2: amount of hillclimbers (int > 0, recommended: 500)")
         print("arg3: amount of iterations (int > 0, recommended: 1600)")
@@ -115,26 +117,18 @@ def main():
             print("Use 'True' or 'False' for arg5")
             return
 
-        # Run hillclimber algorithm on Holland map
-        hc = HillclimberIterator(mapChoice, amountOfHillclimbers
-        						 , iterationsInHillclimber, simulatedAnnealing
-        						 , additionalDetails)
-        hc.algorithm()
-        # Run hillclimber algorithm on National map
-        hc = HillclimberIterator(mapChoice, amountOfHillclimbers
-        				 , iterationsInHillclimber, simulatedAnnealing
-        				 , additionalDetails)
-        hc.algorithm()
+        # depthfirst
+        # df = Lijnvoering(hollandFilepath, True)
+        # df.depthFirstSearch()
 
-        # Run hillclimber algorithm on Holland map with simulated annealing (linear)
-        simulatedAnnealing = "b"
-        hcAnnealing = HillclimberIterator(mapChoice, amountOfHillclimbers
-        						   , iterationsInHillclimber, simulatedAnnealing
-        						   , additionalDetails)
-        hcAnnealing.algorithm()
+        # Run hillclimber algorithm on Holland map
+        # hc = HillclimberIterator(mapChoice, amountOfHillclimbers
+        # 						 , iterationsInHillclimber, simulatedAnnealing
+        # 						 , additionalDetails)
+        # hc.algorithm()
 
         # Run greedy algorithm on Holland map
-        # Greedy()
+        Greedy()
 
 
         # Print the runtime

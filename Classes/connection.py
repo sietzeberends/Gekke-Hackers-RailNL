@@ -1,27 +1,45 @@
 from Classes.station import Station
 
-# connection class
-# connection == time it takes for a train to get from one station to another
-# therefore a connection has two stations and the travel time between them
-# connection also contains all possible connections to take next
 class Connection :
+	"""Class that contains a connection"""
 	def __init__(self, station1, station2, time, critical, index):
+		"""Args:
+			station1 (String)  : the departure Station
+			station2 (String)  : the destination Station
+			time (String)	   : the time of the Connection
+			critical (String)  : indicates whether a connection is critical
+			index (int)		   : unique index of this connection
+
+		  Attributes:
+		  	station1 (String)  : the departure Station
+			station2 (String)  : the destination Station
+			time (int)		   : the time of the Connection
+			children (list)    : list with indexnumbers of all possible
+								 Connections to go to after this one
+			critical (boolean) : indicates whether a connection is critical
+			index (int)		   : unique index of this connection
+		"""
 		self.station1 = station1
 		self.station2 = station2
 		self.time = int(time)
 		self.children = []
-		self.index = index
 		if critical == "TRUE":
 			self.critical = True
 		else:
 			self.critical = False
+		self.index = index
 
-# add all the possible connections to go to next
+	def __str__(self):
+		string = (self.station1.name + ", " + self.station2.name + ", "
+				  + str(self.time) + str(self.critical))
+		return string
+
 	def addChildren(self, connections):
+		"""Add children for a connection
+
+		   Args:
+		   	connections (list) : list with all Connections
+		"""
 		for connection in connections:
 			if str(connection.station1.name) == str(self.station2.name):
 				self.children.append(connection.index)
-
-# return all details of a connection
-	def __str__(self):
-		return (self.station1.name + ", " + self.station2.name + ", " + str(self.time) + str(self.critical))
