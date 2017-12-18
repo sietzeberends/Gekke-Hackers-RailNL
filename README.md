@@ -44,6 +44,8 @@ arg5: print additional details e.g. new highscores that are reached while the al
 
       True
       False
+      
+Application.py will run the hillclimber first with the configuration chosen by the user. After that, a Greedy for 4 trajectories will be runned.
 
 ## Structure
 0. The application is run by executing application.py from the main folder
