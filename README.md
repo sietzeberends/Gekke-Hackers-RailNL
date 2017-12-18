@@ -10,6 +10,7 @@ Case: RailNL - finding an optimal Lijnvoering for a fictional railway company. F
 ### Prerequisites
 1. Powershell/Cmd
 2. Python 3.6.3
+3. run pip install -r requirements.txt for external packages
 
 ### Running the program
 The application is run by executing application.py with command line arguments:
