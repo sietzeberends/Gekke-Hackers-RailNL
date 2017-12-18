@@ -62,8 +62,12 @@ def Greedy():
 		Dict.clear()
 		Dict.update(content)
 
-	for combination in itertools.product(allGreedy, allGreedy, allGreedy):
+	NumberofRuns = 0
 
+	for combination in itertools.product(allGreedy, allGreedy, allGreedy, allGreedy, allGreedy):
+
+		NumberofRuns = NumberofRuns + 1
+		print("Run: " + str(NumberofRuns))
 		criticalIndexes = 0
 		totalTime = 0
 		combinationIndexes = []
