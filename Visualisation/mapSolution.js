@@ -1,3 +1,5 @@
+
+// Determine the size of the map
 widthMap = 1000
 heightMap = 1200
 
@@ -12,14 +14,12 @@ var tipStations = d3.tip()
       return "<span>" + "Station: " + d.station + "</span>";
     })
 
-// create tooltip for connections 
+// create tooltip for connections
 var tipConnections = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10,0])
   .html(function(d){
-      return "<span>" + "Connection: " + 
-      d.station1 + " -> " + d.station2 + 
-      "</span>";
+      return "<span>" + "Connection: " + d.station1 + " -> " + d.station2 + "</span>";
   })
 
 
@@ -41,7 +41,6 @@ var img = map.append("svg:image")
 map.call(tipStations);
 map.call(tipConnections);
 
-
 // create scale for X axis
 var scale_x = d3.scale.linear()
     .range([110, widthMap - 90])
@@ -50,13 +49,13 @@ var scale_x = d3.scale.linear()
 var scale_y = d3.scale.linear()
     .range([heightMap - 90, 175])
 
-
+// store the location of each station in this dict
 var locations_stations = {}
 
-// create menu to select country
+// create button to select solution
 var button = d3.select("body").append("div")
     .attr("class", "menu")
-  
+
 button
   .append("button")
     .attr("type", "button")
@@ -67,7 +66,7 @@ button
     .attr("class", "caret")
 
 
-// queue 
+// queue the csv's for each solution
 var q = d3.queue()
   .defer(d3.json, "StationsNationaal.json")
   .defer(d3.json, "Greedy_4.json")
@@ -76,14 +75,20 @@ var q = d3.queue()
   .defer(d3.json, "HillclimberNationaalNoUtrecht.json")
   .await(makemap);
 
+// function that draws the lines for a solution
   function createSolution (data){
 
   var counter = 0
-  var colours = ["placeholder","red","#ff8000","#ffff00","#40ff00", 
-  				 "#00ffff", "#0000ff", "#bf00ff", "#ff00ff", "#black", 
+
+  // store colours for each trajectory
+  var colours = ["placeholder","red","#ff8000","#ffff00","#40ff00",
+  				 "#00ffff", "#0000ff", "#bf00ff", "#ff00ff", "#black",
   				 "#fffff0", "#008B8B", "#A52A2A", "#006400", "#BDB76B"]
+
+  // save the Coordinates for each connection
   var connectionCoordinates = []
 
+  // draw the lines for each connection
   var lines = map.selectAll("connection")
   .data(data)
     .enter().append("line")
@@ -119,24 +124,14 @@ var q = d3.queue()
                              })
   }
 
-
-
-
-    
-
+// function that makes map
 function makemap(error, stations, Greedy, HillclimberNoordZuid, HillclimberNationaal, HillclimberNoUtrecht){
   if (error) throw error;
 
-console.log(Greedy)
-console.log(HillclimberNoordZuid)
-console.log(HillclimberNationaal)
-
 // save locations of stations to list
 stations.forEach(function(d){
-
 	locations_stations[String(d.station)] = [d.latitude, d.longitude, d.critical]
 })
-
 
 // change domain
 scale_x
@@ -145,12 +140,12 @@ scale_x
 scale_y
 .domain(d3.extent(stations,function(d){return d.latitude;})).nice();
 
-// create circles 
+// create circles
 var circles = map.selectAll("dot")
     .data(stations)
     .enter().append("circle")
     .attr({
-      "class":"dot", 
+      "class":"dot",
       "cx": function(d){ return scale_x(d.longitude)} ,
       "cy": function(d){ return scale_y(d.latitude)},
       "r": 5,
@@ -172,15 +167,16 @@ var circles = map.selectAll("dot")
           })
 
 
-
-var solutions = ["Greedy", "Hillclimber - NoordZuid", 
-                 "Hillclimber - Nationaal", 
+// strings with names of each solution
+var solutions = ["Greedy", "Hillclimber - NoordZuid",
+                 "Hillclimber - Nationaal",
                  "Hillcimber - Nationaal - No Utrecht"]
 
 // create dropdown menu when button is pressed
 var menu = button.append("ul")
     .attr("class", "dropdown-menu")
     .attr("role", "menu")
+
 // create dropdown menu for button
   menu.selectAll("li")
       .data(solutions)
@@ -208,16 +204,14 @@ var menu = button.append("ul")
             }
           })
 
-
-d3.selectAll("line")
+// show tooltip if mouse over connection
+d3.selectAll(".connection")
   .on("mouseover", function(d){
               tipConnections.show(d);
           })
   .on("mouseout", function(d){
               tipConnections.hide(d);
           })
-  
+
   }
 }
-    
-
