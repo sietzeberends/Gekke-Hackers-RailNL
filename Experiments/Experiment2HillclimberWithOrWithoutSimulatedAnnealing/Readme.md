@@ -18,6 +18,6 @@ Best hillclimber without simulated annealing for National map:
 
 ### Max scores per configuration:
 
-Hillclimber, 500 runs, 16.000 iteration - 9405
+Hillclimber, 500 runs, 1.600 iterations - 9405
 
-Hillclimber, 5 runs, 1.600.000 iterations - 9515
+Hillclimber, 5 runs, 160.000 iterations - 9515
