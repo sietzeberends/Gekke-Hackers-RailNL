@@ -74,54 +74,62 @@ def Greedy():
 		greedy.createGreedyTrajectory(i, 0, connections)
 		allGreedy.append(greedy)
 
+	# store best score and combination
 	bestScore = 0
 	bestCombination = {}
 
-	NumberofRuns = 0
-
 	for combination in itertools.product(allGreedy, allGreedy):
 
+		# variables for scorefunction
 		criticalIndexes = 0
 		totalTime = 0
-		combinationIndexes = []
+
+		# stores current combination
+		# stores previous critical connections
+		combinationCritical = []
 		currentCombination = {}
+
 		counter = 0
 
+		# loop through trajectory in a combination
 		for traject in combination:
 			totalTime = totalTime + traject.time
 			insertIntoDict("traject" + str(counter), traject, currentCombination)
 			counter = counter + 1
 
+			# check each connection in the trajectory
 			for connection in traject.connections:
 				if connection.critical == True:
-					if connection.index in combinationIndexes:
+
+					# ensure no critical connection is counted twice
+					if connection.index in combinationCritical:
 						continue
+
+					# ensure connection in opposite direction isn't counted twice
 					check = connection.index % 2
 					if check == 0:
 						check = connection.index + 1
-						if check in combinationIndexes:
+						if check in combinationCritical:
 							continue
 					if check == 1:
 						check = connection.index - 1
-						if check in combinationIndexes:
+						if check in combinationCritical:
 							continue
 
+					# count a (new) critical connection
 					criticalIndexes = criticalIndexes + 1
 
-			combinationIndexes = combinationIndexes + traject.indexes
+					# save critical connection as passed
+					combinationCritical.append(connection.index)
 
+			# calculate score for a combination
 			score = constant * (criticalIndexes/totalCritical) - (reduction * len(currentCombination)) - totalTime
 
+			# if score of combination is higher than highscore, save score
 			if score > bestScore:
-				print("constant: " + str(constant))
-				print("criticalIndexes: " + str(criticalIndexes))
-				print("totalCritical: " + str(totalCritical))
-				print("reduction: " + str(reduction))
-				print("len(currentCombination): " + str(len(currentCombination)))
-				print("totalTime: " + str(totalTime))
 				bestScore = score
-				print("New highscore: " + str(bestScore))
 				replaceDict(currentCombination, bestCombination)
+				print("New highscore: " + str(bestScore))
 
-	print(bestScore)
-	print("Number of trajectories: " + str(len(bestCombination)))
+	# when done, print the highest score
+	print("Overall highscore: " + str(bestScore))
