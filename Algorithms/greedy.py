@@ -7,19 +7,49 @@ import csv
 import random
 import itertools
 
-# track all stations and connections in two lists
-stations = []
-connections = []
+def insertIntoDict(name,traject,Dict):
+	"""Inserts object into dict.
+
+	   Args:
+	   	name (String)        : name of the trajectory
+		traject (Trajectory) : Trajectory that is inserted in the dict
+		Dict (Dict)          : the Dict where a possible solution is saved
+
+	   Returns: None
+	"""
+	if not name in Dict:
+		Dict[name] = traject
+	else:
+		Dict[name] = Dict[name] + traject
+
+def replaceDict(content, Dict):
+	"""Replaces a combination of Trajectories in the dict
+
+	   Args:
+	   	content (Dict) : data to put in the dict
+		Dict (Dict)    : dict to put the data in
+
+	   Returns: none
+	"""
+	Dict.clear()
+	Dict.update(content)
 
 def Greedy():
-	# load all the stations
-	with open('csvFiles/StationsHolland.csv', 'r') as csvfile:
-		rows = csv.reader(csvfile)
-		for row in rows:
-			stations.append(Station(row[0], row[1], row[2], row[3]))
+	"""Runs a greedy algorithm on the Holland map"""
 
-	# load all the connections
+	connections = []
+
+	# save all Greedy trajectories
+	allGreedy = []
+
+	# hardcoded variables because Greedy only runs on 1 map
+	constant = 10000
+	totalCritical = 20
+	reduction = 50
+	totalConnections = 56
 	index = 0;
+
+	# load Connections
 	with open('csvFiles/ConnectiesHolland.csv', 'r') as csvfile:
 		rows = csv.reader(csvfile)
 		for row in rows:
@@ -38,75 +68,60 @@ def Greedy():
 	for connection in connections:
 	    connection.addChildren(connections)
 
-	critical = []
-	for connection in connections:
-		if connection.critical == True:
-			critical.append(connection.index)
+	# create a greedy Trajectory for each connection
+	for i in range(0, totalConnections):
+		greedy = Trajectory()
+		greedy.createGreedyTrajectory(i, 0, connections)
+		allGreedy.append(greedy)
 
+	bestScore = 0
+	bestCombination = {}
 
-	reduction = 500
-	allGreedy = []
+	NumberofRuns = 0
 
-	for i in range(0, 56):
-		Greedy = Trajectory()
-		Greedy.createGreedyTrajectory(i, 0, connections)
-		allGreedy.append(Greedy)
+	for combination in itertools.product(allGreedy, allGreedy):
 
-
-	combinationScores = []
-	allCombinations = {}
-	counter = 0
-	allScores = []
-
-	def insertIntoDict(name,traject,Dict):
-	    if not name in Dict:
-	        Dict[name] = traject.indexes
-	    else:
-	        Dict[name] = Dict[name] + traject.indexes
-
-	amountCritical = []
-
-	for combination in itertools.product(allGreedy, allGreedy, allGreedy, allGreedy):
-
-		combinationIndexes = []
 		criticalIndexes = 0
 		totalTime = 0
+		combinationIndexes = []
+		currentCombination = {}
+		counter = 0
 
 		for traject in combination:
-			insertIntoDict("combination" + str(counter),traject,allCombinations)
 			totalTime = totalTime + traject.time
+			insertIntoDict("traject" + str(counter), traject, currentCombination)
+			counter = counter + 1
 
-		currentCombination = allCombinations["combination" + str(counter)]
-
-		for index in currentCombination:
-			if index in critical:
-				if index in combinationIndexes:
-					continue
-				elif index % 2 == 0:
-					checker = index + 1
-					if checker in combinationIndexes:
+			for connection in traject.connections:
+				if connection.critical == True:
+					if connection.index in combinationIndexes:
 						continue
-				elif index % 2 == 1:
-					checker = index - 1
-					if checker in combinationIndexes:
-						continue
+					check = connection.index % 2
+					if check == 0:
+						check = connection.index + 1
+						if check in combinationIndexes:
+							continue
+					if check == 1:
+						check = connection.index - 1
+						if check in combinationIndexes:
+							continue
 
-				criticalIndexes = criticalIndexes + 1
+					criticalIndexes = criticalIndexes + 1
 
-			combinationIndexes.append(index)
-		score = 10000 * (criticalIndexes/20) - (50 * len(currentCombination)) - totalTime
-		allScores.append(score)
-		counter = counter + 1
-		amountCritical.append(criticalIndexes)
+			combinationIndexes = combinationIndexes + traject.indexes
 
-	print(len(allCombinations))
-	print(max(allScores))
+			score = constant * (criticalIndexes/totalCritical) - (reduction * len(currentCombination)) - totalTime
 
-	indexTop = allScores.index(max(allScores))
+			if score > bestScore:
+				print("constant: " + str(constant))
+				print("criticalIndexes: " + str(criticalIndexes))
+				print("totalCritical: " + str(totalCritical))
+				print("reduction: " + str(reduction))
+				print("len(currentCombination): " + str(len(currentCombination)))
+				print("totalTime: " + str(totalTime))
+				bestScore = score
+				print("New highscore: " + str(bestScore))
+				replaceDict(currentCombination, bestCombination)
 
-	indexesTop = allCombinations["combination" + str(indexTop)]
-
-	for index in indexesTop:
-		print(connections[index])
-
-	print("Amount of critical connections =" + str(amountCritical[indexTop]))
+	print(bestScore)
+	print("Number of trajectories: " + str(len(bestCombination)))

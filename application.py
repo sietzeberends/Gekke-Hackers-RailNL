@@ -122,13 +122,13 @@ def main():
         # df.depthFirstSearch()
 
         # Run hillclimber algorithm on Holland map
-        hc = HillclimberIterator(mapChoice, amountOfHillclimbers
-        						 , iterationsInHillclimber, simulatedAnnealing
-        						 , additionalDetails)
-        hc.algorithm()
+        # hc = HillclimberIterator(mapChoice, amountOfHillclimbers
+        # 						 , iterationsInHillclimber, simulatedAnnealing
+        # 						 , additionalDetails)
+        # hc.algorithm()
 
         # Run greedy algorithm on Holland map
-        # Greedy()
+        Greedy()
 
 
         # Print the runtime
