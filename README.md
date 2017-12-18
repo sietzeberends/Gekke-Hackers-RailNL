@@ -65,4 +65,4 @@ All experiments are placed in a folder called Experiments and have their own sub
 
 Our visualisation depicts the final solutions that we have found. The following link will bring you to our index page, where you then will be taken to our visualisation. 
 
-https://sietzeberends.github.io/Gekke-Hackers-RailNL/
+https://sietzeberends.github.io/Gekke-Hackers-RailNL/Visualisation/mapSolution.html
