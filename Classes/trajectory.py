@@ -1,21 +1,28 @@
 import random
-# Class trajectory
-# Trajectory has a name and a list of connections
 
 class Trajectory:
+	"""Class that contains a trajectory, which exists of connections"""
 	def __init__(self):
+		"""Attributes:
+			connections (list)      : list with all Connections in this
+									  Trajectory
+			time (int)				: the sum of the time of all Connections in
+									  this Trajectory
+			connectionsAmount (int)	: the amount of Connections in this
+									  Trajectory
+			indexes (list)			: the indexes of Connections in this
+									  Trajectory
+		"""
 
 		self.connections = []
 		self.time = 0
 		self.connectionsAmount = 0
 		self.indexes = []
-		self.overallScore = - 50
 
 		for connection in self.connections:
 			self.time += connection.time
 			self.connectionsAmount += 1;
 
-	# return all the information about a Trajectory
 	def __str__(self):
 		output = ""
 		for connection in self.connections:
@@ -27,9 +34,17 @@ class Trajectory:
 		output += " total time: " + str(self.time) + " minutes"
 		return output
 
-	# create a random Trajectory
 	def createTrajectory(self, index, time, connections, maxMinutes):
+		"""Creates a random Trajectory
 
+		   Args:
+		   	index (int)        : index of the starting Connection
+			time (int)		   : total time of the Trajectory
+			connections (list) : list with all Connections
+			maxMinutes (int)   : maximum amount of minutes that is allowed
+								 for this Trajectory
+		   Returns: Trajectory
+		"""
 		connection = connections[index]
 		# as long as the Trajectory has a lower duration than 120 minutes
 		while True:
@@ -42,34 +57,22 @@ class Trajectory:
 			else:
 				break
 
-			# if the station only has one child
-			# i.e. is on the edge of civilization
-			# then go back where you came from
+			# if the station only has one child (edge of the map)
 			if len(connection.children) == 1:
 				index = connection.children[0]
 
 			# if the station has more than one child
-			# pick where to go next (random)
 			else:
 				index = random.choice(connection.children)
 				if len(self.indexes) != 0:
 					stopcounter = 0
-					while connections[index].station2.name == connection.station1.name:
-						# print("trein vertrekt van :" + connection.station1.name)
-						# print("trein komt aan in :" + connection.station2.name)
-						# print("trein van: " + connections[index].station1.name)
-						# print("mag niet aankomen op : " + connection.station1.name)
-						# print("de nieuwe connecties waar we uit kunnen kiezen zijn: ")
-						# for index in connection.children:
-							# print(str(connections[index]))
+					while (connections[index].station2.name ==
+					       connection.station1.name):
 						index = random.choice(connection.children)
-						# print("gekozen connectie: " + str(connections[index]))
 						stopcounter += 1
 						if stopcounter > 10000:
 							print("we geven het op")
 							break
-
-
 			# recursive
 			return self.createTrajectory(index, time, connections, maxMinutes)
 
@@ -131,7 +134,5 @@ class Trajectory:
 
 				indexScore = scores.index(bestScore)
 				newIndex = children[indexScore]
-
-				self.overallScore += bestScore
 
 			return self.createGreedyTrajectory(newIndex, time, connections)

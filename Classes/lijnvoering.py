@@ -18,17 +18,19 @@ class Lijnvoering:
                                while this algorithm is being runned.
 
            Attributes:
-            csvFilepath (str)          : a filepath to a CSV containing Connections
-            trajectories (list)        : list with all Trajectories in this Lijnvoering
-            criticalTotal (int)        : the maximum amount of critical Connections that
-                                         is possible
+            csvFilepath (str)          : a filepath to a CSV containing
+                                         Connections
+            trajectories (list)        : list with all Trajectories in this
+                                         Lijnvoering
+            criticalTotal (int)        : the maximum amount of critical
+                                         Connections that is possible
             connections (list)         : all possible Connections
-            maxMinutes (int)           : the maximum amount of minutes that is allowed
-                                         per Trajectory
-            maxTrajectories (int)      : the maximum amount of Trajectories that is
-                                         allowed per Lijnvoering
-            time (int)                 : the sum of the time of all Connections in
-                                         this Lijnvoering
+            maxMinutes (int)           : the maximum amount of minutes that is
+                                         allowed per Trajectory
+            maxTrajectories (int)      : the maximum amount of Trajectories that
+                                         is allowed per Lijnvoering
+            time (int)                 : the sum of the time of all Connections
+                                         in this Lijnvoering
             criticalInLijnvoering (int): the amount of critical Connections in
                                          this Lijnvoering
             score(int)                 : the score of this Lijnvoering
@@ -61,13 +63,15 @@ class Lijnvoering:
            Args:
             amount (int): the amount of Trajectories to add to the Lijnvoering
 
-           Returns: None"""
+           Returns: None
+        """
 
         # add random trajectories while we haven't created them
         while len(self.trajectories) < amount:
             trajectory = Trajectory()
             firstConnectionIndex = random.choice(self.connections).index
-            trajectory.createTrajectory(firstConnectionIndex, 0 , self.connections, self.maxMinutes)
+            trajectory.createTrajectory(firstConnectionIndex, 0,
+                                        self.connections, self.maxMinutes)
             self.trajectories.append(trajectory)
             self.time += trajectory.time
 
@@ -83,7 +87,8 @@ class Lijnvoering:
                               the algorithm and if so, which cooling strategy is
                               used
 
-           Returns: Lijnvoering"""
+           Returns: Lijnvoering
+        """
 
         if annealing == "a":
             simulatedAnnealing = False
@@ -254,7 +259,8 @@ class Lijnvoering:
                                      Hillclimber does
            iteration (int)         : the current iteration
 
-           Returns: the new temperature"""
+           Returns: the new temperature (int)
+        """
 
         a = iteration/totalIterations
         x = 1
@@ -275,7 +281,8 @@ class Lijnvoering:
                                      Hillclimber does
            iteration (int)         : the current iteration
 
-           Returns: the new temperature"""
+           Returns: the new temperature (int)
+        """
 
         base = (1 / initialTemperature)
         exponent = iteration/totalIterations
@@ -294,7 +301,8 @@ class Lijnvoering:
                                      Hillclimber does
            iteration (int)         : the current iteration
 
-           Returns: the new temperature"""
+           Returns: the new temperature (int)
+        """
 
         temperature = initialTemperature / (math.log(iteration + 1))
         return temperature
@@ -307,7 +315,8 @@ class Lijnvoering:
             current (long): the current highscore
             alternative(long): the proposed
 
-           Returns: the acceptation chance"""
+           Returns: the acceptation chance (float)
+        """
 
         shortening = alternative - current
         chance = math.exp(shortening / temperature)
@@ -362,10 +371,13 @@ class Lijnvoering:
                     print("NNNNNNNN: " + str(n))
                     if n > 0:
                         # if the stations don't connect, pop from the trajectory
-                        while len(trajectory.connections) > 0 and connection.index not in trajectory.connections[-1].children:
+                        while (len(trajectory.connections) > 0 and
+                               connection.index not in
+                               trajectory.connections[-1].children):
                             trajectory.time -= trajectory.connections[-1].time
                             trajectory.connections.pop()
-                            print("doesn't connect, trajectory after popping: " + str(trajectory))
+                            print("doesn't connect, trajectory after popping: "
+                                  + str(trajectory))
 
                     stringKey = ""
                     if len(trajectory.connections) > 0:
@@ -477,6 +489,11 @@ class Lijnvoering:
 
 
     def ScoreAssignmentA(self):
+        """Calculates the score for assignment A
+
+           Returns: the score (float)
+        """
+
         for connection in connections:
             if connection.critical == "TRUE":
                 self.criticalTotal += 1
@@ -489,15 +506,22 @@ class Lijnvoering:
                     if connection.index not in indexesAlGecheckt:
                         if connection.index % 2 != 0:
                             indexesAlGecheckt.append(connection.index)
-                            indexesAlGecheckt.append(self.connections[connection.index - 1].index)
+                            indexesAlGecheckt.append(self.connections
+                                                [connection.index - 1].index)
                         else:
                             indexesAlGecheckt.append(connection.index)
-                            indexesAlGecheckt.append(self.connections[connection.index + 1].index)
+                            indexesAlGecheckt.append(self.connections
+                                                [connection.index + 1].index)
         percentageKritiek = (len(indexesAlGecheckt) / 2) / self.criticalTotal
         score = constant * percentageKritiek
         return score
 
     def scoreAssignmentB(self):
+        """Calculates the score for assignment B
+
+           Returns: the score (float)
+        """
+
         self.criticalInLijnvoering = 0
         percentageKritiek = 0
         constanteP = 10000
@@ -508,35 +532,42 @@ class Lijnvoering:
         constanteMinuten = 1
         indexesAlGecheckt = []
 
-        # ga alle trajecten in de lijnvoering langs
         for trajectory in self.trajectories:
             minuten += trajectory.time
             trajecten += 1
-            # en alle connecties per traject
+
             for connection in trajectory.connections:
-                # kijk of de connectie kritiek is
+
                 if connection.critical:
-                    # als de connectie al eerder is meegerekend
+
                     if connection.index not in indexesAlGecheckt:
-                        # als de connectie op een oneven positie staat, voeg de connectie toe (en z'n broertje ook)
+
                         if connection.index % 2 != 0:
                             indexesAlGecheckt.append(connection.index)
                             indexesAlGecheckt.append(connection.index - 1)
                             self.criticalInLijnvoering += 1
-                        # als de connectie op een oneven positie staat, voeg de connectie toe (en z'n broertje ook)
+
                         else:
                             indexesAlGecheckt.append(connection.index)
                             indexesAlGecheckt.append(connection.index + 1)
                             self.criticalInLijnvoering += 1
 
         percentageKritiek = (len(indexesAlGecheckt) / 2) / self.criticalTotal
-        score = (percentageKritiek * constanteP) - (trajecten * constanteTrajecten) - (minuten / constanteMinuten)
+        score = ((percentageKritiek * constanteP) -
+                (trajecten * constanteTrajecten) - (minuten / constanteMinuten))
 
         return score
 
     def loadConnections(self, connectionsFilepath):
+        """Loads all connections based on a CSV
 
-        """Loads all connections based on a CSV and returns them as a list"""
+           Args:
+            connectionsFilepath (str): a filepath to a CSV containing
+                                       Connections
+
+           Returns: all connections (list)
+        """
+
         # connections second
         connectionsList = []
         index = 0;
@@ -544,20 +575,18 @@ class Lijnvoering:
             rows = csv.reader(csvfile)
 
             for row in rows:
-                connectionsList.append(Connection(Station(row[0], "", "", row[3]),
-    										  Station(row[1], "", "", row[3]),
-    										  row[2], row[3], index))
-
+                connectionsList.append(Connection(Station(row[0], "", "",
+                                       row[3]), Station(row[1], "", "", row[3]),
+    							       row[2], row[3], index))
                 index += 1
 
-                connectionsList.append(Connection(Station(row[1], "", "", row[3]),
-    										  Station(row[0], "", "", row[3]),
-    										  row[2],
-    										  row[3], index))
-
+                connectionsList.append(Connection(Station(row[1], "", "",
+                                       row[3]), Station(row[0], "", "", row[3]),
+    								   row[2], row[3], index))
                 index += 1
 
-    	# add the children to the connections and count how many connections are critical
+    	# add the children to the connections
+        # count how many connection are critical
         for connection in connectionsList:
             connection.addChildren(connectionsList)
             if connection.critical == True:
@@ -569,7 +598,13 @@ class Lijnvoering:
         return connectionsList
 
     def minutesPerTrajectory(self, connections):
-    	"""Calculates the allowed amount of minutes per trajectory and returns that number"""
+    	"""Calculates the allowed amount of minutes per trajectory
+
+           Args:
+            connections (list) : list with all Connections
+
+           Returns: the amount of minutes that is allowed per trajectory (int)
+        """
     	minutes = 0
     	if len(connections) <= 56:
     		minutes = 120
@@ -579,7 +614,14 @@ class Lijnvoering:
     	return minutes
 
     def trajectoriesPerLijnvoering(self, connections):
-        """Calculates the allowed amount of trajectories and returns that number"""
+        """Calculates the allowed amount of trajectories
+
+           Args:
+            connections (list) : list with all Connections
+
+           Returns: the amount of trajectories that is allowed per Lijnvoering
+                    (int)
+        """
         trajectories = 0
         if len(connections) <= 56:
             trajectories = 8
@@ -589,7 +631,14 @@ class Lijnvoering:
         return trajectories
 
     def loadConnectionsAndStations(self, connectionsFilepath, stationsFilepath):
-        """Load stations and connections from CSV files and returns them as a list"""
+        """Load stations and connections from CSV files
+
+           Args:
+            connectionsFilepath (String) : path to a CSV with all Connections
+            stationsFilepath (String)    : path to a CSV with all Stations
+
+           Returns: the list with all connections (list)
+        """
 
         # first the stations
         stationsList = []
@@ -604,14 +653,14 @@ class Lijnvoering:
         with open(connectionsFilepath, 'r') as csvfile:
             rows = csv.reader(csvfile)
             for row in rows:
-                connectionsList.append(Connection(Station(row[0], "", "", row[3]),
-                Station(row[1], "", "", row[3]), row[2], row[3], index))
-
+                connectionsList.append(Connection(Station(row[0], "", "",
+                                       row[3]), Station(row[1], "", "", row[3]),
+                                       row[2], row[3], index))
                 index += 1
 
-                connectionsList.append(Connection(Station(row[1], "", "", row[3]),
-                Station(row[0], "", "", row[3]), row[2], row[3], index))
-
+                connectionsList.append(Connection(Station(row[1], "", "",
+                                       row[3]), Station(row[0], "", "", row[3]),
+                                       row[2], row[3], index))
                 index += 1
 
         # add the children to the connections
@@ -619,23 +668,3 @@ class Lijnvoering:
             connection.addChildren(connectionsList)
 
         return connectionsList
-
-    def setVariables(self, connections):
-        """Calculates the amount of critical connections
-        The maximum amount of trajectories that are allowed
-        And the maximum amount of minutes that is allowed per Trajectory"""
-
-        for connection in self.connections:
-            if connection.critical == True:
-                self.criticalTotal += 1
-        # divided by two, because you can go back and forth
-        self.criticalTotal /= 2
-
-        if len(connections) <= 56:
-            # actually 7, but we use range(1,8)
-            self.maxTrajectories = 8
-            self.maxMinutes = 120
-        else:
-            # actually 20, but we use range(1,21)
-            self.maxTrajectories = 21
-            self.maxMinutes = 180

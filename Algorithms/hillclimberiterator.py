@@ -1,10 +1,10 @@
 from Classes.lijnvoering import Lijnvoering
 
 class HillclimberIterator:
-    """Class that creates an amount of Hillclimber that all create a lijnvoering
-    The actual Hillclimber is run within the Lijnvoering class
-    This class creates new Lijnvoeringen in order to reach different
-    starting situations"""
+    """Class that creates a certain amount of Hillclimbers, that all create a
+    lijnvoering. The actual Hillclimber itself is run from the Lijnvoering class
+    This class just creates new Lijnvoeringen in order to reach different
+    starting situations."""
 
     def __init__(self, mapFilepath, runs, iterations, annealing, details):
         """Args:
