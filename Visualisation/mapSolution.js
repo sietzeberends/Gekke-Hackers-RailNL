@@ -1,12 +1,10 @@
-// Determine the size of the map
 widthMap = 1000
 heightMap = 1200
 
 // when scripts loaded, implement functions that require d3 and tooltip
 window.onload = function(d){
 
-
-  // create tooltip for stations
+// create tooltip for stations
 var tipStations = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
@@ -19,50 +17,43 @@ var tipConnections = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10,0])
   .html(function(d){
-      return "<span>" + "Connection: " + d.station1 + " -> " + d.station2 + "</span>";
+      return "<span>" + "Connection: " +
+      d.station1 + " -> " + d.station2 +
+      "</span>";
   })
 
 
  // create svg for scatterplot
-
 var map = d3.select("body").append("svg")
-    .attr({"width": width_map,
-           "height": height_map})
+    .attr({"width": widthMap,
+           "height": heightMap})
     .append("g");
 
+// append svg of the map of the Netherlands
 var img = map.append("svg:image")
-    .attr("xlink:href", "Blank_map_of_the_Netherlands.svg")
-    .attr("width", width_map)
-    .attr("height", height_map)
+    .attr("xlink:href", "blankMapOfTheNetherlands.svg")
+    .attr("width", widthMap)
+    .attr("height", heightMap)
     .attr("x", 0)
     .attr("y", 0);
 
+// call tooltips to map
 map.call(tipStations);
 map.call(tipConnections);
 
+
 // create scale for X axis
 var scale_x = d3.scale.linear()
-    .range([110, width_map - 90])
+    .range([110, widthMap - 90])
 
 // create scale for Y axis
 var scale_y = d3.scale.linear()
-    .range([height_map - 90, 175])
-
-
-locations_stations = {}
-
-
-d3.json("StationsNationaaltest.json", function(data){
-
-
-// save locations of stations to list
-data.forEach(function(d){
     .range([heightMap - 90, 175])
 
-// store the location of each station in this dict
+
 var locations_stations = {}
 
-// create button to select solution
+// create menu to select country
 var button = d3.select("body").append("div")
     .attr("class", "menu")
 
@@ -76,7 +67,7 @@ button
     .attr("class", "caret")
 
 
-// queue the csv's for each solution
+// queue
 var q = d3.queue()
   .defer(d3.json, "StationsNationaal.json")
   .defer(d3.json, "Greedy_4.json")
@@ -85,20 +76,14 @@ var q = d3.queue()
   .defer(d3.json, "HillclimberNationaalNoUtrecht.json")
   .await(makemap);
 
-// function that draws the lines for a solution
   function createSolution (data){
 
   var counter = 0
-
-  // store colours for each trajectory
   var colours = ["placeholder","red","#ff8000","#ffff00","#40ff00",
   				 "#00ffff", "#0000ff", "#bf00ff", "#ff00ff", "#black",
   				 "#fffff0", "#008B8B", "#A52A2A", "#006400", "#BDB76B"]
-
-  // save the Coordinates for each connection
   var connectionCoordinates = []
 
-  // draw the lines for each connection
   var lines = map.selectAll("connection")
   .data(data)
     .enter().append("line")
@@ -134,14 +119,24 @@ var q = d3.queue()
                              })
   }
 
-// function that makes map
+
+
+
+
+
 function makemap(error, stations, Greedy, HillclimberNoordZuid, HillclimberNationaal, HillclimberNoUtrecht){
   if (error) throw error;
 
+console.log(Greedy)
+console.log(HillclimberNoordZuid)
+console.log(HillclimberNationaal)
+
 // save locations of stations to list
 stations.forEach(function(d){
+
 	locations_stations[String(d.station)] = [d.latitude, d.longitude, d.critical]
 })
+
 
 // change domain
 scale_x
@@ -177,7 +172,7 @@ var circles = map.selectAll("dot")
           })
 
 
-// strings with names of each solution
+
 var solutions = ["Greedy", "Hillclimber - NoordZuid",
                  "Hillclimber - Nationaal",
                  "Hillcimber - Nationaal - No Utrecht"]
@@ -186,7 +181,6 @@ var solutions = ["Greedy", "Hillclimber - NoordZuid",
 var menu = button.append("ul")
     .attr("class", "dropdown-menu")
     .attr("role", "menu")
-
 // create dropdown menu for button
   menu.selectAll("li")
       .data(solutions)
@@ -214,8 +208,8 @@ var menu = button.append("ul")
             }
           })
 
-// show tooltip if mouse over connection
-d3.selectAll(".connection")
+
+d3.selectAll("line")
   .on("mouseover", function(d){
               tipConnections.show(d);
           })
