@@ -10,27 +10,12 @@ Algorithms:
 3. Depthfirst > works for Holland map, but isn't correct and therefore disabled
 in this version
 
-Options:
-
-0: Choose which map to use (use either HollandFilepath or NetherlandsFilepath)
-1: Amount of Hillclimbers that are created
-2: Amount of iterations that every Hillclimber does.
-3: Turn simulated annealing on or off for every Hillclimber
-   and Choose a cooling strategy:
-   	a: off
-	b: linear
-	c: exponential
-	d: Geman & Geman
-	e: hardcoded on a very low acceptation chance
-
-5: Print additional details e.g. new highscores that are reached while
-   the algorithm is running"""
-
 __author__ = "Sietze Berends, Daan Uittenhout, Floris Holstege"
 __version__ = "1.0"
 __maintainer__ = "Sietze Berends"
 __email__ = "sietze.berends@student.uva.nl"
-__status__ = "Production"
+__status__ = "Final"
+"""
 
 # Built-in modules
 from datetime import datetime
@@ -43,34 +28,49 @@ from Algorithms.depthfirst import DepthfirstAlgorithm
 
 def main():
 
-    if len(sys.argv) != 5:
-        print("Usage: application.py arg1 arg2 arg3 arg4")
+    if len(sys.argv) != 6:
+        print("Usage: application.py arg1 arg2 arg3 arg4 arg5")
         print("Recommended configuration: application.py 500 1600 a True")
-        print("arg1: amount of hillclimbers (int > 0, recommended: 500)")
-        print("arg2: amount of iterations (int > 0, recommended: 1600)")
-        print("arg3: annealing (String[a, b, c, d, e]), recommended: a)")
-        print("arg4: show additional details (Bool, recommended: True)")
+        print("arg1: choose the map (String: 'Holland' or 'National')")
+        print("arg2: amount of hillclimbers (int > 0, recommended: 500)")
+        print("arg3: amount of iterations (int > 0, recommended: 1600)")
+        print("arg4: simulated annealing (String: 'a', 'b', 'c', 'd' or 'e')" +\
+              ", recommended: a)")
+
+        print("arg5: show additional details (Bool, recommended: True)")
 
 
     else:
         print("filename: " + sys.argv[0])
-        print("runs: " + sys.argv[1])
-        print("iterations: " + sys.argv[2])
-        print("annealing: " + sys.argv[3])
-        print("details: " + sys.argv[4])
+        print("map: " + sys.argv[1])
+        print("runs: " + sys.argv[2])
+        print("iterations: " + sys.argv[3])
+        print("annealing: " + sys.argv[4])
+        print("details: " + sys.argv[5])
 
         # Track how long the application runs
         startTime = datetime.now()
 
         # Configure the algorithms
-        hollandFilepath = 'csvFiles/ConnectiesHolland.csv'
-        netherlandsFilepath = 'csvFiles/ConnectiesNationaal.csv'
+        hollandFilepath = "CsvFiles/ConnectiesHolland.csv"
+        netherlandsFilepath = "CsvFiles/ConnectiesNationaal.csv"
+        mapChoice = ""
+        # check for map
+        print(sys.argv[1].lower())
+        if (sys.argv[1].lower() != "national" and sys.argv[1].lower() !=
+            "holland"):
+            print("To choose a map, please enter 'National' or 'Holland'")
+            return
+        elif sys.argv[1].lower() == "national":
+            mapChoice += str(netherlandsFilepath)
+        else:
+            mapChoice += str(hollandFilepath)
 
         # check for positive integer
         try:
-            if isinstance(int(sys.argv[1]), int):
-                if int(sys.argv[1]) > 0:
-                    amountOfHillclimbers = int(sys.argv[1])
+            if isinstance(int(sys.argv[2]), int):
+                if int(sys.argv[2]) > 0:
+                    amountOfHillclimbers = int(sys.argv[2])
                 else:
                     print("Please enter a positive integer")
                     return
@@ -85,9 +85,9 @@ def main():
 
         # check for positive integer
         try:
-            if isinstance(int(sys.argv[2]), int):
-                if int(sys.argv[2]) > 0:
-                    iterationsInHillclimber = int(sys.argv[2])
+            if isinstance(int(sys.argv[3]), int):
+                if int(sys.argv[3]) > 0:
+                    iterationsInHillclimber = int(sys.argv[3])
                 else:
                     print("Please enter a positive integer")
                     return
@@ -100,41 +100,41 @@ def main():
 
 
         # check simulated annealing yes/no/cooling strategy/hardcoded
-        if sys.argv[3] in ("a", "b", "c", "d", "e"):
-            simulatedAnnealing = sys.argv[3]
+        if sys.argv[4] in ("a", "b", "c", "d", "e"):
+            simulatedAnnealing = sys.argv[4]
         else:
-            print("use 'a', 'b', 'c', 'd', 'e' for arg3")
+            print("use 'a', 'b', 'c', 'd', 'e' for arg4")
             return
 
         # check for boolean to print details or not
-        if sys.argv[4] == "True":
+        if sys.argv[5].lower() == "true":
             additionalDetails = True
-        elif sys.argv[4] == "False":
+        elif sys.argv[5].lower() == "false":
             additionalDetails = False
         else:
-            print("Use 'True' or 'False' (first letter capitalized) for arg4")
+            print("Use 'True' or 'False' for arg5")
             return
 
         # Run hillclimber algorithm on Holland map
-        hc = HillclimberIterator(hollandFilepath, amountOfHillclimbers
+        hc = HillclimberIterator(mapChoice, amountOfHillclimbers
         						 , iterationsInHillclimber, simulatedAnnealing
         						 , additionalDetails)
         hc.algorithm()
         # Run hillclimber algorithm on National map
-        hc = HillclimberIterator(netherlandsFilepath, amountOfHillclimbers
+        hc = HillclimberIterator(mapChoice, amountOfHillclimbers
         				 , iterationsInHillclimber, simulatedAnnealing
         				 , additionalDetails)
         hc.algorithm()
 
         # Run hillclimber algorithm on Holland map with simulated annealing (linear)
         simulatedAnnealing = "b"
-        hcAnnealing = HillclimberIterator(hollandFilepath, amountOfHillclimbers
+        hcAnnealing = HillclimberIterator(mapChoice, amountOfHillclimbers
         						   , iterationsInHillclimber, simulatedAnnealing
         						   , additionalDetails)
         hcAnnealing.algorithm()
 
         # Run greedy algorithm on Holland map
-        Greedy()
+        # Greedy()
 
 
         # Print the runtime

@@ -18,13 +18,16 @@ class HillclimberIterator:
                                    printed while this algorithm is being runned
 
             Attributes:
-                map (str)            : a filepath to a csv containing Connections.
+                map (str)            : a filepath to a csv containing
+                                       Connections.
                 runs        (int)    : the amount of Hillclimbers that are made.
                 iterations  (int)    : the amount of iterations each Hillclimber
                                        makes to get a better score.
-                annealing   (boolean): indicates whether to use simulated annealing
+                annealing   (boolean): indicates whether to use simulated
+                                       annealing
                 details     (boolean): indicates whether additional details are
-                                       printed while this algorithm is being runned
+                                       printed while this algorithm is being
+                                       runned
         """
         self.map = mapFilepath
         self.runs = runs
@@ -48,17 +51,18 @@ class HillclimberIterator:
                                                               self.annealing)
 
             if bestLijnvoering.scoreAssignmentB() > highScore:
-            		highScore = bestLijnvoering.scoreAssignmentB()
-
-            if self.details:
-                print("Previous highscore: " + str(highScore))
-                print("New highscore reached with: " +
-                       str(len(bestLijnvoering.trajectories)) + " Trajectories")
-                print(bestLijnvoering)
-                print ("New highscore: " + str(highScore))
-                print ("Total time: " + str(bestLijnvoering.time))
-                print ("Amount of critical Connections: " +
+                highScore = bestLijnvoering.scoreAssignmentB()
+                if self.details:
+                    print("Previous highscore: " + str(highScore))
+                    print("New highscore reached with: " +\
+                        str(len(bestLijnvoering.trajectories)) +\
+                         " Trajectories")
+                    print(bestLijnvoering)
+                    print ("New highscore: " + str(highScore))
+                    print ("Total time: " + str(bestLijnvoering.time))
+                    print ("Amount of critical Connections: " +\
                         str(bestLijnvoering.criticalInLijnvoering))
+
         print("")
         print("Best Lijnvoering has " + str(len(bestLijnvoering.trajectories))
          + " Trajectories and a score of " + str(highScore))
