@@ -10,3 +10,10 @@
 		  color: #fff;
 		  border-radius: 2px;
 		}
+
+/* attributes for the position of the button*/
+.menu{
+	position:absolute;
+	top:20px;
+	right:200px;
+}
