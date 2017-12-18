@@ -1,12 +1,9 @@
-<<<<<<< HEAD
 width_map = 1000
 height_map = 1200
-=======
 
 // Determine the size of the map
 widthMap = 1000
 heightMap = 1200
->>>>>>> 93819d12749b9dd8a9ee35679f22795d0ea12259
 
 // when scripts loaded, implement functions that require d3 and tooltip
 window.onload = function(d){
@@ -52,12 +49,11 @@ var scale_x = d3.scale.linear()
 
 // create scale for Y axis
 var scale_y = d3.scale.linear()
-<<<<<<< HEAD
     .range([height_map - 90, 175])
 
 
 locations_stations = {}
-    
+
 
 d3.json("StationsNationaaltest.json", function(data){
 
