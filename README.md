@@ -60,3 +60,9 @@ The following experiments have been done:
 4 - All stations critical
 
 All experiments are placed in a folder called Experiments and have their own subfolder with a Readme. Please refer to these Experiments to get the description, results and plots of each experiments.
+
+## Visualisation:
+
+Our visualisation depicts the final solutions that we have found. The following link will bring you to our index page, where you then will be taken to our visualisation. 
+
+https://sietzeberends.github.io/Gekke-Hackers-RailNL/
