@@ -19,7 +19,7 @@ class Station:
 		self.critical = False;
 		if critical == "Kritiek":
 			self.critical = True
-			
+
 	def __str__(self):
-		return (self.name + ", " + str(self.latitude) + ", " + str(self.longitude) + ", "
-		+ str(self.critical))
+		return (self.name + ", " + str(self.latitude) + ", "
+		+ str(self.longitude) + ", " + str(self.critical))

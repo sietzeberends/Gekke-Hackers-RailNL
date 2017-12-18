@@ -210,40 +210,40 @@ class Lijnvoering:
                 self.score = highestForThisLijnvoering
                 besteLijnvoering.score = self.score
 
-                # with open ("csvFiles/connections_visualisation.csv",
-                #            "w") as out:
-                #     writer = csv.writer(out, dialect='excel')
-                #     for trajectory in besteLijnvoering.trajectories:
-                #         writer.writerow("-")
-                #         for connection in trajectory.connections:
-                #             placeholder = connection.station1.name + ", " +\
-                #                           connection.station2.name + ", " +\
-                #                           str(connection.time)
-                #             placeholder = placeholder.split(",")
-                #             writer.writerow(placeholder)
-                # # filename depends on parameters
-                # filename = ""
-                # if simulatedAnnealing:
-                #     filename += "SA-" + "500-" + str(maxN) + "-T"
-                #     filename += str(initialTemperature) + "-"
-                #     if strategy == "b":
-                #         filename += "LIN.csv"
-                #     elif strategy == "c":
-                #         filename += "EXP.csv"
-                #     elif strategy == "d":
-                #         filename += "GEMAN.csv"
-                #     else:
-                #         filename += "HARDCODED"
-                # else:
-                #     filename += "HC-" + "500-" + str(maxN) + ".csv"
-                #
-                # with open (filename, "a", newline="") as out:
-                #     writer = csv.writer(out, dialect="excel")
-                #     placeholder1 =	str(len(besteLijnvoering.trajectories)) +\
-                #                     ", " + str(besteLijnvoering.score) + ", " +\
-                #                     str(besteLijnvoering.time)
-                #     placeholder1 = placeholder1.split(",")
-                #     writer.writerow(placeholder1)
+                with open ("csvFiles/connections_visualisation.csv",
+                           "w") as out:
+                    writer = csv.writer(out, dialect='excel')
+                    for trajectory in besteLijnvoering.trajectories:
+                        writer.writerow("-")
+                        for connection in trajectory.connections:
+                            placeholder = connection.station1.name + ", " +\
+                                          connection.station2.name + ", " +\
+                                          str(connection.time)
+                            placeholder = placeholder.split(",")
+                            writer.writerow(placeholder)
+                # filename depends on parameters
+                filename = ""
+                if simulatedAnnealing:
+                    filename += "SA-" + "500-" + str(maxN) + "-T"
+                    filename += str(initialTemperature) + "-"
+                    if annealing == "b":
+                        filename += "LIN.csv"
+                    elif annealing == "c":
+                        filename += "EXP.csv"
+                    elif annealing == "d":
+                        filename += "GEMAN.csv"
+                    else:
+                        filename += "HARDCODED"
+                else:
+                    filename += "HC-" + "500-" + str(maxN) + ".csv"
+
+                with open (filename, "a", newline="") as out:
+                    writer = csv.writer(out, dialect="excel")
+                    placeholder1 =	str(len(besteLijnvoering.trajectories)) +\
+                                    ", " + str(besteLijnvoering.score) + ", " +\
+                                    str(besteLijnvoering.time)
+                    placeholder1 = placeholder1.split(",")
+                    writer.writerow(placeholder1)
 
         return besteLijnvoering
 
@@ -321,172 +321,6 @@ class Lijnvoering:
         shortening = alternative - current
         chance = math.exp(shortening / temperature)
         return chance
-
-    def depthFirstSearch(self):
-
-        stack = []
-        archive = {}
-        trajectory = Trajectory()
-        besteLijnvoering = Lijnvoering(self.csvFilepath, self.details)
-        n = 0
-        nogFfDoor = 10000000000
-        root = 0
-        allTrajectories = []
-
-        # loop over alle connecties
-        for rConnection in self.connections:
-            trajectory.connections.clear()
-            trajectory.time = 0
-            print (root)
-            root += 1
-            if root > 1:
-                if stringKey == "23-49-45-46-42":
-                    nogFfDoor = n
-            if nogFfDoor == 224300:
-                break
-
-            # voeg de root connectie toe aan de stack
-            stack.append(rConnection)
-            print("Root connection: " + str(rConnection))
-
-            # pop a connection off the stack
-            while len(stack) > 0:
-
-                goodToGo = False
-                timeIsOkay = False
-                notInArchive = False
-                connection = stack.pop()
-                if root > 1:
-                    if stringKey == "23-49-45-46-42":
-                        nogFfDoor = n
-                if nogFfDoor == 224300:
-                    break
-
-                if len(trajectory.connections) > 0:
-                    print("current trajectory: " + str(trajectory))
-                    print("connection to check: " + str(connection))
-
-                # check alle condities
-                while not goodToGo:
-                    print("NNNNNNNN: " + str(n))
-                    if n > 0:
-                        # if the stations don't connect, pop from the trajectory
-                        while (len(trajectory.connections) > 0 and
-                               connection.index not in
-                               trajectory.connections[-1].children):
-                            trajectory.time -= trajectory.connections[-1].time
-                            trajectory.connections.pop()
-                            print("doesn't connect, trajectory after popping: "
-                                  + str(trajectory))
-
-                    stringKey = ""
-                    if len(trajectory.connections) > 0:
-                        for tconnection in trajectory.connections:
-                            stringKey += str(tconnection.index) + '-'
-
-                    stringKey += str(connection.index)
-                    print("stringkey: " + stringKey)
-                    if stringKey == "23-49-45-46-42":
-                        nogFfDoor = n
-                    if nogFfDoor == 224300:
-                        break
-
-                    # if in archive
-                    if stringKey in archive:
-                        print("In archive")
-                        break
-
-                    else:
-                        print("Not in archive")
-                        notInArchive = True
-
-                    print("check time")
-
-                    # if exceeds time
-                    if trajectory.time + connection.time > 120:
-                        print("exceeds time")
-                        break
-                    else:
-                        print("doesn't exceed time")
-                        timeIsOkay = True
-
-                    if notInArchive and timeIsOkay:
-                        print("good to go")
-                        goodToGo = True
-                    else:
-                        print("not good to go")
-
-                # if good to go, add to trajectory
-                if goodToGo:
-                    trajectory.connections.append(connection)
-                    trajectory.time += connection.time
-                    toAppend = Trajectory()
-                    for tConnection in trajectory.connections:
-                        toAppend.connections.append(tConnection)
-                        toAppend.time += tConnection.time
-                    allTrajectories.append(toAppend)
-
-                    # add trajectory to archive
-                    archive[stringKey] = True
-
-                    # add children for the connection
-                    for child in connection.children:
-                        print("append child " + str(self.connections[child]))
-                        stack.append(self.connections[child])
-
-                n += 1
-                nogFfDoor += 1
-
-        highScore = 0
-        m = 0
-        # for aTrajectory in allTrajectories:
-        #     print (m)
-        #     m += 1
-        #     alternativeLijnvoering = Lijnvoering(self.csvFilepath, self.details)
-        #     trajectToAdd = Trajectory()
-        #     for aConnection in aTrajectory.connections:
-        #         trajectToAdd.connections.append(aConnection)
-        #         trajectToAdd.time += aConnection.time
-        #     alternativeLijnvoering.trajectories.append(trajectToAdd)
-        #     alternativeScore = alternativeLijnvoering.scoreAssignmentB()
-        #
-        #     if alternativeScore > highScore:
-        #         besteLijnvoering.trajectories.clear()
-        #         besteLijnvoering.trajectories.append(trajectToAdd)
-        #         highScore = alternativeScore
-        #
-        # with open ("filename1", "a", newline="") as out:
-        #     writer = csv.writer(out, dialect="excel")
-        #
-        #     for connection in besteLijnvoering.trajectories[0].connections:
-        #         placeholder1 =	str(connection) + ", "
-        #         writer.writerow(placeholder1)
-        #
-        #     placeholder1 = str(highScore)
-        #     writer.writerow(placeholder1)
-
-    def combineDepthFirst(self, trajectories):
-        n = 0
-        lijnVoering = Lijnvoering('csvFiles/ConnectiesHolland.csv')
-        alternativeLijnvoering = Lijnvoering('csvFiles/ConnectiesHolland.csv')
-        highScore = 0
-        for combination in itertools.product(trajectories, trajectories,
-                                             trajectories):
-            alternativeLijnvoering.trajectories.clear()
-            n += 1
-            if n % 1000000 == 0:
-                print(n)
-            for trajectory in combination:
-                alternativeLijnvoering.trajectories.append(trajectory)
-            alternativeScore = alternativeLijnvoering.scoreAssignmentB()
-            if alternativeScore > highScore:
-                lijnVoering.trajectories.clear()
-                for trajectory in alternativeLijnvoering.trajectories:
-                    lijnVoering.trajectories.append(trajectory)
-                highScore = alternativeScore
-        print(lijnVoering)
-        print(lijnVoering.scoreAssignmentB())
-
 
     def ScoreAssignmentA(self):
         """Calculates the score for assignment A

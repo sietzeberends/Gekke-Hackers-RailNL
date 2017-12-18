@@ -7,8 +7,6 @@ Algorithms:
 0. Hillclimber > works for Holland map and National map
 1. Hillclimber with simulated annealing > works for Holland map and National map
 2. Greedy > due to performance only works for Holland map
-3. Depthfirst > works for Holland map, but isn't correct and therefore disabled
-in this version
 
 __author__ = "Sietze Berends, Daan Uittenhout, Floris Holstege"
 __version__ = "1.0"
@@ -24,7 +22,6 @@ import sys
 # Own modules and classes
 from Algorithms.hillclimberiterator import HillclimberIterator
 from Algorithms.greedy import Greedy
-from Algorithms.depthfirst import DepthfirstAlgorithm
 from Classes.lijnvoering import Lijnvoering
 
 def main():
@@ -117,14 +114,10 @@ def main():
             print("Use 'True' or 'False' for arg5")
             return
 
-        # depthfirst
-        # df = Lijnvoering(hollandFilepath, True)
-        # df.depthFirstSearch()
-
-        # Run hillclimber algorithm on Holland map
-        # hc = HillclimberIterator(mapChoice, amountOfHillclimbers
-        # 						 , iterationsInHillclimber, simulatedAnnealing
-        # 						 , additionalDetails)
+        # # # Run hillclimber algorithm on Holland map
+        # # hc = HillclimberIterator(mapChoice, amountOfHillclimbers
+        # # 						 , iterationsInHillclimber, simulatedAnnealing
+        # # 						 , additionalDetails)
         # hc.algorithm()
 
         # Run greedy algorithm on Holland map

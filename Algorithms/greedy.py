@@ -1,4 +1,4 @@
-from __future__ import division
+import math
 from Classes.station import Station
 from Classes.connection import Connection
 from Classes.trajectory import Trajectory
@@ -78,7 +78,9 @@ def Greedy():
 	bestScore = 0
 	bestCombination = {}
 
-	for combination in itertools.product(allGreedy, allGreedy):
+	# we always run the greedy for 4 trajectories
+	for combination in itertools.product(allGreedy, allGreedy, allGreedy,
+										 allGreedy):
 
 		# variables for scorefunction
 		criticalIndexes = 0
