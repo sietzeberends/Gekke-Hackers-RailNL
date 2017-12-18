@@ -55,7 +55,7 @@ class Lijnvoering:
             i += 1
         return output
 
-    def createRandomLijnVoering(self, amount):
+    def createRandomLijnvoering(self, amount):
         """Creates a random Lijnvoering
 
            Args:
@@ -113,7 +113,7 @@ class Lijnvoering:
             self.time = 0
 
             # create a random Lijnvoering with a certain amount of trajectories
-            self.createRandomLijnVoering(i)
+            self.createRandomLijnvoering(i)
 
             # also create a copy of this Lijnvoering in which trajectories
             # can be changed so that we can compare their scores
@@ -313,245 +313,163 @@ class Lijnvoering:
         chance = math.exp(shortening / temperature)
         return chance
 
-    def depthFirstSearch(self, rootInput, nInput, allTrajectoriesInput,
-                         archiveInput):
-        """"""
-        highScoreLijnvoering = LijnVoering(self.csvFilepath)
-        trajectory = Trajectory()
+    def depthFirstSearch(self):
+
         stack = []
+        archive = {}
+        trajectory = Trajectory()
+        besteLijnvoering = Lijnvoering(self.csvFilepath, self.details)
+        n = 0
+        nogFfDoor = 10000000000
+        root = 0
         allTrajectories = []
-        for traject in allTrajectoriesInput:
-            allTrajectories.append(traject)
-        allIsWell = True
 
-        # push the first connection on the stack
-        root = rootInput
-        stack.append(self.connections[root])
-        n = nInput
-        archive = archiveInput
+        # loop over alle connecties
+        for rConnection in self.connections:
+            trajectory.connections.clear()
+            trajectory.time = 0
+            print (root)
+            root += 1
+            if root > 1:
+                if stringKey == "23-49-45-46-42":
+                    nogFfDoor = n
+            if nogFfDoor == 224300:
+                break
 
-        while len(stack) > 0:
-            # pop a connection from the stack on the first run
-            if n == 0:
+            # voeg de root connectie toe aan de stack
+            stack.append(rConnection)
+            print("Root connection: " + str(rConnection))
+
+            # pop a connection off the stack
+            while len(stack) > 0:
+
+                goodToGo = False
+                timeIsOkay = False
+                notInArchive = False
                 connection = stack.pop()
-            # if the previous connection was added, pop a new one
-            elif allIsWell:
-                print("from stack: " + str(stack[-1]))
-                connection = stack.pop()
-                print("to connection: " + str(connection))
-            # if the previous connection was not added
-            # we already popped a new one
-            else:
-                print("Keep going...")
-
-            print("Check this connection: " + str(connection))
-
-            # set the stringKey (for checking with the dict)
-            stringKey = ""
-            if len(trajectory.connections) > 0:
-                for tconnection in trajectory.connections:
-                    stringKey += str(tconnection.index)
-                stringKey += str(connection.index)
-
-            # and check if it's in the dict
-            if stringKey in dictTrajectory:
-                print("Is in dict")
-                inDict = True
-            else:
-                print("Is not in dict")
-                inDict = False
-
-            # also check if the connection from the stack
-            # belongs to a higher level
-            level = 1
-            for tconnection in reversed(trajectory.connections):
-                if connection.station1.name == tconnection.station1.name:
-                    print("matches " + str(level) + " levels higher")
-                    levelUp = True
+                if root > 1:
+                    if stringKey == "23-49-45-46-42":
+                        nogFfDoor = n
+                if nogFfDoor == 224300:
                     break
-                else:
-                    level += 1
-                    levelUp = False
 
-            if not levelUp:
-                print("Not from a higher level")
+                if len(trajectory.connections) > 0:
+                    print("current trajectory: " + str(trajectory))
+                    print("connection to check: " + str(connection))
 
-            # finally, check the time
-            if trajectory.time + connection.time > 120:
-                exceedsTime = True
-                print("Exceeds time")
-            else:
-                exceedsTime = False
-                print("Does not exceed time")
+                # check alle condities
+                while not goodToGo:
+                    print("NNNNNNNN: " + str(n))
+                    if n > 0:
+                        # if the stations don't connect, pop from the trajectory
+                        while len(trajectory.connections) > 0 and connection.index not in trajectory.connections[-1].children:
+                            trajectory.time -= trajectory.connections[-1].time
+                            trajectory.connections.pop()
+                            print("doesn't connect, trajectory after popping: " + str(trajectory))
 
-            # 1. if it's in the dict, pop the next one
-            if inDict:
-                print("Already in dict, pop the next one")
-                print("to throw away: " + str(connection))
-                connection = stack.pop()
-                allIsWell = False
+                    stringKey = ""
+                    if len(trajectory.connections) > 0:
+                        for tconnection in trajectory.connections:
+                            stringKey += str(tconnection.index) + '-'
 
-            # 2. if the time is going to exceed 120 minutes, pop the next one
-            elif exceedsTime and not levelUp:
-                print("Will exceed time, pop the next one")
-                print("to throw away: " + str(connection))
-                for connection in stack:
-                    print("STACK PRINTEN")
-                    print(connection)
-                connection = stack.pop()
-                print(connection)
-                allIsWell = False
+                    stringKey += str(connection.index)
+                    print("stringkey: " + stringKey)
+                    if stringKey == "23-49-45-46-42":
+                        nogFfDoor = n
+                    if nogFfDoor == 224300:
+                        break
 
-            # 3. if the time exceeds but it's from another level,
-            # append after going back to that level
-            elif exceedsTime and levelUp:
-                print("Will exceed time, but is from higher level. +\
-                       Append to trajectory")
-                for j in range(0, level):
-                    if len(trajectory.connections) > 1:
-                        x = trajectory.connections.pop()
-                        trajectory.time -= x.time
-                        print ("new trajectory after deleting " + str(j + 1) +\
-                               ": " + str(trajectory))
+                    # if in archive
+                    if stringKey in archive:
+                        print("In archive")
+                        break
 
-            # 4. if the time doesn't exceed and the connection is from another
-            # level but it's not identical to the last one in the trajectory
-            elif not (exceedsTime and levelUp and
-        connection.station1.name != trajectory.connections[-1].station2.name):
-                print("Will not exceed time, but is from higher level. +\
-                      Append to trajectory")
-                for j in range(0, level):
-                    if len(trajectory.connections) > 1:
-                        x = trajectory.connections.pop()
-                        trajectory.time -= x.time
-                        print ("new trajectory after deleting " + str(j + 1) +\
-                               ": " + str(trajectory))
+                    else:
+                        print("Not in archive")
+                        notInArchive = True
 
-            # 5. if all is well, add children (not level up version)
-            else:
-                trajectory.connections.append(connection)
-                trajectory.time += connection.time
-                shadowTrajectory = Trajectory()
-                for c in trajectory.connections:
-                    shadowTrajectory.connections.append(c)
-                    shadowTrajectory.time += c.time
-                allTrajectories.append(shadowTrajectory)
-                dictTrajectory[stringKey] = True
-                print("trajectory for next round: " + str(trajectory))
+                    print("check time")
 
-
-                # edge of civilization check
-                if len(connection.children) == 1:
-                    print(connection)
-                    print(self.connections[self.connections[connection.children[0]].index])
-                    print("edge of civilization, bounce allowed")
-                    stack.append(self.connections[self.connections[connection.children[0]].index])
-
-
-                for tconnection in trajectory.connections:
-                    if (connection.station2.name == tconnection.station1.name
-                        and len(trajectory.connections[0].children) != 1):
-                        alreadyExists = True
-                        trajectory.connections.pop()
+                    # if exceeds time
+                    if trajectory.time + connection.time > 120:
+                        print("exceeds time")
                         break
                     else:
-                        alreadyExists = False
+                        print("doesn't exceed time")
+                        timeIsOkay = True
 
-                if not alreadyExists:
+                    if notInArchive and timeIsOkay:
+                        print("good to go")
+                        goodToGo = True
+                    else:
+                        print("not good to go")
+
+                # if good to go, add to trajectory
+                if goodToGo:
+                    trajectory.connections.append(connection)
+                    trajectory.time += connection.time
+                    toAppend = Trajectory()
+                    for tConnection in trajectory.connections:
+                        toAppend.connections.append(tConnection)
+                        toAppend.time += tConnection.time
+                    allTrajectories.append(toAppend)
+
+                    # add trajectory to archive
+                    archive[stringKey] = True
+
+                    # add children for the connection
                     for child in connection.children:
-                        # if it's a bounce, don't add it to the stack
-                        if (connection.station1.name ==
-                            self.connections[child].station2.name):
-                            print("")
-                            print(self.connections[child])
-                            print("invalid bounce, don't add to stack")
-                            # if it's not a bounce, add it to the stack
-                        else:
-                            print(self.connections[child])
-                            print("add to stack: " +\
-                                   str(self.connections[child]))
-                            stack.append(self.connections[child])
+                        print("append child " + str(self.connections[child]))
+                        stack.append(self.connections[child])
 
-                if root == 55:
-                    break
+                n += 1
+                nogFfDoor += 1
 
-                allIsWell = True
-
-            n += 1
-
-
-        if len(stack) == 0:
-            level = 1
-            for tconnection in reversed(trajectory.connections):
-                if connection.station1.name == tconnection.station1.name:
-                    break
-                else:
-                    level += 1
-
-            for j in range(0, level):
-                if len(trajectory.connections) > 1:
-                    x = trajectory.connections.pop()
-                    trajectory.time -= x.time
-            if connection.time + trajectory.time <= 120:
-                trajectory.connections.append(connection)
-                trajectory.time += connection.time
-
-            shadowTrajectory = Trajectory()
-            for c in trajectory.connections:
-                shadowTrajectory.connections.append(c)
-                shadowTrajectory.time += c.time
-            allTrajectories.append(shadowTrajectory)
-
-        root += 1
-
-        if root < 56:
-            return self.depthFirstSearch(root, n, allTrajectories)
-
-
-        else:
-            bestLijnvoering = LijnVoering(self.csvFilepath)
-            bestTrajectory = Trajectory()
-            bestLijnvoering.trajectories.append(bestTrajectory)
-            alternativeLijnvoering = LijnVoering(self.csvFilepath)
-            alternativeTrajectory = Trajectory()
-            alternativeLijnvoering.trajectories.append(alternativeTrajectory)
-
-            highScore = 0
-            for at in allTrajectories:
-                print(at)
-                alternativeLijnvoering.trajectories[0] = at
-                alternativeScore = alternativeLijnvoering.scoreAssignmentB()
-                print(alternativeScore)
-                if alternativeScore > highScore:
-                    bestLijnvoering.trajectories[0] = at
-                    highScore = bestLijnvoering.scoreAssignmentB()
-            print("The best Lijnvoering: ")
-            print(bestLijnvoering)
-            print(highScore)
-            print("Amount of critical connections: " +\
-                  str(bestLijnvoering.criticalInLijnvoering))
-            print (len(allTrajectories))
-            print(n)
-
-        self.combineDepthFirst(allTrajectories)
+        highScore = 0
+        m = 0
+        # for aTrajectory in allTrajectories:
+        #     print (m)
+        #     m += 1
+        #     alternativeLijnvoering = Lijnvoering(self.csvFilepath, self.details)
+        #     trajectToAdd = Trajectory()
+        #     for aConnection in aTrajectory.connections:
+        #         trajectToAdd.connections.append(aConnection)
+        #         trajectToAdd.time += aConnection.time
+        #     alternativeLijnvoering.trajectories.append(trajectToAdd)
+        #     alternativeScore = alternativeLijnvoering.scoreAssignmentB()
+        #
+        #     if alternativeScore > highScore:
+        #         besteLijnvoering.trajectories.clear()
+        #         besteLijnvoering.trajectories.append(trajectToAdd)
+        #         highScore = alternativeScore
+        #
+        # with open ("filename1", "a", newline="") as out:
+        #     writer = csv.writer(out, dialect="excel")
+        #
+        #     for connection in besteLijnvoering.trajectories[0].connections:
+        #         placeholder1 =	str(connection) + ", "
+        #         writer.writerow(placeholder1)
+        #
+        #     placeholder1 = str(highScore)
+        #     writer.writerow(placeholder1)
 
     def combineDepthFirst(self, trajectories):
         n = 0
-        lijnVoering = LijnVoering('csvFiles/ConnectiesHolland.csv')
-        alternativeLijnVoering = LijnVoering('csvFiles/ConnectiesHolland.csv')
+        lijnVoering = Lijnvoering('csvFiles/ConnectiesHolland.csv')
+        alternativeLijnvoering = Lijnvoering('csvFiles/ConnectiesHolland.csv')
         highScore = 0
         for combination in itertools.product(trajectories, trajectories,
                                              trajectories):
-            alternativeLijnVoering.trajectories.clear()
+            alternativeLijnvoering.trajectories.clear()
             n += 1
             if n % 1000000 == 0:
                 print(n)
             for trajectory in combination:
-                alternativeLijnVoering.trajectories.append(trajectory)
-            alternativeScore = alternativeLijnVoering.scoreAssignmentB()
+                alternativeLijnvoering.trajectories.append(trajectory)
+            alternativeScore = alternativeLijnvoering.scoreAssignmentB()
             if alternativeScore > highScore:
                 lijnVoering.trajectories.clear()
-                for trajectory in alternativeLijnVoering.trajectories:
+                for trajectory in alternativeLijnvoering.trajectories:
                     lijnVoering.trajectories.append(trajectory)
                 highScore = alternativeScore
         print(lijnVoering)
@@ -603,21 +521,21 @@ class Lijnvoering:
                         # als de connectie op een oneven positie staat, voeg de connectie toe (en z'n broertje ook)
                         if connection.index % 2 != 0:
                             indexesAlGecheckt.append(connection.index)
-                            indexesAlGecheckt.append(self.connections[connection.index - 1].index)
+                            indexesAlGecheckt.append(connection.index - 1)
                             self.criticalInLijnvoering += 1
                         # als de connectie op een oneven positie staat, voeg de connectie toe (en z'n broertje ook)
                         else:
                             indexesAlGecheckt.append(connection.index)
-                            indexesAlGecheckt.append(self.connections[connection.index + 1].index)
+                            indexesAlGecheckt.append(connection.index + 1)
                             self.criticalInLijnvoering += 1
 
-
         percentageKritiek = (len(indexesAlGecheckt) / 2) / self.criticalTotal
-        score = percentageKritiek * constanteP - trajecten * constanteTrajecten - minuten / constanteMinuten
+        score = (percentageKritiek * constanteP) - (trajecten * constanteTrajecten) - (minuten / constanteMinuten)
 
         return score
 
     def loadConnections(self, connectionsFilepath):
+
         """Loads all connections based on a CSV and returns them as a list"""
         # connections second
         connectionsList = []
@@ -669,208 +587,6 @@ class Lijnvoering:
             trajectories = 21
 
         return trajectories
-
-from Classes.trajectory import Trajectory
-from Classes.connection import Connection
-from Classes.station import Station
-
-from queue import *
-import math
-import random
-import csv
-
-class LijnVoering:
-    def __init__(self, connectionsFilepath, stationsFilepath):
-        self.connectionsFilepath = connectionsFilepath
-        self.stationsFilepath = stationsFilepath
-        self.connections = self.loadConnectionsAndStations(self.connectionsFilepath,
-                                                           self.stationsFilepath)
-
-        self.criticalTotal = 0
-        self.maxTrajectories = 0
-        self.maxMinutes = 0
-
-        self.setVariables(self.connections)
-
-        self.trajectories = []
-        self.time = 0
-
-    def __str__(self):
-        output = ""
-        for trajectory in self.trajectories:
-            output += str(trajectory)
-            output += "\n\n"
-        # output += "Totale tijd van lijnvoering: " + str(self.time)
-        return output
-
-    # create a random Lijnvoering
-    def createRandomLijnVoering(self, trajectories, amount):
-
-        # add random trajectories while we haven't created them
-        while len(trajectories) < amount:
-            trajectory = Trajectory()
-            firstConnectionIndex = random.choice(self.connections).index
-            trajectory.createTrajectory(firstConnectionIndex, 0 , self.connections, self.maxMinutes)
-            self.trajectories.append(trajectory)
-            self.time += trajectory.time
-
-    def hillClimber(self, trajectories, connections, amount, runs):
-
-        n = 0
-        maxn = 16000
-        temperature = 1
-        initialTemperature = 1
-        self.time = 0
-
-        # create a random Lijnvoering with a certain amount of trajectories
-        self.createRandomLijnVoering(self.trajectories, amount)
-
-        # also create a copy of this Lijnvoering in which trajectories
-        # can be changed so that we can compare their scores
-        alternativeLijnvoering = LijnVoering(self.connectionsFilepath, self.stationsFilepath)
-
-        for trajectory in self.trajectories:
-            alternativeLijnvoering.trajectories.append(trajectory)
-
-        # set the base score of the Lijnvoering
-        current = self.scoreOpdrachtB()
-
-        # track the time, we can print this out later
-        for trajectory in trajectories:
-            self.time += trajectory.time
-
-        # start with replacing the first trajectory
-        whichTrajectory = 0
-
-        # check for improved score 16.000 times
-        while n < maxn:
-            n += 1
-
-            # generate a new random trajectory
-            trajectory = Trajectory()
-            firstConnectionIndex = random.choice(self.connections).index
-            trajectory.createTrajectory(firstConnectionIndex, 0 , self.connections, self.maxMinutes)
-
-            # replace the trajectory and calculate the new score
-            alternativeLijnvoering.trajectories[whichTrajectory] = trajectory
-            scoreAlternative = alternativeLijnvoering.scoreOpdrachtB()
-
-            # if the score is better, save this Lijnvoering
-            if scoreAlternative > current:
-                self.trajectories.clear()
-                for trajectory in alternativeLijnvoering.trajectories:
-                    self.trajectories.append(trajectory)
-
-                current = scoreAlternative
-
-                # if there is only one trajectory, replace the same one
-                if len(self.trajectories) == 1:
-                    whichTrajectory = whichTrajectory
-
-                # if we've reached the last trajectory, start with the first one
-                elif len(self.trajectories) - 1 == whichTrajectory:
-                    whichTrajectory = 0
-
-                # if we haven't reached the last trajectory, get the next one
-                else:
-                    whichTrajectory += 1
-
-                temperature = self.newTemp(initialTemperature, temperature, maxn, n)
-
-            # if the score is lower or equal, simulated annealing
-            # else:
-            #       # calculate the chance that the lower score is accepted
-            #       chanceAlternative = self.acceptationChance(current, scoreAlternative, temperature)
-            #       chanceRandom = random.choice([0.0, 1.0])
-            #
-            #       # print("cur: " + str(current))
-            #       # print("alt " + str(scoreAlternative))
-            #       # print("temp: " + str(temperature))
-            #       # print("chance: " + str(chanceAlternative))
-            #
-            #       # print("temp: " + str(temperature))
-            #       # print("verkorting: " + str(scoreAlternative - current))
-            #       # print("chance: " + str(chanceAlternative))
-            #       # if it's accepted
-            #       if chanceAlternative > chanceRandom:
-            #           current = scoreAlternative
-            #           self.trajectories.clear()
-            #           for trajectory in alternativeLijnvoering.trajectories:
-            #               self.trajectories.append(trajectory)
-            #
-            #       # cool down the temperature for the next run
-            #       temperature = self.newTemp(initialTemperature, temperature, maxn, n)
-
-
-            return current
-
-    def newTemp(self, initialTemperature, temperature, totalIterations, iteration):
-        """Returns the new temperature based on current temperature and
-        current iteration"""
-        base = (1 / initialTemperature)
-        exponent = iteration/totalIterations
-        newTemperature = initialTemperature * (base ** exponent)
-        return newTemperature
-
-    # calculate acception chance for simulated annealing
-    def acceptationChance(self, current, alternative, temperature):
-        shortening = alternative - current
-        chance = math.exp(shortening / temperature)
-        return chance
-
-    def ScoreOpdrachtA(self):
-        constant = 10000
-        indexesAlGecheckt = []
-        percentageKritiek = 0
-        for trajectory in self.trajectories:
-            for connection in trajectory.connections:
-                if connection.critical:
-                    if connection.index not in indexesAlGecheckt:
-                        if connection.index % 2 != 0:
-                            indexesAlGecheckt.append(connection.index)
-                            indexesAlGecheckt.append(self.connections[connection.index - 1].index)
-                        else:
-                            indexesAlGecheckt.append(connection.index)
-                            indexesAlGecheckt.append(self.connections[connection.index + 1].index)
-        percentageKritiek = (len(indexesAlGecheckt) / 2) / self.criticalTotal
-        score = constant * percentageKritiek
-        return score
-        # 10000 * aantal kritieke connection in LineFeeding / (aantal kritieke connections totaal)
-
-    def scoreOpdrachtB(self):
-
-        percentageKritiek = 0
-        constanteP = 10000
-
-        trajecten = 0
-        constanteTrajecten = 50
-        minuten = 0
-        constanteMinuten = 1
-        indexesAlGecheckt = []
-
-        # ga alle trajecten in de lijnvoering langs
-        for trajectory in self.trajectories:
-            minuten += trajectory.time
-            trajecten += 1
-            # en alle connecties per traject
-            for connection in trajectory.connections:
-                # kijk of de connectie kritiek is
-                if connection.critical:
-                    # als de connectie al eerder is meegerekend
-                    if connection.index not in indexesAlGecheckt:
-                        # als de connectie op een oneven positie staat, voeg de connectie toe (en z'n broertje ook)
-                        if connection.index % 2 != 0:
-                            indexesAlGecheckt.append(connection.index)
-                            indexesAlGecheckt.append(self.connections[connection.index - 1].index)
-                        # als de connectie op een oneven positie staat, voeg de connectie toe (en z'n broertje ook)
-                        else:
-                            indexesAlGecheckt.append(connection.index)
-                            indexesAlGecheckt.append(self.connections[connection.index + 1].index)
-
-        percentageKritiek = (len(indexesAlGecheckt) / 2) / self.criticalTotal
-        score = percentageKritiek * constanteP - trajecten * constanteTrajecten - minuten / constanteMinuten
-
-        return score
 
     def loadConnectionsAndStations(self, connectionsFilepath, stationsFilepath):
         """Load stations and connections from CSV files and returns them as a list"""
